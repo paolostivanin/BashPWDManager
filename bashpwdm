@@ -1,0 +1,28 @@
+#!/bin/bash
+
+#################################################################
+# @Author:    Paolo Stivanin aka Polslinux		        
+# @Name:      Bash Password Manager			        		                
+# @Copyright: 2011					        
+# @Site:      http://www.polslinux.it                           
+# @License:   GNU AGPL v3 http://www.gnu.org/licenses/agpl.html 
+#################################################################
+
+IFS=$'\n'
+version="0.1-alpha1"
+
+if [ "$1" == "-v" ] ; then
+echo "Bash Password Manager version $version"
+exit 0
+fi
+database=`zenity --file-selection --title "Scegli percorso database"`
+permission=`ls -l $database | cut -f2 -d'-'`
+if [ ! -f $database ] || [ "$permission" != "rw" ]; then
+echo "Il database non esiste oppure non ha i permessi read/write."
+exit 1
+fi
+username=`zenity --entry --title "Username" --text "Inserisci nome utente"`
+password=`zenity --entry --hide-text --title "Password" --text "Inserisci password"`
+echo $username >> $database
+echo $password >> $database
+echo "-------------------------------"
