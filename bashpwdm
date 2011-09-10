@@ -1,11 +1,11 @@
 #!/bin/bash
 
 #################################################################
-# @Author:    Paolo Stivanin aka Polslinux		        
-# @Name:      Bash Password Manager			        		                
-# @Copyright: 2011					        
-# @Site:      http://www.polslinux.it                           
-# @License:   GNU AGPL v3 http://www.gnu.org/licenses/agpl.html 
+# @Author: Paolo Stivanin aka Polslinux
+# @Name: Bash Password Manager
+# @Copyright: 2011
+# @Site: http://www.polslinux.it
+# @License: GNU AGPL v3 http://www.gnu.org/licenses/agpl.html
 #################################################################
 
 IFS=$'\n'
