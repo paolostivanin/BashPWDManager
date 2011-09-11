@@ -9,20 +9,36 @@
 #################################################################
 
 IFS=$'\n'
-version="0.1-alpha1"
+version="0.1-alpha2"
 
-if [ "$1" == "-v" ] ; then
-echo "Bash Password Manager version $version"
-exit 0
-fi
+function check_db(){
 database=`zenity --file-selection --title "Scegli percorso database"`
 permission=`ls -l $database | cut -f2 -d'-'`
 if [ ! -f $database ] || [ "$permission" != "rw" ]; then
 echo "Il database non esiste oppure non ha i permessi read/write."
 exit 1
 fi
+}
+
+function input_info(){
 username=`zenity --entry --title "Username" --text "Inserisci nome utente"`
 password=`zenity --entry --hide-text --title "Password" --text "Inserisci password"`
 echo $username >> $database
 echo $password >> $database
-echo "-------------------------------"
+echo "-------------------------------" >> $database
+}
+
+function fine_prog(){
+unset username
+unset password
+unset IFS
+}
+
+if [ "$1" == "-v" ] ; then
+echo "Bash Password Manager version $version"
+exit 0
+fi
+
+check_db
+input_info
+fine_prog
