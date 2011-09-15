@@ -9,59 +9,76 @@
 #################################################################
 
 IFS=$'\n'
-version="0.1-alpha2"
+version="0.1-alpha3"
 user=`id -u`
+conf_file="/home/$USER/.config/bpwdman.conf"
 
 function check_db(){
-file_db=`zenity --file-selection --title "Scegli percorso database"`
-crypto_algo=`cat /home/$USER/.bpwdman | cut -f1 -d' '`
-path_db=`dirname $file_db`
-permission=`ls -l $file_db | cut -f2 -d'-'`
-if [ ! -f $file_db ] || [ "$permission" != "rw" ]; then
-echo "Il database non esiste oppure non ha i permessi read/write."
-exit 1
-fi
+ file_db=`zenity --file-selection --title "Choose database"`
+ crypto_algo=`cat $conf_file | cut -f1 -d' '`
+ path_db=`dirname $file_db`
+ permission=`ls -l $file_db | cut -f2 -d'-'`
+ if [ ! -f $file_db ] || [ "$permission" != "rw" ]; then
+  echo "Database doesn't exist or hasn't read/write permissions."
+  exit 1
+ fi
 }
 
 function decrypt_db(){
-gpg -o out_db --cipher-algo=$crypto_algo -d $file_db
-mv $path_db/out_db $file_db
+ gpg -o $path_db/out_db --cipher-algo=$crypto_algo -d $file_db
+ mv $path_db/out_db $file_db
 }
 
 function input_info(){
-username=`zenity --entry --title "Username" --text "Inserisci nome utente"`
-password=`zenity --entry --hide-text --title "Password" --text "Inserisci password"`
-echo $username >> $file_db
-echo $password >> $file_db
-echo "-------------------------------" >> $file_db
+ username=`zenity --entry --title "Username" --text "Write Username"`
+ password=`zenity --entry --hide-text --title "Password" --text "Write password"`
+ echo $username >> $file_db
+ echo $password >> $file_db
+ echo "-------------------------------" >> $file_db
 }
 
 function encrypt_db(){
-gpg -o $path_db/enc_db --cipher-algo=$crypto_algo -c $file_db
-mv $path_db/enc_db -c $file_db
+ gpg -o $path_db/enc_db --cipher-algo=$crypto_algo -c $file_db
+ mv $path_db/enc_db $file_db
 }
 
 function fine_prog(){
-unset username
-unset password
-unset file_db
-unset path_db
-unset IFS
+ unset username
+ unset password
+ unset file_db
+ unset path_db
+ unset IFS
 }
 
 if [ "$1" == "-v" ] ; then
-echo "Bash Password Manager version $version"
-exit 0
+ echo "Bash Password Manager version $version"
+ exit 0
+ elif [ "$1" == "-c" ] ; then
+  file_db=`zenity --file-selection --title "Choose database"`
+  crypto_algo=`cat $conf_file | cut -f1 -d' '`
+  path_db=`dirname $file_db`
+  gpg -o $path_db/out_db --cipher-algo=$crypto_algo -d $file_db
+  mv $path_db/out_db $file_db
+  typ=`zenity  --list  --text "Choose the new cipher algo" --radiolist  --column "Choice" --column "Type" TRUE CAST5 FALSE 3DES FALSE AES256 FALSE TWOFISH FALSE  BLOWFISH | tr '[A-Z]' '[a-z]'`
+  sed -i "/algo/c algo=$typ" $conf_file
+  gpg -o $path_db/enc_db --cipher-algo=$crypto_algo -c $file_db
+  mv $path_db/enc_db $file_db
 fi
 
 if [ "$user" = 0 ] ; then
-zenity --error --text "You are root, start the script as NORMAL user"
-exit 1
+ zenity --error --text "You are root, start the script as NORMAL user"
+ exit 1
 fi
 
-if [ ! -f /home/$USER/.bpwdman ] ; then
-typ=$(zenity  --list  --text "What type of cypher algo do you want to use?" --radiolist  --column "Choice" --column "Type" TRUE CAST5 FALSE 3DES FALSE AES256 FALSE TWOFISH FALSE BLOWFISH)
-echo $typ  | tr '[A-Z]' '[a-z]' >> /home/$USER/.bpwdman
+if [ ! -f $conf_file ] ; then
+ typ=$(zenity  --list  --text "What type of cipher algo do you want to use?" --radiolist  --column "Choice" --column "Type" TRUE CAST5 FALSE 3DES FALSE AES256 FALSE TWOFISH FALSE BLOWFISH)
+ echo "algo=$typ"  | tr '[A-Z]' '[a-z]' >> $conf_file
+ db_dir=`zenity --file-selection --directory --title "Choose database directory"`
+ db_name=`zenity --entry --title "Database name" --text "Write the name of your database"
+ touch $db_dir/$db_name
+ echo "db_created=1" >> $conf_file
+ unset db_dir
+ unset db_name
 fi
 
 check_db

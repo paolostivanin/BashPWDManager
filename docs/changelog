@@ -5,3 +5,8 @@
 	* Add gpg encrypt/decrypt
 	* Add possibility to choose cipher-algo
 	* Root CANNOT start the script
+
+(16/09/2011) - v0.1-alpha3:
+	* Add "-c" option which give you the possibility to change your db cipher algo
+	* The first time you start the script it creates the database (name and path are asked)
+	* Code improvement
