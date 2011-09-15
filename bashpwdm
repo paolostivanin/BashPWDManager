@@ -9,7 +9,7 @@
 #################################################################
 
 IFS=$'\n'
-version="0.1-alpha2"
+version="0.1-alpha1"
 
 function check_db(){
 database=`zenity --file-selection --title "Scegli percorso database"`
