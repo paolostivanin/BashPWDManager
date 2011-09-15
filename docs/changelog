@@ -1,1 +1,7 @@
-(10/09/2011) : v0.1-alpha1 --> Initial release, basic functionality
+(10/09/2011) - v0.1-alpha1:
+	* Initial release, basic functionality
+
+(15/09/2011) - v0.1-alpha2:
+	* Add gpg encrypt/decrypt
+	* Add possibility to choose cipher-algo
+	* Root CANNOT start the script
