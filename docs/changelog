@@ -10,3 +10,10 @@
 	* Add "-c" option which give you the possibility to change your db cipher algo
 	* The first time you start the script it creates the database (name and path are asked)
 	* Code improvement
+
+(17/09/2011) - v0.1-alpha4:
+	* Add install script
+	* Add uninstall script
+	* Add config script with lot of features
+	* Correct 2 critical bugs that caused the interruction of the script
+	* Minor bug fixing

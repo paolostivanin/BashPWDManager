@@ -1,0 +1,42 @@
+#!/bin/bash
+
+################################################################
+# @Author:    Paolo Stivanin aka Polslinux		       
+# @Name:      Bash Password Manager Uninstall Script		       
+# @Copyright: 2011					       
+# @Site:      http://www.polslinux.it                          
+# @License:   GNU GPL v3 http://www.gnu.org/licenses/gpl.html  
+################################################################
+
+distro=$(cat /etc/issue | cut -d' ' -f1 -s)
+
+echo "Before starting please write your exact username:"
+read username
+echo "  * Checking user's privileges..."
+if [ "$(id -u)" != "0" ]; then 
+  echo "	ERROR: User $(whoami) is not root, and does not have sudo privileges"
+  if [ $distro == "Debian" ] ; then echo "Type su in the terminal and re-run this script"
+  elif [ $distro == "Ubuntu" ] ; then echo "Type sudo su in the terminal and re-run this script"
+  elif [ $distro == "Arch" ] ; then echo "Type su in the terminal and re-run this script"
+  fi
+  exit 1
+else
+echo "  * Removing files..."
+  if [ -d /usr/share/doc/bash-pwd-manager ] ; then
+  rm -r /usr/share/doc/bash-pwd-manager
+  fi
+  if [ -f /usr/local/bin/bashpwdm ] ; then
+  rm -f /usr/local/bin/bashpwdm
+  fi
+  if [ -f /usr/local/bin/bashpwdm-config ] ; then
+  rm -f /usr/local/bin/bashpwdm-config
+  fi
+  if [ -f /usr/share/applications/bashpwdm.desktop ] ; then
+  rm -f /usr/share/applications/bashpwdm.desktop
+  fi
+  if [ -f /usr/share/pixmaps/bpwdm.png ] ; then
+  rm -f /usr/share/pixmaps/bpwdm.png
+  fi
+fi
+echo "Thanks to have used my script! Bye bye :)"
+exit 0

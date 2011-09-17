@@ -1,0 +1,61 @@
+#!/bin/bash
+
+################################################################
+# @Author:      Paolo Stivanin aka Polslinux		       
+# @Name:        Bash Password Manager Install Script		                      
+# @Copyright:   2011					       
+# @Site:        http://www.polslinux.it                          
+# @License:     GNU GPL v3 http://www.gnu.org/licenses/gpl.html  
+################################################################
+
+distro=$(cat /etc/issue | cut -d' ' -f1 -s)
+pkg1=`which zenity`
+pkg2=`which bash`
+pkg3=`which gpg`
+pkg4=`which pinentry-gtk-2`
+
+echo -ne "* Checking user's privileges...\n"
+if [ "$(id -u)" != "0" ]; then 
+	echo "	ERROR: User $(whoami) is not root, and does not have sudo privileges"
+	if [ "$distro" == "Debian" ] ; then echo "        Type su in the terminal and re-run this script"
+	elif [ "$distro" == "Ubuntu" ] ; then echo "        Type sudo su in the terminal and re-run this script"
+	elif [ "$distro" == "Arch" ] ; then echo "        Type su in the terminal and re-run this script"
+	fi
+	exit 1
+else
+	echo "   Write your exact username:"
+	read username
+fi
+
+echo -ne "* Checking type of your linux distros...\n"
+if [ "$distro" == "Debian" ] || [ "$distro" == "Ubuntu" ] || [ "$distro" == "Arch" ];then
+	echo "   Ok, you're running $distro and Bash Password Manager is compatible with it!"
+else
+	echo  "   WARNING: Bash Password Manager is tested to work with Debian, Ubuntu and Archlinux,"
+	echo  "   try it on your system and tell me if there is something wrong!"
+fi
+
+echo -ne "* Checking deps...\n"
+if [ "$pkg1" == "/usr/bin/zenity" ] && [ "$pkg2" == "/bin/bash" ] && [ "$pkg3" == "/usr/bin/gpg" ] && [ "$pkg4" == "/usr/bin/pinentry-gtk-2" ] ; then
+	echo -ne "  Deps are ok...\n"
+	else
+		echo -ne "* ERROR: you have to install zenity, gpg, bash and pinentry-gtk2 before you"
+		echo -ne "  can you this script!\n"
+		exit 1
+fi
+
+echo -ne "* Installing files...\n"
+if [ ! -d /usr/share/doc/bash-pwd-manager ] ; then
+	mkdir /usr/share/doc/bash-pwd-manager
+fi
+cp LICENSE README uninstall docs/* /usr/share/doc/bash-pwd-manager
+cp bin/bashpwdm /usr/local/bin
+cp bin/bashpwdm-config /usr/local/bin
+#cp docs/bashpwdm.desktop /usr/share/applications/
+#cp docs/bpwdm.png /usr/share/pixmaps/
+chown $username /usr/local/bin/bashpwdm
+chown $username /usr/local/bin/bashpwdm-config
+chmod +x /usr/local/bin/bashpwdm
+chmod +x /usr/local/bin/bashpwdm-config
+echo "   All done! :)"
+exit 0
