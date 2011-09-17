@@ -28,6 +28,14 @@ if [ "$?" == "0" ] ; then
 fi
 }
 
+function fine_prog(){
+unset typ
+unset db_dir
+unset db_name
+unset conf_file
+unset IFS
+}
+
 if [ ! -f $conf_file ] ; then
  typ=$(zenity  --list  --text "What type of cipher algo do you want to use?" --radiolist  --column "Choice" --column "Type" TRUE CAST5 FALSE 3DES FALSE AES256 FALSE TWOFISH FALSE BLOWFISH)
  echo "algo=$typ"  | tr '[A-Z]' '[a-z]' >> $conf_file
@@ -37,10 +45,8 @@ if [ ! -f $conf_file ] ; then
  echo "db_created=1" >> $conf_file
  save_db_path
  first_encryption
- unset typ
- unset db_dir
- unset db_name
  zenity --info --text "Bash Password Manager has been configured!" --title "All done!" --width=400
+ fine_prog
 elif [ -f $conf_file ] ; then
  zenity --info --text "Bash Password Manager has already been configured!" --title "All done!" --width=400
  exit 0
