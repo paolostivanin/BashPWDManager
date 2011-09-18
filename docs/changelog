@@ -1,19 +1,25 @@
-(10/09/2011) - v0.1-alpha1:
+(10/09/2011) - v0.99.901 (alpha1):
 	* Initial release, basic functionality
 
-(15/09/2011) - v0.1-alpha2:
+(15/09/2011) - v0.99.902 (alpha2):
 	* Add gpg encrypt/decrypt
 	* Add possibility to choose cipher-algo
 	* Root CANNOT start the script
 
-(16/09/2011) - v0.1-alpha3:
+(16/09/2011) - v0.99.903 (alpha3):
 	* Add "-c" option which give you the possibility to change your db cipher algo
 	* The first time you start the script it creates the database (name and path are asked)
 	* Code improvement
 
-(17/09/2011) - v0.1-alpha4:
+(17/09/2011) - v0.99.904 (alpha4):
 	* Add install script
 	* Add uninstall script
 	* Add config script with lot of features
 	* Correct 2 critical bugs that caused the interruction of the script
 	* Minor bug fixing
+
+(18/09/2011) - v0.99.905 (alpha5):
+	* Add possibility to create strong password
+	* Add possibility to choose if you want to read pwd or add pwd
+	* Zenity >= 3.1.5 MUST BE INSTALLED. This version correct a critical bug, please update Zenity to this version before use the script!
+	* Code improvement

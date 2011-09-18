@@ -9,7 +9,7 @@
 #################################################################
 
 IFS=$'\n'
-version="0.1-alpha4"
+version="0.99.905"
 user=`id -u`
 conf_file="/home/$USER/.config/bpwdman.conf"
 
@@ -58,29 +58,27 @@ function fine_prog(){
  unset file_db
  unset path_db
  unset IFS
+ exit 0
 }
 
-if [ "$1" == "-v" ] ; then
- echo "Bash Password Manager version $version"
+function fine_prog_from_view(){
+ unset file_db
+ unset path_db
+ unset ans
+ unset IFS
  exit 0
- elif [ "$1" == "-c" ] ; then
-  file_db=`zenity --file-selection --title "Choose database"`
-  exit_script
-  crypto_algo=`cat $conf_file | cut -f1 -d' '`
-  path_db=`dirname $file_db`
-  gpg -o $path_db/out_db --cipher-algo=$crypto_algo -d $file_db
-  mv $path_db/out_db $file_db
-  typ=`zenity  --list  --text "Choose the new cipher algo" --radiolist  --column "Choice" --column "Type" TRUE CAST5 FALSE 3DES FALSE AES256 FALSE TWOFISH FALSE  BLOWFISH | tr '[A-Z]' '[a-z]'`
-  exit_script
-  sed -i "/algo/c algo=$typ" $conf_file
-  gpg -o $path_db/enc_db --cipher-algo=$crypto_algo -c $file_db
-  mv $path_db/enc_db $file_db
-fi
+}
 
+function view_db(){
+cat $file_db | zenity --text-info --width=800 --height=600
+}
+
+function check_user(){
 if [ "$user" = 0 ] ; then
  zenity --error --text "You are root, start the script as NORMAL user"
  exit 1
 fi
+}
 
 function check_before_start(){
 if [ ! -f $conf_file ] ; then
@@ -97,9 +95,48 @@ Do you want to do this now?" --title "Warning" --width=350
 fi
 }
 
+function view_or_add(){
+ans=$(zenity  --list  --text "Do you want to view password or add password?" --radiolist  --column "Pick" --column "Choice" TRUE Add FALSE View)
+if [ $ans == "View" ] ; then
+check_db
+decrypt_db
+view_db
+encrypt_db
+fine_prog_from_view
+fi
+}
+
+
+if [ "$1" == "-v" ] ; then
+ echo -ne "\nBash Password Manager version $version\n\n"
+ exit 0
+ elif [ "$1" == "-p" ] ; then
+  nchar=`zenity --entry --title="Character" --text="Write number of password character:" --entry-text ""`
+  char="[:graph:]"
+  pass=`</dev/urandom tr -dc $char | head -c $nchar`
+  zenity --info --text "Your password is:
+$pass" --title "Generated Password"
+  unset pass
+  exit 0
+ elif [ "$1" == "-c" ] ; then
+  file_db=`zenity --file-selection --title "Choose database"`
+  exit_script
+  crypto_algo=`cat $conf_file | cut -f1 -d' '`
+  path_db=`dirname $file_db`
+  gpg -o $path_db/out_db --cipher-algo=$crypto_algo -d $file_db
+  mv $path_db/out_db $file_db
+  typ=`zenity  --list  --text "Choose the new cipher algo" --radiolist  --column "Choice" --column "Type" TRUE CAST5 FALSE 3DES FALSE AES256 FALSE TWOFISH FALSE  BLOWFISH | tr '[A-Z]' '[a-z]'`
+  exit_script
+  sed -i "/algo/c algo=$typ" $conf_file
+  gpg -o $path_db/enc_db --cipher-algo=$crypto_algo -c $file_db
+  mv $path_db/enc_db $file_db
+fi
+
+check_user
 check_before_start
+view_or_add
 check_db
 decrypt_db
 input_info
-crypt_db
+encrypt_db
 fine_prog
