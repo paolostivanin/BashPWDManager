@@ -19,7 +19,7 @@
 	* Minor bug fixing
 
 (18/09/2011) - v0.99.905 (alpha5):
-	* Add possibility to create strong password
+	* Add possibility to create strong password (-p option)
 	* Add possibility to choose if you want to read pwd or add pwd
 	* Zenity >= 3.1.5 MUST BE INSTALLED. This version correct a critical bug, please update Zenity to this version before use the script!
 	* Code improvement
