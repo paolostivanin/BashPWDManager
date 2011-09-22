@@ -9,7 +9,7 @@
 #################################################################
 
 IFS=$'\n'
-version="0.99.905"
+version="0.99.906"
 user=`id -u`
 conf_file="/home/$USER/.config/bpwdman.conf"
 
@@ -38,12 +38,13 @@ function decrypt_db(){
 }
 
 function input_info(){
+ title=`zenity --entry --title "Title" --text "Write Title"`
+ exit_script
  username=`zenity --entry --title "Username" --text "Write Username"`
  exit_script
  password=`zenity --entry --hide-text --title "Password" --text "Write password"`
  exit_script
- echo $username >> $file_db
- echo $password >> $file_db
+ echo "TITLE: $title | USER: $username | PASSWORD: $password" >> $file_db
  echo "-------------------------------" >> $file_db
 }
 

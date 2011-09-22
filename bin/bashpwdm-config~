@@ -9,19 +9,13 @@
 #################################################################
 
 IFS=$'\n'
+version="0.1-alpha4"
 conf_file="/home/$USER/.config/bpwdman.conf"
-
-function check_useagent(){
-first_char=`cat .gnupg/gpg.conf | grep use-agent | cut -f1 -d ' '`
-if [ $first_char == "#" ] ; then
- sed -i '/use-agent/s/^#//' /home/$USER/.gnupg/gpg.conf
-fi
-
 
 function first_encryption(){
  typ_algo=`echo $typ | tr '[A-Z]' '[a-z]'`
  gpg -o $db_dir/enc_db --cipher-algo=$typ -c $db_dir/$db_name
- mv $db_dir/enc_db $db_dir/$db_name.bpm
+ mv $db_dir/enc_db $db_dir/$db_name
 }
 
 function save_db_path(){
@@ -47,10 +41,9 @@ if [ ! -f $conf_file ] ; then
  echo "algo=$typ"  | tr '[A-Z]' '[a-z]' >> $conf_file
  db_dir=`zenity --file-selection --directory --title "Choose database directory"`
  db_name=`zenity --entry --title "Database name" --text "Write the name of your database"`
- touch $db_dir/$db_name.bpm
+ touch $db_dir/$db_name
  echo "db_created=1" >> $conf_file
  save_db_path
- check_useagent
  first_encryption
  zenity --info --text "Bash Password Manager has been configured!" --title "All done!" --width=400
  fine_prog
