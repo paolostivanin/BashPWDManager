@@ -67,8 +67,8 @@ fi
 cp LICENSE README uninstall docs/* /usr/share/doc/bash-pwd-manager
 cp bin/bashpwdm /usr/local/bin
 cp bin/bashpwdm-config /usr/local/bin
-#cp docs/bashpwdm.desktop /usr/share/applications/
-#cp docs/bpwdm.png /usr/share/pixmaps/
+cp docs/bashpwdm.desktop /usr/share/applications/
+cp docs/bpwdm.png /usr/share/pixmaps/
 chown $username /usr/local/bin/bashpwdm
 chown $username /usr/local/bin/bashpwdm-config
 chmod +x /usr/local/bin/bashpwdm

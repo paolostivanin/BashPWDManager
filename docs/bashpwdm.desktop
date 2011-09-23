@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Bash PWD Manager
+Exec=/usr/local/bin/bashpwdm %f
+Icon=/usr/share/pixmaps/bpwdm.png
+Comment=Perform secure files deletion
+Terminal=false
+Type=Application
+Categories=Utility;Security;

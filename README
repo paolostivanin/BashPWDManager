@@ -1,13 +1,54 @@
-ROADMAP
-=======
-1.0-alpha1   -->    10/09/2011 [RELEASED]
-1.0-alpha2   -->    15/09/2011 [RELEASED]
-1.0-alpha3   -->    16/09/2011 [RELEASED]
-1.0-alpha4   -->    17/09/2011 [RELEASED]
-1.0-alpha5   -->    18/09/2011 [RELEASED]
-1.0-alpha6   -->    22/09/2011 [RELEASED]
-1.0-beta1    --> 28-30/09/2011 []
-1.0-rc1      -->   1-3/10/2011 []
-1.0.0        -->     3/10/2011 []
+						BBBBB	  PPPPPPP    MMM MMM
+						B	 B	  P     P	 M  M  M
+						BBBBBB	  P	    P    M     M
+						B	BB	  PPPPPPP	 M     M
+						B	  B	  P			 M     M
+						BBBBBBB	  P			 M     M
 
-Please remember that all dates are indicative. Next version can be ready today, tomorrow or next week!
+
+
+Description
+===========
+Bash Password Manager is a tool that create a database
+in which you can store your passwords in a total secure way!
+The database is encrypted with aes256/blowfish/twofish/3des/etc.
+Double encryption is on the roadmap ;)
+
+
+Requirements
+============
+bash:   it is a bash script ;)
+zenity: message dialogs
+gpg:    encrypt db
+
+
+How it works
+============
+The script will create and encrypt the DB. 
+After that you can add, view or store new password.
+
+
+How to use
+==========
+Go to Applications -> Accessories -> BashPWDman
+
+
+How to install
+==============
+Download the archive file and after you have extract it,
+open the terminal and type:
+chmod +x PATH_EXTRACTED_FOLDER/install
+sudo PATH_EXTRACTED_FOLDER/.install
+
+
+Extra options
+=============================
+Open the terminal and type:
+bashpwdm -c -> you can change the cipher-algo of your db
+bashpwdm -p -> you can create a strong password
+
+
+Notes
+=====
+For more information see:
+<http://www.projects.polslinux.it>
