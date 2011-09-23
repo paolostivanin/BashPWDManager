@@ -12,15 +12,15 @@ IFS=$'\n'
 conf_file="/home/$USER/.config/bpwdman.conf"
 
 function check_useagent(){
-first_char=`cat .gnupg/gpg.conf | grep use-agent | cut -f1 -d ' '`
-if [ $first_char == "#" ] ; then
+first_char=`cat /home/$USER/.gnupg/gpg.conf | grep use-agent | cut -f1 -d ' '`
+if [ "$first_char" == "#" ] ; then
  sed -i '/use-agent/s/^#//' /home/$USER/.gnupg/gpg.conf
 fi
-
+}
 
 function first_encryption(){
  typ_algo=`echo $typ | tr '[A-Z]' '[a-z]'`
- gpg -o $db_dir/enc_db --cipher-algo=$typ -c $db_dir/$db_name
+ gpg -o $db_dir/enc_db --cipher-algo=$typ -c $db_dir/$db_name.bpm
  mv $db_dir/enc_db $db_dir/$db_name.bpm
 }
 
@@ -54,7 +54,6 @@ if [ ! -f $conf_file ] ; then
  first_encryption
  zenity --info --text "Bash Password Manager has been configured!" --title "All done!" --width=400
  fine_prog
-elif [ -f $conf_file ] ; then
+ elif [ -f $conf_file ] ; then
  zenity --info --text "Bash Password Manager has already been configured!" --title "All done!" --width=400
- exit 0
 fi
