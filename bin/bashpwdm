@@ -4,12 +4,12 @@
 # @Author: Paolo Stivanin aka Polslinux
 # @Name: Bash Password Manager
 # @Copyright: 2011
-# @Site: http://www.polslinux.it
+# @Site: http://projects.polslinux.it
 # @License: GNU AGPL v3 http://www.gnu.org/licenses/agpl.html
 #################################################################
 
 IFS=$'\n'
-version="0.99.992"
+version="0.99.993"
 user=`id -u`
 conf_file="/home/$USER/.config/bpwdman.conf"
 
@@ -21,8 +21,13 @@ fi
 }
 
 function check_db(){
+ path_to_db=`cat $conf_file | grep database-path | cut -f2 -d'='`
+ if [ $path_to_db == "0" ] ; then
  file_db=`zenity --file-selection --title "Choose database"`
+ else
+ file_db=`cat $conf_file | grep database-path | cut -f2 -d'='`
  exit_script
+ fi
  crypto_algo=`cat $conf_file | grep algo | cut -f2 -d'='`
  path_db=`dirname $file_db`
  permission=`ls -l $file_db | cut -f2 -d'-'`
@@ -71,7 +76,12 @@ function fine_prog_from_view(){
 }
 
 function view_db(){
+if [ "$ans" == "View All" ] ; then
 cat $file_db | zenity --text-info --width=800 --height=600
+elif [ "$ans" == "View One" ] ; then
+titlepass=`zenity --entry --title="Title" --text="Write the TITLE (eg Facebook, Gmail, ecc):" --entry-text ""`
+cat $file_db | grep $titlepass | zenity --text-info
+fi
 }
 
 function check_user(){
@@ -97,8 +107,8 @@ fi
 }
 
 function view_or_add(){
-ans=$(zenity  --list  --text "Do you want to view password or add password?" --radiolist  --column "Pick" --column "Choice" TRUE Add FALSE View)
-if [ $ans == "View" ] ; then
+ans=$(zenity  --list  --text "Do you want to view password or add password?" --radiolist  --column "Pick" --column "Choice" TRUE Add FALSE "View All" FALSE "View One")
+if [ "$ans" == "View All" ]|| [ "$ans" == "View One" ] ; then
 check_db
 decrypt_db
 view_db

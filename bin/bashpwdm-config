@@ -4,7 +4,7 @@
 # @Author: Paolo Stivanin aka Polslinux
 # @Name: Bash Password Manager Configuration Script
 # @Copyright: 2011
-# @Site: http://www.polslinux.it
+# @Site: http://projects.polslinux.it
 # @License: GNU AGPL v3 http://www.gnu.org/licenses/agpl.html
 #################################################################
 
@@ -28,7 +28,7 @@ function save_db_path(){
 zenity --question --text "Do you want to save the path to DB so every time you
 start the script you won't have to select it?" --title "Save DB path?" --width=410
 if [ "$?" == "0" ] ; then
- echo "database-path=$db_dir" >> $conf_file   
+ echo "database-path=$db_dir/$db_name.bpm" >> $conf_file   
  elif [ "$?" != "0" ] ; then
    echo "database-path=0" >> $conf_file
 fi
