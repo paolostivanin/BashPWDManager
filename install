@@ -4,7 +4,7 @@
 # @Author:      Paolo Stivanin aka Polslinux		       
 # @Name:        Bash Password Manager Install Script		                      
 # @Copyright:   2011					       
-# @Site:        http://www.polslinux.it                          
+# @Site:        http://projects.polslinux.it                          
 # @License:     GNU GPL v3 http://www.gnu.org/licenses/gpl.html  
 ################################################################
 
@@ -58,7 +58,7 @@ if [ $? != 0 ] ; then
 echo "--> ERROR: You have to install pinentry-gtk2 before continue..."
 exit 1
 fi
-echo -ne "OK!\n"
+echo -ne "   Ok!\n"
 
 echo "* Installing files..."
 if [ ! -d /usr/share/doc/bash-pwd-manager ] ; then
@@ -73,5 +73,5 @@ chown $username /usr/local/bin/bashpwdm
 chown $username /usr/local/bin/bashpwdm-config
 chmod +x /usr/local/bin/bashpwdm
 chmod +x /usr/local/bin/bashpwdm-config
-echo -ne "OK!\n"
+echo -ne "   Ok, all done!\n"
 exit 0

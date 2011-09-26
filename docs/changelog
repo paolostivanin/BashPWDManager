@@ -43,8 +43,14 @@
 	* Minor fixes
 	* Add mini roadmap into changelog file
 		
-(xx/09/2011) - v1.0-rc1
+(26/09/2011) - v1.0-rc1
 	* Intesive stress testing
 
-(xx/09/2011) - v1.0.0
+(27/09/2011) - v1.0.0
 	* STABLE RELEASE :)
+
+(xx/10/2011) - v1.0.901 (1.1-alpha1)
+	* Add strong double encryption (gpg + openssl)
+	* Add possibility to add or view more password in one time without exit the script
+	* Update README with new info
+	* All the code has been double checked to avoid security bugs

@@ -4,20 +4,18 @@
 # @Author:    Paolo Stivanin aka Polslinux		       
 # @Name:      Bash Password Manager Uninstall Script		       
 # @Copyright: 2011					       
-# @Site:      http://www.polslinux.it                          
+# @Site:      http://projects.polslinux.it                          
 # @License:   GNU GPL v3 http://www.gnu.org/licenses/gpl.html  
 ################################################################
 
 distro=$(cat /etc/issue | cut -d' ' -f1 -s)
 
-echo "Before starting please write your exact username:"
-read username
 echo "  * Checking user's privileges..."
 if [ "$(id -u)" != "0" ]; then 
   echo "	ERROR: User $(whoami) is not root, and does not have sudo privileges"
-  if [ $distro == "Debian" ] ; then echo "Type su in the terminal and re-run this script"
-  elif [ $distro == "Ubuntu" ] ; then echo "Type sudo su in the terminal and re-run this script"
-  elif [ $distro == "Arch" ] ; then echo "Type su in the terminal and re-run this script"
+  if [ $distro == "Debian" ] ; then echo "    Type su in the terminal and re-run this script"
+  elif [ $distro == "Ubuntu" ] ; then echo "    Type sudo su in the terminal and re-run this script"
+  elif [ $distro == "Arch" ] ; then echo "    Type su in the terminal and re-run this script"
   fi
   exit 1
 else
