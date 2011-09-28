@@ -47,6 +47,10 @@ if [ ! -f $conf_file ] ; then
  echo "algo=$typ"  | tr '[A-Z]' '[a-z]' >> $conf_file
  db_dir=`zenity --file-selection --directory --title "Choose database directory"`
  db_name=`zenity --entry --title "Database name" --text "Write the name of your database"`
+ if [ "$db_name" == "" ] ; then
+   zenity --error --title "Error" --text "You cannot create DB with no name"
+   exit 1
+ fi
  touch $db_dir/$db_name.bpm
  echo "db_created=1" >> $conf_file
  save_db_path

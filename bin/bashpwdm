@@ -9,7 +9,7 @@
 #################################################################
 
 IFS=$'\n'
-version="1.0-rc1"
+version="1.0.1"
 user=`id -u`
 conf_file="/home/$USER/.config/bpwdman.conf"
 
