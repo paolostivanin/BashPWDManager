@@ -50,6 +50,8 @@
 	* Correct a bug in DB creation (now you cannot create db with no name)
 	* STABLE RELEASE :)
 
+(05/10/2011) - v1.0.2
+	* Correct bug which cause zenity 2.32.1 to be major than zenity 3.1.5
 
 (xx/10/2011) - v1.0.901 (1.1-alpha1)
 	* Add strong double encryption (gpg + openssl)
