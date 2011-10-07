@@ -5,7 +5,7 @@
 # @Name:        Bash Password Manager Install Script		                      
 # @Copyright:   2011					       
 # @Site:        http://projects.polslinux.it                          
-# @License:     GNU GPL v3 http://www.gnu.org/licenses/gpl.html  
+# @License:     GNU AGPL v3 http://www.gnu.org/licenses/agpl.html  
 ################################################################
 
 distro=$(cat /etc/issue | cut -d' ' -f1 -s)
@@ -39,7 +39,7 @@ if [ $? != 0 ] ; then
 else
 pkg1_ver=`zenity --version | sed 's/[^0-9]*//g'`
  if [ $pkg1_ver != 315 ] || [ $pkg1_ver != 320 ] ; then
-   echo "ERROR: Your Zenity version is $pkg1_ver but Zenity version 
+   echo "ERROR: Your Zenity version is `zenity --version` but Zenity version 
 required by this script MUST be >= 3.1.5"
    exit 1
  fi
