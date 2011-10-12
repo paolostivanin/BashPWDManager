@@ -9,7 +9,7 @@
 #################################################################
 
 IFS=$'\n'
-version="1.0.3"
+version="1.0.4"
 user=`id -u`
 conf_file="/home/$USER/.config/bpwdman.conf"
 
@@ -80,7 +80,7 @@ if [ "$ans" == "View All" ] ; then
 cat $file_db | zenity --text-info --width=800 --height=600
 elif [ "$ans" == "View One" ] ; then
 titlepass=`zenity --entry --title="Title" --text="Write the TITLE (eg Facebook, Gmail, ecc):" --entry-text ""`
-cat $file_db | grep $titlepass | zenity --text-info
+cat $file_db | grep -i $titlepass | zenity --text-info
 fi
 }
 
