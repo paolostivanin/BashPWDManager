@@ -9,23 +9,30 @@
 
 Description
 ===========
-Bash Password Manager is a tool that create a database
+Bash Password Manager is a script that create a database
 in which you can store your passwords in a total secure way!
-The database is encrypted with aes256/blowfish/twofish/3des/etc.
-Double encryption is on the roadmap ;)
+The database is double encrypted with GPG and OpenSSL so you can be sure that
+nobody can hack/view/compromise your database :)
 
 
 Requirements
 ============
-bash:   it is a bash script ;)
-zenity: message dialogs
-gpg:    encrypt db
+bash   : it is a bash script ;)
+zenity : message dialogs
+gpg    : encrypt/decrypt db
+openssl: encrypt/decrypt db
 
 
 How it works
 ============
 The script will create and encrypt the DB. 
 After that you can add, view or store new password.
+This script has lot of features such:
+	* double encryption
+	* possibility to choose your favourite cipher-algo (aes256, blowfish, twofish, ecc)
+	* possibility to generate strong random password
+	* possibility to change the cipher-algo of your DB when you want
+	* this script is small and fast
 
 
 How to use
@@ -35,17 +42,18 @@ Go to Applications -> Accessories -> BashPWDman
 
 How to install
 ==============
-Download the archive file and after you have extract it,
+Download the archive and after you have extract it,
 open the terminal and type:
-chmod +x PATH_EXTRACTED_FOLDER/install
-sudo PATH_EXTRACTED_FOLDER/.install
+chmod +x PATH_TO_EXTRACTED_FOLDER/install
+sudo PATH_TO_EXTRACTED_FOLDER/install
 
 
 Extra options
 =============================
 Open the terminal and type:
-bashpwdm -c -> you can change the cipher-algo of your db
-bashpwdm -p -> you can create a strong password
+bashpwdm -v -> view version of Bash PWD Manager
+bashpwdm -c -> change the cipher-algo of db
+bashpwdm -p -> create a strong password
 
 
 Notes

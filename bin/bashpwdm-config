@@ -12,14 +12,14 @@ IFS=$'\n'
 conf_file="/home/$USER/.config/bpwdman.conf"
 
 function check_useagent(){
-first_char=`cat /home/$USER/.gnupg/gpg.conf | grep use-agent | cut -f1 -d ' '`
+local first_char=`cat /home/$USER/.gnupg/gpg.conf | grep use-agent | cut -f1 -d ' '`
 if [ "$first_char" == "#" ] ; then
  sed -i '/use-agent/s/^#//' /home/$USER/.gnupg/gpg.conf
 fi
 }
 
 function first_encryption(){
- typ_algo=`echo $typ | tr '[A-Z]' '[a-z]'`
+ local typ_algo=`echo $typ | tr '[A-Z]' '[a-z]'`
  gpg -o $db_dir/enc_db --cipher-algo=$typ -c $db_dir/$db_name.bpm
  mv $db_dir/enc_db $db_dir/$db_name.bpm
 }
@@ -47,7 +47,8 @@ if [ ! -f $conf_file ] ; then
  echo "algo=$typ"  | tr '[A-Z]' '[a-z]' >> $conf_file
  db_dir=`zenity --file-selection --directory --title "Choose database directory"`
  db_name=`zenity --entry --title "Database name" --text "Write the name of your database"`
- if [ "$db_name" == "" ] ; then
+ db_name_tmp=`echo $db_name | sed 's/ //g'`
+ if [ -z "$db_name_tmp" ]; then
    zenity --error --title "Error" --text "You cannot create DB with no name"
    rm -f $conf_file
    exit 1
