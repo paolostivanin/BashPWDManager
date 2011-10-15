@@ -26,7 +26,7 @@ function first_encryption(){
 
 function save_db_path(){
 zenity --question --text "Do you want to save the path to DB so every time you
-start the script you won't have to select it?" --title "Save DB path?" --width=410
+start the script you won't have to select it?" --title "Save DB path?" --width=410 --ok-label=Yes --cancel-label=No
 if [ "$?" == "0" ] ; then
  echo "database-path=$db_dir/$db_name.bpm" >> $conf_file   
  elif [ "$?" != "0" ] ; then

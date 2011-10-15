@@ -55,7 +55,7 @@ function input_info(){
 }
 
 function input_again(){
-zenity --question --title "Another?" --text "Do you want to add another password?"
+zenity --question --title "Another?" --text "Do you want to add another password?" --ok-label=Yes --cancel-label=No
 if [ "$?" = "0" ] ; then
 input_info
 fi
@@ -85,7 +85,7 @@ function fine_prog_from_view(){
 }
 
 function view_again(){
-zenity --question --title "Another?" --text "Do you want to see another password?"
+zenity --question --title "Another?" --text "Do you want to see another password?" --ok-label=Yes --cancel-label=No
 if [ "$?" = "0" ] ; then
 view_db
 fi
@@ -111,7 +111,7 @@ function check_before_start(){
 if [ ! -f $conf_file ] ; then
 zenity --question --text "You have open the terminal and write
 'bashpwdm-config' before use this script.
-Do you want to do this now?" --title "Warning" --width=350
+Do you want to do this now?" --title "Warning" --width=350 --ok-label=Yes --cancel-label=No
  if [ "$?" == "0" ] ; then
  source bashpwdm-config
  zenity --warning --text "All done, now it is time to restart this script :)" --title "Warning" --width=400
