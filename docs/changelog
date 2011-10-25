@@ -59,16 +59,17 @@
 (12/10/2011) - v1.0.4
 	* Correct a bug which caused "search password" to be case sensitive (now  is not case sensitive)
 
-(15/10/2011) - v1.0.901 (1.1-alpha1)
+(15/10/2011) - v1.0.901 (1.1-beta1)
 	* Add strong double encryption (gpg + openssl)
 	* Add possibility to add or view more password in one time without exiting the script
 	* All the code has been double checked to avoid security bugs
 	* Update README with new info
 	* Small fixes
 	
-(xx/10/2011) - v1.0.991 (1.1-rc1)
-	* Possible bugs fix (if bugs were found)
-	* Intesive testing
+(25/10/2011) - v1.0.991 (1.1-rc1)
+	* Fix bug into double encryption
+	* Other minor fixes
 
-(xx+1/10/2011) - v1.1.0
-	* Stable release :)
+(xx/10/2011) - v1.0.992 (1.1-rc2)
+	* Fix openssl password request from terminal
+	* Fix annoying double passwords request

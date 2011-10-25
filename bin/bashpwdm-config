@@ -20,6 +20,8 @@ fi
 
 function first_encryption(){
  local typ_algo=`echo $typ | tr '[A-Z]' '[a-z]'`
+ openssl aes-256-cbc -a -salt -in $db_dir/$db_name.bpm -out $db_dir/enc_db_openssl
+ mv $db_dir/enc_db_openssl $db_dir/$db_name.bpm
  gpg -o $db_dir/enc_db --cipher-algo=$typ -c $db_dir/$db_name.bpm
  mv $db_dir/enc_db $db_dir/$db_name.bpm
 }
