@@ -11,18 +11,31 @@
 IFS=$'\n'
 conf_file="/home/$USER/.config/bpwdman.conf"
 
-function check_useagent(){
+function disable_useagent(){
 local first_char=`cat /home/$USER/.gnupg/gpg.conf | grep use-agent | cut -f1 -d ' '`
-if [ "$first_char" == "#" ] ; then
- sed -i '/use-agent/s/^#//' /home/$USER/.gnupg/gpg.conf
+if [ "$first_char" != "#" ] ; then
+ sed -i '/use-agent/s/^/#/' /home/$USER/.gnupg/gpg.conf
 fi
+}
+
+function check_pwd_char(){
+ local pass_char=`echo $pass | wc -m`
+ let pwd_char=$pass_char-1
+ if [ $pass_char -lt 9 ] ; then
+  zenity --error --title "Password characters" --text "Your password characters are $pwd_char.
+You MUST choose a password equal or greater than 8 charactes. 
+Thanks :)"
+  zenity --info --title "Restart the script" --text "Please restart this script..."
+  rm -f $conf_file
+  exit 1
+ fi
 }
 
 function first_encryption(){
  local typ_algo=`echo $typ | tr '[A-Z]' '[a-z]'`
- openssl aes-256-cbc -a -salt -in $db_dir/$db_name.bpm -out $db_dir/enc_db_openssl
+ openssl aes-256-cbc -a -salt -pass pass:$pass -in $db_dir/$db_name.bpm -out $db_dir/enc_db_openssl
  mv $db_dir/enc_db_openssl $db_dir/$db_name.bpm
- gpg -o $db_dir/enc_db --cipher-algo=$typ -c $db_dir/$db_name.bpm
+ echo $pass | gpg --passphrase-fd 0 -o $db_dir/enc_db --cipher-algo=$typ -c $db_dir/$db_name.bpm
  mv $db_dir/enc_db $db_dir/$db_name.bpm
 }
 
@@ -41,6 +54,9 @@ unset typ
 unset db_dir
 unset db_name
 unset conf_file
+unset pass
+unset pass_char
+unset pwd_char
 unset IFS
 }
 
@@ -56,9 +72,11 @@ if [ ! -f $conf_file ] ; then
    exit 1
  fi
  touch $db_dir/$db_name.bpm
+ pass=`zenity --entry --title "DB Password" --text "Choose your DB password" --hide-text`
+ check_pwd_char
  echo "db_created=1" >> $conf_file
  save_db_path
- check_useagent
+ disable_useagent
  first_encryption
  zenity --info --text "Bash Password Manager has been configured!" --title "All done!" --width=400
  fine_prog

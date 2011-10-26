@@ -70,6 +70,9 @@
 	* Fix bug into double encryption
 	* Other minor fixes
 
-(xx/10/2011) - v1.0.992 (1.1-rc2)
+(26/10/2011) - v1.0.992 (1.1-rc2)
 	* Fix openssl password request from terminal
 	* Fix annoying double passwords request
+	* use-agent isn't used anymore. Using zenity instead of it
+	* Pinentry-gtk has been dropped as dep
+	* Now on config password's characters will be checked. If they are < 8 the script will exit.
