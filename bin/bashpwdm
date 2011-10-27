@@ -9,7 +9,7 @@
 #################################################################
 
 IFS=$'\n'
-version="1.0.992 (1.1-rc2)"
+version="1.1.0"
 user=`id -u`
 conf_file="/home/$USER/.config/bpwdman.conf"
 
@@ -60,7 +60,7 @@ function input_info(){
  local password=`zenity --entry --hide-text --title "Password" --text "Write password"`
  exit_script
  echo "TITLE: $title | USER: $username | PASSWORD: $password" >> $file_db
- echo "-------------------------------" >> $file_db
+ echo "-------------------------------------" >> $file_db
 }
 
 function input_again(){
@@ -96,10 +96,12 @@ fi
 
 function view_db(){
 if [ "$ans" == "View All" ] ; then
-cat $file_db | zenity --text-info --width=800 --height=600
+ cat $file_db | zenity --text-info --width=800 --height=600
+ encrypt_db
+ fine_prog_from_view
 elif [ "$ans" == "View One" ] ; then
-local titlepass=`zenity --entry --title="Title" --text="Write the TITLE (eg Facebook, Gmail, ecc):" --entry-text ""`
-cat $file_db | grep -i $titlepass | zenity --text-info
+ local titlepass=`zenity --entry --title="Title" --text="Write the TITLE (eg Facebook, Gmail, ecc):" --entry-text ""`
+ cat $file_db | grep -i $titlepass | zenity --text-info
 fi
 }
 

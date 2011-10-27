@@ -76,3 +76,7 @@
 	* use-agent isn't used anymore. Using zenity instead of it
 	* Pinentry-gtk has been dropped as dep
 	* Now on config password's characters will be checked. If they are < 8 the script will exit.
+	
+(27/10/2011) - v1.1.0
+	* Small fixes
+	* Finally the newstable release :)
