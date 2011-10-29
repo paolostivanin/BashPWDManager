@@ -8,6 +8,7 @@
 # @License: GNU AGPL v3 http://www.gnu.org/licenses/agpl.html
 #################################################################
 
+BACKIFS=$IFS IFS=$'\n'
 IFS=$'\n'
 conf_file="/home/$USER/.config/bpwdman.conf"
 
@@ -50,14 +51,8 @@ fi
 }
 
 function fine_prog(){
-unset typ
-unset db_dir
-unset db_name
-unset conf_file
-unset pass
-unset pass_char
-unset pwd_char
-unset IFS
+IFS=$BACKIFS
+exit 0
 }
 
 if [ ! -f $conf_file ] ; then
