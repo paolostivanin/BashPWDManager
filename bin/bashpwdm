@@ -134,6 +134,10 @@ fine_prog_from_view
 fi
 }
 
+if [ `id -u` == 0 ] ; then
+ zenity --error --title "Error" --text "You can't start this script as root."
+ exit 0
+fi
 
 if [ "$1" == "-v" ] ; then
  echo -ne "\nBash Password Manager version $version\n\n"

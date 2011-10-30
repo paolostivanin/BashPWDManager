@@ -83,3 +83,6 @@
 	
 (29/10/2011) - v1.1.1
 	* The script won't exit if the config file doesn't exits
+
+(30/10/2011) - v1.1.2
+	* Now you cannot start this script as root user
