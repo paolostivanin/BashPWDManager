@@ -86,3 +86,6 @@
 
 (30/10/2011) - v1.1.2
 	* Now you cannot start this script as root user
+
+(02/11/2011) - v1.1.3
+	* If you write the wrong pwd now the script will tell you

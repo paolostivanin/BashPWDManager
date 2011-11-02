@@ -10,7 +10,7 @@
 
 BACKIFS=$IFS IFS=$'\n'
 IFS=$'\n'
-version="1.1.1"
+version="1.1.3"
 user=`id -u`
 conf_file="/home/$USER/.config/bpwdman.conf"
 
@@ -18,6 +18,12 @@ conf_file="/home/$USER/.config/bpwdman.conf"
 function exit_script(){
 if [ $? != "0" ] ; then
  exit 0
+fi
+}
+
+function check_gpg_openssl_pwd(){
+if [ $? != 0 ] ; then
+ zenity --error --title "Password Error" --text "You have entered a wrong password, now exit!" --width=450
 fi
 }
 
@@ -40,15 +46,19 @@ function check_db(){
 
 function decrypt_db(){
  echo $pass | gpg --passphrase-fd 0 -o $path_db/out_db_gpg --cipher-algo=$crypto_algo -d $file_db
+ check_gpg_openssl_pwd
  mv $path_db/out_db_gpg $file_db
  openssl aes-256-cbc -d -a -pass pass:$pass -in $file_db -out $path_db/out_db
+ check_gpg_openssl_pwd
  mv $path_db/out_db $file_db
 }
 
 function encrypt_db(){
  openssl aes-256-cbc -a -salt -pass pass:$pass -in $file_db -out $path_db/enc_db_openssl
+ check_gpg_openssl_pwd
  mv $path_db/enc_db_openssl $file_db
  echo $pass | gpg --passphrase-fd 0 -o $path_db/enc_db --cipher-algo=$crypto_algo -c $file_db
+ check_gpg_openssl_pwd
  mv $path_db/enc_db $file_db
 }
 
