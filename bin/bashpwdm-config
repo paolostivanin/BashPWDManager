@@ -15,8 +15,13 @@ conf_file="/home/$USER/.config/bpwdman.conf"
 function disable_useagent(){
 local first_char=`cat /home/$USER/.gnupg/gpg.conf | grep use-agent | cut -f1 -d ' '`
 if [ "$first_char" != "#" ] ; then
- sed -i '/use-agent/s/^/#/' /home/$USER/.gnupg/gpg.conf
+ echo "using-agent=yes" >> $conf_file
 fi
+}
+
+function retype_pass(){
+pass=`zenity --entry --title "DB Password" --text "Choose your DB password" --hide-text`
+check_pwd_char
 }
 
 function check_pwd_char(){
@@ -26,9 +31,7 @@ function check_pwd_char(){
   zenity --error --title "Password characters" --text "Your password characters are $pwd_char.
 You MUST choose a password equal or greater than 8 charactes. 
 Thanks :)"
-  zenity --info --title "Restart the script" --text "Please restart this script..."
-  rm -f $conf_file
-  exit 1
+  retype_pass
  fi
 }
 

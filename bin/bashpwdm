@@ -10,7 +10,7 @@
 
 BACKIFS=$IFS IFS=$'\n'
 IFS=$'\n'
-version="1.1.3"
+version="1.1.4"
 user=`id -u`
 conf_file="/home/$USER/.config/bpwdman.conf"
 
@@ -21,10 +21,31 @@ if [ $? != "0" ] ; then
 fi
 }
 
-function check_gpg_openssl_pwd(){
+function check_gpg_openssl_pwd_encrypt(){
 if [ $? != 0 ] ; then
- zenity --error --title "Password Error" --text "You have entered a wrong password, now exit!" --width=450
- exit 1
+ zenity --error --title "Password Error" --text "You have entered a wrong password, try again!" --width=450
+ pass=`zenity --entry --title "DB Password" --text "Write your DB password" --hide-text`
+ encrypt_db
+fi
+}
+
+function check_gpg_openssl_pwd_decrypt(){
+if [ $? != 0 ] ; then
+ zenity --error --title "Password Error" --text "You have entered a wrong password, try again!" --width=450
+ pass=`zenity --entry --title "DB Password" --text "Write your DB password" --hide-text`
+ decrypt_db
+fi
+}
+
+function retype_nchar(){
+nchar=`zenity --entry --title="Character" --text="Write number of password character:" --entry-text ""`
+check_pwd_char
+}
+
+function check_pwd_char(){
+if [ $nchar -lt 8 ] ; then
+ zenity --warning --title "Low password characters" --text "You have choose low password characters, please choose a number >=8"
+ retype_nchar
 fi
 }
 
@@ -47,19 +68,19 @@ function check_db(){
 
 function decrypt_db(){
  echo $pass | gpg --passphrase-fd 0 -o $path_db/out_db_gpg --cipher-algo=$crypto_algo -d $file_db
- check_gpg_openssl_pwd
+ check_gpg_openssl_pwd_decrypt
  mv $path_db/out_db_gpg $file_db
  openssl aes-256-cbc -d -a -pass pass:$pass -in $file_db -out $path_db/out_db
- check_gpg_openssl_pwd
+ check_gpg_openssl_pwd_decrypt
  mv $path_db/out_db $file_db
 }
 
 function encrypt_db(){
  openssl aes-256-cbc -a -salt -pass pass:$pass -in $file_db -out $path_db/enc_db_openssl
- check_gpg_openssl_pwd
+ check_gpg_openssl_pwd_encrypt
  mv $path_db/enc_db_openssl $file_db
  echo $pass | gpg --passphrase-fd 0 -o $path_db/enc_db --cipher-algo=$crypto_algo -c $file_db
- check_gpg_openssl_pwd
+ check_gpg_openssl_pwd_encrypt
  mv $path_db/enc_db $file_db
 }
 
@@ -84,11 +105,13 @@ fi
 
 function fine_prog(){
  IFS=$BACKIFS
+ sed -i '/use-agent/s/^#//' /home/$USER/.gnupg/gpg.conf
  exit 0
 }
 
 function fine_prog_from_view(){
  IFS=$BACKIFS
+ sed -i '/use-agent/s/^#//' /home/$USER/.gnupg/gpg.conf
  exit 0
 }
 
@@ -129,7 +152,11 @@ Do you want to do this now?" --title "Warning" --width=350 --ok-label=Yes --canc
    exit 0
  fi
 else
-pass=`zenity --entry --title "DB Password" --text "Choose your DB password" --hide-text`
+is_using=`cat $conf_file | grep "using-agent" | cut -f2 -d'='`
+if [ "$is_using" == "yes" ] ; then
+ sed -i '/use-agent/s/^/#/' /home/$USER/.gnupg/gpg.conf
+fi  
+pass=`zenity --entry --title "DB Password" --text "Write your DB password" --hide-text`
 fi
 }
 
@@ -155,11 +182,9 @@ if [ "$1" == "-v" ] ; then
  exit 0
  elif [ "$1" == "-p" ] ; then
   nchar=`zenity --entry --title="Character" --text="Write number of password character:" --entry-text ""`
+  check_pwd_char
   char="[:graph:]"
-  pass=`</dev/urandom tr -dc $char | head -c $nchar`
-  zenity --info --text "Your password is:
-$pass" --title "Generated Password"
-  unset pass
+  echo `</dev/urandom tr -dc $char | head -c $nchar` | zenity --text-info --title "Your password is:" --height=150 --width=300
   exit 0
  elif [ "$1" == "-c" ] ; then
   file_db=`zenity --file-selection --title "Choose database"`

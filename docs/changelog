@@ -89,3 +89,16 @@
 
 (02/11/2011) - v1.1.3
 	* If you write the wrong pwd now the script will tell you
+	
+(03/11/2011) - v1.1.4
+	* Use-agent option is backupped and restored every time
+	* The script won't exit if you type wrong pwd
+	* Config won't exit if the pwd is <8 char
+	* "-p" will re-ask your pwd if it is <8 char
+	* fixed a bug that caused "-p" option to fail due too zenity bug
+
+(xx/11/2011) - v1.1.901 (1.2-beta1)
+	* Add option to change DB directory (--change-dir)
+	* Add option to change DB name (--change-name)
+	* Add quick help (--help)
+	* Add option to update the main script (-u)
