@@ -24,6 +24,7 @@ fi
 function check_gpg_openssl_pwd(){
 if [ $? != 0 ] ; then
  zenity --error --title "Password Error" --text "You have entered a wrong password, now exit!" --width=450
+ exit 1
 fi
 }
 
