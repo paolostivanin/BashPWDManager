@@ -10,7 +10,7 @@
 
 BACKIFS=$IFS IFS=$'\n'
 IFS=$'\n'
-version="1.1.4"
+version="1.1.5"
 user=`id -u`
 conf_file="/home/$USER/.config/bpwdman.conf"
 
@@ -84,14 +84,25 @@ function encrypt_db(){
  mv $path_db/enc_db $file_db
 }
 
+function check_pwd_before_write(){
+password_retype=`zenity --entry --hide-text --title "Password" --text "Retype your password"`
+if [ "$password" !=  "$password_retype" ] ; then
+ zenity --error --title "Errore" --text "Passwords are different, please try again!"
+ pwd_insert
+fi
+}
 
 function input_info(){
- local title=`zenity --entry --title "Title" --text "Write Title"`
+ title=`zenity --entry --title "Title" --text "Write Title"`
  exit_script
- local username=`zenity --entry --title "Username" --text "Write Username"`
+ username=`zenity --entry --title "Username" --text "Write Username"`
  exit_script
- local password=`zenity --entry --hide-text --title "Password" --text "Write password"`
+} 
+
+function pwd_insert(){
+ password=`zenity --entry --hide-text --title "Password" --text "Write password"`
  exit_script
+ check_pwd_before_write
  echo "TITLE: $title | USER: $username | PASSWORD: $password" >> $file_db
  echo "-------------------------------------" >> $file_db
 }
