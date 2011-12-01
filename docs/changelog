@@ -107,4 +107,5 @@
 	* Add option to change DB directory (--change-dir)
 	* Add option to change DB name (--change-name)
 	* Add quick help (--help)
-	* Add option to update the main script (-u)
+	* Add option to automatic update the main script (-u)
+	* Add possibility to delete one or more password
