@@ -100,10 +100,10 @@
 (15/11/2011) - v1.1.5
 	* check pwd before write it into db 
 
-(zz/11/2011) - v1.1.6
+(01/12/2011) - v1.1.6
 	* Now the script is POSIX standard
 
-(xx/11/2011) - v1.1.901 (1.2-beta1)
+(xx/12/2011) - v1.1.901 (1.2-beta1)
 	* Add option to change DB directory (--change-dir)
 	* Add option to change DB name (--change-name)
 	* Add quick help (--help)
