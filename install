@@ -32,29 +32,29 @@ else
 fi
 
 echo "* Checking deps..."
-pkg1=`which zenity`
+pkg1=$(which zenity)
 if [ $? != 0 ] ; then
  echo "--> ERROR: You have to install zenity before continue..."
  exit 1
 else
-pkg1_ver=`zenity --version | sed 's/[^0-9]*//g'`
+pkg1_ver=$(zenity --version | sed 's/[^0-9]*//g')
  if [ $pkg1_ver != 315 ] || [ $pkg1_ver != 320 ] ; then
-   echo "ERROR: Your Zenity version is `zenity --version` but Zenity version 
+   echo "ERROR: Your Zenity version is $(zenity --version) but Zenity version 
 required by this script MUST be >= 3.1.5"
    exit 1
  fi
 fi
-pkg2=`which bash`
+pkg2=$(which bash)
 if [ $? != 0 ] ; then
 echo "--> ERROR: You have to install bash before continue..."
 exit 1
 fi
-pkg3=`which gpg`
+pkg3=$(which gpg)
 if [ $? != 0 ] ; then
 echo "--> ERROR: You have to install gpg before continue..."
 exit 1
 fi
-pkg4=`which openssl`
+pkg4=$(which openssl)
 if [ $? != 0 ] ; then
 echo "--> ERROR: You have to install openssl before continue..."
 exit 1
