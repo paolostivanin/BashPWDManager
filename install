@@ -12,23 +12,23 @@ distro=$(cat /etc/issue | cut -d' ' -f1 -s)
 
 echo -ne "* Checking user's privileges...\n"
 if [ "$(id -u)" != "0" ]; then 
-	echo "	ERROR: User $(whoami) is not root, and does not have sudo privileges"
-	if [ "$distro" == "Debian" ] ; then echo "        Type su in the terminal and re-run this script"
-	elif [ "$distro" == "Ubuntu" ] ; then echo "        Type sudo su in the terminal and re-run this script"
-	elif [ "$distro" == "Arch" ] ; then echo "        Type su in the terminal and re-run this script"
-	fi
-	exit 1
+ echo "	ERROR: User $(whoami) is not root, and does not have sudo privileges"
+ if [ "$distro" == "Debian" ] ; then echo "        Type su in the terminal and re-run this script"
+ elif [ "$distro" == "Ubuntu" ] ; then echo "        Type sudo su in the terminal and re-run this script"
+ elif [ "$distro" == "Arch" ] ; then echo "        Type su in the terminal and re-run this script"
+ fi
+ exit 1
 else
-	echo "   Write your exact username:"
-	read username
+ echo "   Write your exact username:"
+ read username
 fi
 
 echo -ne "* Checking type of your linux distros...\n"
 if [ "$distro" == "Debian" ] || [ "$distro" == "Ubuntu" ] || [ "$distro" == "Arch" ];then
-	echo "   Ok, you're running $distro and Bash Password Manager is compatible with it!"
+ echo "   Ok, you're running $distro and Bash Password Manager is compatible with it!"
 else
-	echo  "   WARNING: Bash Password Manager is tested to work with Debian, Ubuntu and Archlinux,"
-	echo  "   try it on your system and tell me if there is something wrong!"
+ echo  "   WARNING: Bash Password Manager is tested to work with Debian, Ubuntu and Archlinux,"
+ echo  "   try it on your system and tell me if there is something wrong!"
 fi
 
 echo "* Checking deps..."
@@ -46,33 +46,36 @@ required by this script MUST be >= 3.1.5"
 fi
 pkg2=$(which bash)
 if [ $? != 0 ] ; then
-echo "--> ERROR: You have to install bash before continue..."
-exit 1
+ echo "--> ERROR: You have to install bash before continue..."
+ exit 1
 fi
 pkg3=$(which gpg)
 if [ $? != 0 ] ; then
-echo "--> ERROR: You have to install gpg before continue..."
-exit 1
+ echo "--> ERROR: You have to install gpg before continue..."
+ exit 1
 fi
 pkg4=$(which openssl)
 if [ $? != 0 ] ; then
-echo "--> ERROR: You have to install openssl before continue..."
-exit 1
+ echo "--> ERROR: You have to install openssl before continue..."
+ exit 1
 fi
 echo "   Ok!"
 
 echo "* Installing files..."
 if [ ! -d /usr/share/doc/bash-pwd-manager ] ; then
-	mkdir /usr/share/doc/bash-pwd-manager
+ mkdir /usr/share/doc/bash-pwd-manager
 fi
 cp LICENSE README uninstall docs/* /usr/share/doc/bash-pwd-manager
 cp bin/bashpwdm /usr/local/bin
 cp bin/bashpwdm-config /usr/local/bin
+cp bin/bashpwdm_update /usr/local/bin
 cp docs/bashpwdm.desktop /usr/share/applications/
 cp docs/bpwdm.png /usr/share/pixmaps/
 chown $username /usr/local/bin/bashpwdm
 chown $username /usr/local/bin/bashpwdm-config
+chown $username /usr/local/bin/bashpwdm_update
 chmod +x /usr/local/bin/bashpwdm
 chmod +x /usr/local/bin/bashpwdm-config
+chmod +x /usr/local/bin/bashpwdm_update
 echo -ne "   Ok, all done!\n"
 exit 0

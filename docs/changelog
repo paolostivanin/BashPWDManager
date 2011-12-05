@@ -104,8 +104,11 @@
 	* Now the script is POSIX standard
 
 (xx/12/2011) - v1.1.901 (1.2-beta1)
+	* FIXED: -c option is now --change-algo
+	* FIXED: -p option is now --generate-pwd
+	* FIXED: backup/restore use-agent option
 	* Add option to change DB directory (--change-dir)
 	* Add option to change DB name (--change-name)
-	* Add quick help (--help)
+	* Add quick help (--help)  ------------------------------> DEVELOPING...
 	* Add option to automatic update the main script (-u)
-	* Add possibility to delete one or more password
+	* Add possibility to delete one or more password ---------> DEVELOPING...
