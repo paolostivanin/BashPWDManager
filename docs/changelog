@@ -110,6 +110,6 @@
 	* Add option to change DB directory (--change-dir)
 	* Add option to change DB name (--change-name)
 	* Add quick help (--help)  -------------------------------> DEVELOPING...
-	* Add option to automatic update the main script (-u)
+	* Add option to automatically update the main script (-u)
 	* Add possibility to delete one or more password
 	* Add possibility to change one or more password ---------> DEVELOPING...

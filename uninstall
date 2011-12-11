@@ -21,19 +21,22 @@ if [ "$(id -u)" != "0" ]; then
 else
 echo "  * Removing files..."
   if [ -d /usr/share/doc/bash-pwd-manager ] ; then
-  rm -r /usr/share/doc/bash-pwd-manager
+   rm -r /usr/share/doc/bash-pwd-manager
   fi
   if [ -f /usr/local/bin/bashpwdm ] ; then
-  rm -f /usr/local/bin/bashpwdm
+   rm -f /usr/local/bin/bashpwdm
   fi
   if [ -f /usr/local/bin/bashpwdm-config ] ; then
-  rm -f /usr/local/bin/bashpwdm-config
+   rm -f /usr/local/bin/bashpwdm-config
+  fi
+  if [ -f /usr/local/bin/bashpwdm_update ] ; then
+   rm -f /usr/local/bin/bashpwdm_update
   fi
   if [ -f /usr/share/applications/bashpwdm.desktop ] ; then
-  rm -f /usr/share/applications/bashpwdm.desktop
+   rm -f /usr/share/applications/bashpwdm.desktop
   fi
   if [ -f /usr/share/pixmaps/bpwdm.png ] ; then
-  rm -f /usr/share/pixmaps/bpwdm.png
+   rm -f /usr/share/pixmaps/bpwdm.png
   fi
 fi
 echo "Thanks to have used my script! Bye bye :)"

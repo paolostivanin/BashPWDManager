@@ -38,7 +38,7 @@ chmod +x /usr/local/bin/bashpwdm-config
 chmod +x /usr/local/bin/bashpwdm_update
 cd .. && rm -r bashpwdm_tmp && rm -f bashpwdm_v$last_version.tar.bz2
 echo "  * All done, Bash PWD Manager has been updated :)"
-elif [ "$version" == "$last_version" ] ; then
+elif [ "$version" = "$last_version" ] ; then
 echo "  * Bash PWD Manager is already up-to-date"
 fi
 }
