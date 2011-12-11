@@ -61,7 +61,7 @@ function check_db(){
  path_db=$(dirname $file_db)
  local permission=$(ls -l $file_db | cut -f2 -d'-')
  if [ ! -f $file_db ] || [ "$permission" != "rw" ]; then
-  zenity --error --text "Database doesn't exist or hasn't read/write permissions." --title "Database Error"
+  zenity --error --text "Database doesn't exist or hasn't read & write permissions." --title "Database Error"
   exit 1
  fi
 }
@@ -107,9 +107,27 @@ function pwd_insert(){
  echo "-------------------------------------" >> $file_db
 }
 
+function delete_again(){
+zenity --question --title "Another?" --text "Do you want to delete another password?" --ok-label=Yes --cancel-label=No
+if [ "$?" = 0 ] ; then
+ delete_pwd
+fi
+}
+
+function delete_pwd(){
+to_delete=$(zenity --entry --title "Choose PWD" --text "Write the EXACT title of PWD to delete")
+cat $file_db | grep $to_delete | zenity --text-info --title "Click OK to delete this password" --width=400 --height=200
+if [ $? = 0 ]; then
+ sed -i '/\<'$to_delete'\>/d' $file_db
+ delete_again
+else
+ zenity --warning --title "No deletion" --text "No password has been deleted"
+fi
+}
+
 function input_again(){
 zenity --question --title "Another?" --text "Do you want to add another password?" --ok-label=Yes --cancel-label=No
-if [ "$?" = "0" ] ; then
+if [ "$?" = 0 ] ; then
 input_info
 fi
 }
@@ -176,24 +194,31 @@ fi
 }
 
 function view_or_add(){
-ans=$(zenity  --list  --text "Do you want to view password or add password?" --radiolist  --column "Pick" --column "Choice" TRUE Add FALSE "View All" FALSE "View One")
-if [ "$ans" == "View All" ] || [ "$ans" == "View One" ] ; then
-check_db
-decrypt_db
-view_db
-view_again
-encrypt_db
-fine_prog_from_view
+ans=$(zenity  --list  --text "Do you want to view, add or delete password?" --radiolist  --column "Pick" --column "Choice" TRUE Add FALSE Delete FALSE "View All" FALSE "View One")
+if [ "$ans" = "View All" ] || [ "$ans" = "View One" ] ; then
+ check_db
+ decrypt_db
+ view_db
+ view_again
+ encrypt_db
+ fine_prog_from_view
+elif [ "$ans" = "Delete" ]; then
+ check_db
+ decrypt_db
+ delete_pwd
+ delete_again
+ encrypt_db
+ fine_prog_from_view
 fi
 }
 
-if [ "$user" = "0" ] ; then
+if [ "$user" = 0 ] ; then
  zenity --error --title "Error" --text "You can't start this script as root."
  exit 0
 fi
 
 if [ "$1" = "-v" ] ; then
- echo "Bash Password Manager version $version"
+ echo "Bash Password Manager v$version developed by Polslinux <http://www.polslinux.it>"
  exit 0
  elif [ "$1" = "--generate-pwd" ] ; then
   nchar=$(zenity --entry --title="Character" --text="Write number of password character:" --entry-text "")
