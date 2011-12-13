@@ -25,9 +25,7 @@ check_pwd_char
 }
 
 function check_pwd_char(){
- local pass_char=$(echo $pass | wc -m)
- let pwd_char=$pass_char-1
- if [ $pass_char -lt 9 ] ; then
+ if [ ${#pass} -lt 8 ] ; then
   zenity --error --title "Password characters" --text "Your password characters are $pwd_char.
 You MUST choose a password equal or greater than 8 charactes. 
 Thanks :)"

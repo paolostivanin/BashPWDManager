@@ -104,13 +104,14 @@
 	* Now the script is POSIX standard
 
 (xx/12/2011) - v1.1.901 (1.2-beta1)
-	* FIXED: -c option is now --change-algo
-	* FIXED: -p option is now --generate-pwd
 	* FIXED: backup/restore use-agent option
-	* Updated README file with newest options
-	* Add option to change DB directory (--change-dir)
-	* Add option to change DB name (--change-name)
-	* Add quick help (--help)  -------------------------------> DEVELOPING...
-	* Add option to automatically update the main script (-u)
-	* Add possibility to delete one or more password
-	* Add possibility to change one or more password ---------> DEVELOPING...
+	* CHANGED: -c option is now --change-algo
+	* CHANGED: -p option is now --generate-pwd
+	* IMPROVED: now checking number of pwd char is faster than before
+	* IMPROVED: Updated README file with newest options ---------> NOT YET UPDATED
+	* ADDED: option to change DB directory (--change-dir)
+	* ADDED: option to change DB name (--change-name)
+	* ADDED: quick help (--help)  -------------------------------> DEVELOPING...
+	* ADDED: option to automatically update the main script (-u)
+	* ADDED: possibility to delete one or more password
+	* ADDED: possibility to change one or more password ---------> DEVELOPING...
