@@ -105,8 +105,8 @@
 
 (xx/12/2011) - v1.1.901 (1.2-beta1)
 	* FIXED: backup/restore use-agent option
-	* CHANGED: -c option is now --change-algo
-	* CHANGED: -p option is now --generate-pwd
+	* CHANGED: -c option can be also --change-algo
+	* CHANGED: -p option can be also --generate-pwd
 	* IMPROVED: now checking number of pwd char is faster than before
 	* IMPROVED: Updated README file with newest options ---------> NOT YET UPDATED
 	* ADDED: option to change DB directory (--change-dir)

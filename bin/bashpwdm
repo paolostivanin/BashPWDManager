@@ -220,13 +220,13 @@ fi
 if [ "$1" = "-v" ] ; then
  echo "Bash Password Manager v$version developed by Polslinux <http://www.polslinux.it>"
  exit 0
- elif [ "$1" = "--generate-pwd" ] ; then
+ elif [ "$1" = "--generate-pwd" ] || [ "$1" = "-p" ]; then
   nchar=$(zenity --entry --title="Character" --text="Write number of password character:" --entry-text "")
   check_pwd_char
   char="[:graph:]"
   echo $(</dev/urandom tr -dc $char | head -c $nchar) | zenity --text-info --title "Your password is:" --height=150 --width=300
   exit 0
- elif [ "$1" = "--change-algo" ] ; then
+ elif [ "$1" = "--change-algo" ] || [ "$1" = "-c" ] ; then
   file_db=$(zenity --file-selection --title "Choose database")
   exit_script
   crypto_algo=$(cat $conf_file | cut -f1 -d' ')
@@ -241,20 +241,30 @@ if [ "$1" = "-v" ] ; then
   gpg -o $path_db/enc_db --cipher-algo=$crypto_algo -c $path_db/enc_db_openssl
   mv $path_db/enc_db $file_db
   exit 0
- elif [ "$1" = "--change-dir" ] ; then
+ elif [ "$1" = "--change-dir" ] || [ "$1" = "-d" ]; then
   newdir=$(zenity --file-selection --directory --title "New DB direcory" --text "Choose your new database directory")
   sed -i '/database-path*/d' $conf_file
   db_name=$(cat $conf_file | grep "database-name" | cut -f2 -d'=')
   echo "database-path=$newdir/$db_name" >> $conf_file
   exit 0
- elif [ "$1" = "--change-name" ] ; then
+ elif [ "$1" = "--change-name" ] || [ "$1" = "-n" ] ; then
   new_db_name=$(zenity --entry --title "Database name" --text "Write the new name of your database")
   sed -i '/database-name*/d' $conf_file
   echo $new_db_name >> $conf_file
   exit 0
- elif [ "$1" = "-u" ] ; then
+ elif [ "$1" = "-u" ] || [ "$1" = "--update" ] ; then
   source bashpwdm_update
   exit 0
+ elif [ "$1" = "-h" ] || [ "$1" = "--help" ] ; then
+echo -e "You are using Bash PWD Manager v$version.\nTo start using the script just search for 'BashPWDManager' into your app menu\nor type 'bashpwdm' into the terminal.
+The syntax for the following options is: bashpwdm [OPTIONS]\nwhere [OPTIONS] can be:\n
+(-c) --change-algo  -> change your DB cipher-algo
+(-p) --generate-pwd -> generate a strong password
+(-d) --change-dir   -> change the directory where your DB is saved
+(-n) --change-name  -> change your DB name
+(-u) --update       -> update the script to lastest version
+(-h) --help         -> this help ;)\n"
+exit 0
 fi
 
 check_user
