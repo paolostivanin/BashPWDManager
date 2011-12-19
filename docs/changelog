@@ -103,12 +103,12 @@
 (01/12/2011) - v1.1.6
 	* Now the script is POSIX standard
 
-(xx/12/2011) - v1.1.901 (1.2-beta1)
+(19/12/2011) - v1.1.901 (1.2-beta1)
 	* FIXED: backup/restore use-agent option
 	* CHANGED: -c option can be also --change-algo
 	* CHANGED: -p option can be also --generate-pwd
 	* IMPROVED: now checking number of pwd char is faster than before
-	* IMPROVED: Updated README file with newest options ---------> NOT YET UPDATED
+	* IMPROVED: Updated README file with newest options
 	* ADDED: option to change DB directory (--change-dir)
 	* ADDED: option to change DB name (--change-name)
 	* ADDED: quick help (--help)
