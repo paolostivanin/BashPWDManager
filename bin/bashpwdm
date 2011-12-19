@@ -125,10 +125,41 @@ else
 fi
 }
 
+function new_pwd_and_check(){
+newpwd=$(zenity --entry --title "New Password" --text "Write your new password" --hide-text)
+exit_script
+newpwd_2=$(zenity --entry --title "New Password" --text "Retype your password" --hide-text)
+exit_script
+if [ "$newpwd" != "$newpwd_2" ]; then
+ zenity --error --title "Wrong PWD" --text "Passwords aren't the same, please try again"
+ exit_script
+ new_pwd_and_check
+fi
+}
+
+function change_again(){
+zenity --question --title "Another?" --text "Do you want to change another password?" --ok-label=Yes --cancel-label=No
+if [ $? = 0 ] ; then
+ change_pwd
+fi
+}
+
+function change_pwd(){
+new_pwd_and_check
+to_change=$(zenity --entry --title "Choose PWD" --text "Write the EXACT title of PWD to change")
+cat $file_db | grep $to_change | zenity --text-info --title "Click OK to change this password" --width=400 --height=200
+if [ $? = 0 ]; then
+ sed -i '/^TITLE: '$to_change'/s/PASSWORD:.*/PASSWORD: '$newpwd'/' $file_db
+ change_again
+else
+ zenity --warning --title "No changing" --text "No password has been changed"
+fi
+}
+
 function input_again(){
 zenity --question --title "Another?" --text "Do you want to add another password?" --ok-label=Yes --cancel-label=No
 if [ "$?" = 0 ] ; then
-input_info
+ input_info
 fi
 }
 
@@ -151,7 +182,7 @@ function fine_prog_from_view(){
 function view_again(){
 zenity --question --title "Another?" --text "Do you want to see another password?" --ok-label=Yes --cancel-label=No
 if [ "$?" = "0" ] ; then
-view_db
+ view_db
 fi
 }
 
@@ -194,7 +225,7 @@ fi
 }
 
 function view_or_add(){
-ans=$(zenity  --list  --text "Do you want to view, add or delete password?" --radiolist  --column "Pick" --column "Choice" TRUE Add FALSE Delete FALSE "View All" FALSE "View One")
+ans=$(zenity  --list  --text "Do you want to add, change, delete or view password?" --radiolist  --column "Pick" --column "Choice" TRUE Add FALSE Change FALSE Delete FALSE "View All" FALSE "View One")
 if [ "$ans" = "View All" ] || [ "$ans" = "View One" ] ; then
  check_db
  decrypt_db
@@ -207,6 +238,13 @@ elif [ "$ans" = "Delete" ]; then
  decrypt_db
  delete_pwd
  delete_again
+ encrypt_db
+ fine_prog_from_view
+elif [ "$ans" = "Change" ]; then
+ check_db
+ decrypt_db
+ change_pwd
+ change_again
  encrypt_db
  fine_prog_from_view
 fi
