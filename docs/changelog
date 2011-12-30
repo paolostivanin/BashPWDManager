@@ -115,3 +115,24 @@
 	* ADDED: option to automatically update the main script (-u)
 	* ADDED: possibility to delete one or more password
 	* ADDED: possibility to change one or more password
+
+(xx/01/2012) - v1.1.991 (1.2-rc1)
+	* Intesive testing
+	* Release Candidate
+
+(yy/01/2012) - v1.2.0
+	* NEWSTABLE RELEASE :)
+
+(NaN) - v1.9.901 (2.0-beta1)
+	* ADDED: list of title so you can choose the pwd to be shown more quickly
+	* ADDED: pwd expiration date
+	* ADDED: kde compatibility thanks to kdialog
+	* ADDED: cli compatibility thanks to dialog
+
+	* ........SPACE FOR (EVENTUALLY) NEW FEATURES........
+
+	* CHANGED: gnome interface have been splitted from core script
+	* IMPROVED: core has been revisited and improved
+	* IMPROVED: installer have been improved to match all the new changes
+	* IMPROVED: uninstaller have been improved to match all the new changes
+	* UPDATED: readme file has been updated
