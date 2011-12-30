@@ -44,12 +44,12 @@ Extra options
 
 Open the terminal and type:<br>
 
-- `bashpwdm --version`      (-v) -> view version of Bash PWD Manager
-- `bashpwdm --change-algo`  (-c) -> change the cipher-algo of db
-- `bashpwdm --generate-pwd` (-p) -> create a strong password
-- `bashpwdm --change-dir`   (-d) -> change db directory (if you have saved it)
-- `bashpwdm --change-name`  (-n) -> change db name (if you have saved it)
-- `bashpwdm --update`       (-u) -> automatically update BashPWDManager to lastest version
+- `bashpwdm --version     `  (-v) -> view version of Bash PWD Manager
+- `bashpwdm --change-algo `  (-c) -> change the cipher-algo of db
+- `bashpwdm --generate-pwd`  (-p) -> create a strong password
+- `bashpwdm --change-dir  `  (-d) -> change db directory (if you have saved it)
+- `bashpwdm --change-name `  (-n) -> change db name (if you have saved it)
+- `bashpwdm --update      `  (-u) -> automatically update BashPWDManager to lastest version
 
 Notes
 -----
