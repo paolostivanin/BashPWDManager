@@ -130,6 +130,8 @@
 	* ADDED: pwd expiration date
 	* ADDED: kde compatibility thanks to kdialog
 	* ADDED: cli compatibility thanks to dialog
+	* ADDED: md5sum check
+	* ADDED: backup option
 
 	* ........SPACE FOR (EVENTUALLY) NEW FEATURES........
 
