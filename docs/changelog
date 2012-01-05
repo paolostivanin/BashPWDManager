@@ -116,10 +116,11 @@
 	* ADDED: possibility to delete one or more password
 	* ADDED: possibility to change one or more password
 
-(xx/01/2012) - v1.1.991 (1.2-rc1)
-	* Intesive testing
-	* New README
-	* Release Candidate
+(05/01/2012) - v1.1.991 (1.2-rc1)
+	* IMPROVED: README with markdown features
+	* FIXED: various bugs that caused the script to fails
+	* IMPROVED: if the script is closed in the wrong way the DB now will be encryped
+	* FIXED: some other minor things
 
 (yy/01/2012) - v1.2.0
 	* NEWSTABLE RELEASE :)

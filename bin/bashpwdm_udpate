@@ -1,10 +1,10 @@
 #!/bin/bash
 
 #################################################################
-# @Author:    Paolo Stivanin aka Polslinux		        
-# @Name:      Bash PWD Manager Update Script			        		                
-# @Copyright: 2011					        
-# @Site:      http://projects.polslinux.it                           
+# @Author:    Paolo Stivanin aka Polslinux
+# @Name:      Bash PWD Manager Update Script      
+# @Copyright: 2011
+# @Site:      http://projects.polslinux.it
 # @License:   GNU AGPL v3 http://www.gnu.org/licenses/agpl.html 
 #################################################################
 
@@ -19,8 +19,8 @@ fi
 echo "  * Write your exact username:"
 read username
 echo "  * Checking Bash PWD Manager version..."
-echo -ne "    Your version is $version
-    Newest version is $last_version\n"
+echo "    Your version is $version
+    Newest version is $last_version"
 if [ "$version" != "$last_version" ] ; then
   echo "  * Updating Bash PWD Manager, please wait..."
   cd /tmp && mkdir bashpwdm_tmp

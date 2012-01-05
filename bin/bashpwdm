@@ -10,13 +10,17 @@
 
 BACKIFS=$IFS IFS=$'\n'
 IFS=$'\n'
-version="1.2.0-beta1"
+version="1.1.991"
 user=$(id -u)
 conf_file="/home/$USER/.config/bpwdman.conf"
 
 
 function exit_script(){
 if [ $? != "0" ] ; then
+ type_of=$(file $file_db | cut -f2 -d':' | sed '/ /s/^ //' | cut -f1 -d' ')
+ if [ "$type_of" = "ASCII" ]; then
+  encrypt_db
+ fi
  exit 0
 fi
 }
@@ -50,38 +54,38 @@ fi
 }
 
 function check_db(){
- path_to_db=$(cat $conf_file | grep database-path | cut -f2 -d'=')
- if [ $path_to_db = "0" ] ; then
+path_to_db=$(cat $conf_file | grep database-path | cut -f2 -d'=')
+if [ $path_to_db = "0" ] ; then
  file_db=$(zenity --file-selection --title "Choose database")
- else
+else
  file_db=$(cat $conf_file | grep database-path | cut -f2 -d'=')
  exit_script
- fi
- crypto_algo=$(cat $conf_file | grep algo | cut -f2 -d'=')
- path_db=$(dirname $file_db)
- local permission=$(ls -l $file_db | cut -f2 -d'-')
- if [ ! -f $file_db ] || [ "$permission" != "rw" ]; then
-  zenity --error --text "Database doesn't exist or hasn't read & write permissions." --title "Database Error"
-  exit 1
- fi
+fi
+crypto_algo=$(cat $conf_file | grep algo | cut -f2 -d'=')
+path_db=$(dirname $file_db)
+local permission=$(ls -l $file_db | cut -f2 -d'-')
+if [ ! -f $file_db ] || [ "$permission" != "rw" ]; then
+ zenity --error --text "Database doesn't exist or hasn't read & write permissions." --title "Database Error"
+ exit 1
+fi
 }
 
 function decrypt_db(){
- echo $pass | gpg --passphrase-fd 0 -o $path_db/out_db_gpg --cipher-algo=$crypto_algo -d $file_db
- check_gpg_openssl_pwd_decrypt
- mv $path_db/out_db_gpg $file_db
- openssl aes-256-cbc -d -a -pass pass:$pass -in $file_db -out $path_db/out_db
- check_gpg_openssl_pwd_decrypt
- mv $path_db/out_db $file_db
+echo $pass | gpg --passphrase-fd 0 -o $path_db/out_db_gpg --cipher-algo=$crypto_algo -d $file_db
+check_gpg_openssl_pwd_decrypt
+mv $path_db/out_db_gpg $file_db
+openssl aes-256-cbc -d -a -pass pass:$pass -in $file_db -out $path_db/out_db
+check_gpg_openssl_pwd_decrypt
+mv $path_db/out_db $file_db
 }
 
 function encrypt_db(){
- openssl aes-256-cbc -a -salt -pass pass:$pass -in $file_db -out $path_db/enc_db_openssl
- check_gpg_openssl_pwd_encrypt
- mv $path_db/enc_db_openssl $file_db
- echo $pass | gpg --passphrase-fd 0 -o $path_db/enc_db --cipher-algo=$crypto_algo -c $file_db
- check_gpg_openssl_pwd_encrypt
- mv $path_db/enc_db $file_db
+openssl aes-256-cbc -a -salt -pass pass:$pass -in $file_db -out $path_db/enc_db_openssl
+check_gpg_openssl_pwd_encrypt
+mv $path_db/enc_db_openssl $file_db
+echo $pass | gpg --passphrase-fd 0 -o $path_db/enc_db --cipher-algo=$crypto_algo -c $file_db
+check_gpg_openssl_pwd_encrypt
+mv $path_db/enc_db $file_db
 }
 
 function check_pwd_before_write(){
@@ -93,18 +97,18 @@ fi
 }
 
 function input_info(){
- title=$(zenity --entry --title "Title" --text "Write Title")
- exit_script
- username=$(zenity --entry --title "Username" --text "Write Username")
- exit_script
+title=$(zenity --entry --title "Title" --text "Write Title")
+exit_script
+username=$(zenity --entry --title "Username" --text "Write Username")
+exit_script
 } 
 
 function pwd_insert(){
- password=$(zenity --entry --hide-text --title "Password" --text "Write password")
- exit_script
- check_pwd_before_write
- echo "TITLE: $title | USER: $username | PASSWORD: $password" >> $file_db
- echo "-------------------------------------" >> $file_db
+password=$(zenity --entry --hide-text --title "Password" --text "Write password")
+exit_script
+check_pwd_before_write
+echo "TITLE: $title | USER: $username | PASSWORD: $password" >> $file_db
+echo "-------------------------------------" >> $file_db
 }
 
 function delete_again(){
@@ -160,23 +164,29 @@ function input_again(){
 zenity --question --title "Another?" --text "Do you want to add another password?" --ok-label=Yes --cancel-label=No
 if [ "$?" = 0 ] ; then
  input_info
+ pwd_insert
+ input_again
 fi
 }
 
 function fine_prog(){
- IFS=$BACKIFS
+IFS=$BACKIFS
+if [ -f /home/$USER/.gnupg/gpg.conf ]; then
  if [ "$is_using" = "yes" ] ; then
   sed -i '/use-agent/s/^#//' /home/$USER/.gnupg/gpg.conf
  fi
- exit 0
+fi
+exit 0
 }
 
 function fine_prog_from_view(){
- IFS=$BACKIFS
+IFS=$BACKIFS
+if [ -f /home/$USER/.gnupg/gpg.conf ]; then
  if [ "$is_using" = "yes" ] ; then
   sed -i '/use-agent/s/^#//' /home/$USER/.gnupg/gpg.conf
  fi
- exit 0
+fi
+exit 0
 }
 
 function view_again(){
@@ -194,33 +204,6 @@ if [ "$ans" == "View All" ] ; then
 elif [ "$ans" == "View One" ] ; then
  local titlepass=$(zenity --entry --title="Title" --text="Write the TITLE (ex Facebook, Gmail, ecc):" --entry-text "")
  cat $file_db | grep -i $titlepass | zenity --text-info
-fi
-}
-
-function check_user(){
-if [ "$user" = 0 ] ; then
- zenity --error --text "You are root, start the script as NORMAL user"
- exit 1
-fi
-}
-
-function check_before_start(){
-if [ ! -f $conf_file ] ; then
-zenity --question --text "You have open the terminal and write
-'bashpwdm-config' before use this script.
-Do you want to do this now?" --title "Warning" --width=350 --ok-label=Yes --cancel-label=No
- if [ "$?" = 0 ] ; then
- source bashpwdm-config
- zenity --warning --text "All done, now the script can continue his work... :)" --title "Warning" --width=400
- else 
-   exit 0
- fi
-else
-is_using=$(cat $conf_file | grep "using-agent" | cut -f2 -d'=')
-if [ "$is_using" = "yes" ] ; then
- sed -i '/use-agent/s/^/#/' /home/$USER/.gnupg/gpg.conf
-fi  
-pass=$(zenity --entry --title "DB Password" --text "Write your DB password" --hide-text)
 fi
 }
 
@@ -247,6 +230,26 @@ elif [ "$ans" = "Change" ]; then
  change_again
  encrypt_db
  fine_prog_from_view
+fi
+}
+
+function check_before_start(){
+if [ ! -f $conf_file ] ; then
+zenity --question --text "You have open the terminal and write
+'bashpwdm-config' before use this script.
+Do you want to do this now?" --title "Warning" --width=350 --ok-label=Yes --cancel-label=No
+ if [ "$?" = 0 ] ; then
+ source bashpwdm-config
+ else 
+   exit 0
+ fi
+else
+ if [ -f /home/$USER/.gnupg/gpg.conf ]; then
+  is_using=$(cat $conf_file | grep "using-agent" | cut -f2 -d'=')
+  if [ "$is_using" = "yes" ] ; then
+   sed -i '/use-agent/s/^/#/' /home/$USER/.gnupg/gpg.conf
+  fi
+ fi
 fi
 }
 
@@ -305,12 +308,13 @@ The syntax for the following options is: bashpwdm [OPTIONS]\nwhere [OPTIONS] can
  exit 0
 fi
 
-check_user
 check_before_start
+pass=$(zenity --entry --hide-text --title "Password" --text "Write your DB password")
 view_or_add
 check_db
 decrypt_db
 input_info
+pwd_insert
 input_again
 encrypt_db
 fine_prog
