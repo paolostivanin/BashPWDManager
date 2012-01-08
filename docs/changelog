@@ -122,7 +122,7 @@
 	* IMPROVED: if the script is closed in the wrong way the DB now will be encryped
 	* FIXED: some other minor things
 
-(yy/01/2012) - v1.2.0
+(08/01/2012) - v1.2.0
 	* NEWSTABLE RELEASE :)
 
 (NaN) - v1.9.901 (2.0-beta1)
@@ -132,6 +132,7 @@
 	* ADDED: cli compatibility thanks to dialog
 	* ADDED: md5sum check
 	* ADDED: backup option
+	* ADDED: choice if use one (GPG) or two (GPG+OpenSSL) encryption methods. If two you are forced to use two differents pwds
 
 	* ........SPACE FOR (EVENTUALLY) NEW FEATURES........
 
