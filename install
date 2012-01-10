@@ -66,9 +66,9 @@ if [ ! -d /usr/share/doc/bash-pwd-manager ] ; then
  mkdir /usr/share/doc/bash-pwd-manager
 fi
 cp LICENSE README uninstall docs/* /usr/share/doc/bash-pwd-manager
-cp bin/bashpwdm /usr/local/bin
-cp bin/bashpwdm-config /usr/local/bin
-cp bin/bashpwdm_update /usr/local/bin
+cp bin/bashpwdm.sh /usr/local/bin
+cp bin/bashpwdm-config.sh /usr/local/bin
+cp bin/bashpwdm_update.sh /usr/local/bin
 cp docs/bashpwdm.desktop /usr/share/applications/
 cp docs/bpwdm.png /usr/share/pixmaps/
 chown $username /usr/local/bin/bashpwdm
