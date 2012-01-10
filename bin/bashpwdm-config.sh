@@ -8,7 +8,7 @@
 # @License: GNU AGPL v3 http://www.gnu.org/licenses/agpl.html
 #################################################################
 
-BACKIFS=$IFS IFS=$'\n'
+BACKIFS=$IFS
 IFS=$'\n'
 conf_file="/home/$USER/.config/bpwdman.conf"
 

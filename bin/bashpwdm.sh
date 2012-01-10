@@ -8,7 +8,7 @@
 # @License: GNU AGPL v3 http://www.gnu.org/licenses/agpl.html
 #################################################################
 
-BACKIFS=$IFS IFS=$'\n'
+BACKIFS=$IFS
 IFS=$'\n'
 version="1.2.0"
 user=$(id -u)
