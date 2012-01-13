@@ -126,18 +126,19 @@
 	* NEWSTABLE RELEASE :)
 
 (NaN) - v1.9.901 (2.0-beta1)
-	* ADDED: list of title so you can choose the pwd to be shown more quickly
-	* ADDED: pwd expiration date
-	* ADDED: kde compatibility thanks to kdialog
-	* ADDED: cli compatibility thanks to dialog
-	* ADDED: md5sum check
-	* ADDED: backup option
-	* ADDED: choice if use one (GPG) or two (GPG+OpenSSL) encryption methods. If two you are forced to use two differents pwds
-
+	* ADDED: sqlite db. Now your password are **stored encrypted** into and **encrypted sqlite db** :)
+	* ADDED: list of title so you can choose the pwd to that have to be shown more quickly
+	* ADDED: **pwd expiration date**
+	* ADDED: check integrity of db with md5sum
+	* ADDED: options to backup db
+	* ADDED: choice if use 1 (GPG or OpenSSL) or 2 (GPG+OpenSSL) encryption methods. If you select 2, you are forced to use two differents pwds
 	* ........SPACE FOR (EVENTUALLY) NEW FEATURES........
-
-	* CHANGED: gnome interface have been splitted from core script
-	* IMPROVED: core has been revisited and improved
+	* IMPROVED: core code have been revisited
 	* IMPROVED: installer have been improved to match all the new changes
 	* IMPROVED: uninstaller have been improved to match all the new changes
 	* UPDATED: readme file has been updated
+	
+	...FEATURES THAT AREN'T SURE (zenity is MORE powerful than k/dialog; they have some BIG limitations)
+	* ADDED: kde compatibility thanks to kdialog
+	* ADDED: cli compatibility thanks to dialog
+	* ADDED: simple CLI interface (i'm studing how to avoid dialog limitations)
