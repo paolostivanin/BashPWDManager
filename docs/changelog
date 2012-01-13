@@ -127,6 +127,7 @@
 
 (NaN) - v1.9.901 (2.0-beta1)
 	* ADDED: sqlite db. Now your password are **stored encrypted** into and **encrypted sqlite db** :)
+	* ADDED: **group feature**
 	* ADDED: list of title so you can choose the pwd to that have to be shown more quickly
 	* ADDED: **pwd expiration date**
 	* ADDED: check integrity of db with md5sum
