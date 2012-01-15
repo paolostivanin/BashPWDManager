@@ -125,7 +125,7 @@
 (08/01/2012) - v1.2.0
 	* NEWSTABLE RELEASE :)
 
-(NaN) - v1.9.901 (2.0-beta1)
+(xx/02/2012) - v1.9.901 (2.0-beta1)
 	* ADDED: sqlite db. Now your password are **stored encrypted** into and **encrypted sqlite db** :)
 	* ADDED: **group feature**
 	* ADDED: list of title so you can choose the pwd to that have to be shown more quickly
@@ -133,13 +133,11 @@
 	* ADDED: check integrity of db with md5sum
 	* ADDED: options to backup db
 	* ADDED: choice if use 1 (GPG or OpenSSL) or 2 (GPG+OpenSSL) encryption methods. If you select 2, you are forced to use two differents pwds
+	* ADDED: cli interface
 	* ........SPACE FOR (EVENTUALLY) NEW FEATURES........
 	* IMPROVED: core code have been revisited
 	* IMPROVED: installer have been improved to match all the new changes
 	* IMPROVED: uninstaller have been improved to match all the new changes
+	* IMPROVED: yad has replaced zenity (yad is MORE powerful than zenity and also it has a good integration with KDE)
+	* IMPROVED: kde eyecandy thanks to yad and oxygen-gtk
 	* UPDATED: readme file has been updated
-	
-	...FEATURES THAT AREN'T SURE (zenity is MORE powerful than k/dialog; they have some BIG limitations)
-	* ADDED: kde compatibility thanks to kdialog
-	* ADDED: cli compatibility thanks to dialog
-	* ADDED: simple CLI interface (i'm studing how to avoid dialog limitations)
