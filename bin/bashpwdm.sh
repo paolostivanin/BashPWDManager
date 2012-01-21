@@ -3,14 +3,14 @@
 #################################################################
 # @Author: Paolo Stivanin aka Polslinux
 # @Name: Bash Password Manager
-# @Copyright: 2011
+# @Copyright: 2012
 # @Site: http://projects.polslinux.it
 # @License: GNU AGPL v3 http://www.gnu.org/licenses/agpl.html
 #################################################################
 
 BACKIFS=$IFS
 IFS=$'\n'
-version="1.2.0"
+version="1.9.901"
 user=$(id -u)
 conf_file="/home/$USER/.config/bpwdman.conf"
 

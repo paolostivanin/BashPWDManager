@@ -1,9 +1,9 @@
 #!/bin/bash
 
 ################################################################
-# @Author:    Paolo Stivanin aka Polslinux		       
-# @Name:      Bash Password Manager Uninstall Script		       
-# @Copyright: 2011					       
+# @Author:    Paolo Stivanin aka Polslinux       
+# @Name:      Bash Password Manager Uninstall Script
+# @Copyright: 2012
 # @Site:      http://projects.polslinux.it                          
 # @License:   AGNU GPL v3 http://www.gnu.org/licenses/agpl.html  
 ################################################################

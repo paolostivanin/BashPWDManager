@@ -3,7 +3,7 @@
 #################################################################
 # @Author:    Paolo Stivanin aka Polslinux
 # @Name:      Bash PWD Manager Update Script      
-# @Copyright: 2011
+# @Copyright: 2012
 # @Site:      http://projects.polslinux.it
 # @License:   GNU AGPL v3 http://www.gnu.org/licenses/agpl.html 
 #################################################################
@@ -12,7 +12,7 @@ distro=$(cat /etc/issue | cut -d' ' -f1 -s)
 last_version=$(cd /tmp && wget --no-check-certificate https://raw.github.com/polslinux/BashPWDManager/master/docs/version &>/dev/null && cat version | grep -Eo '[0-9\.]+')
 
 function update_bashpwdm(){
-if [ $(id -u) != "0" ]; then 
+if [ $(id -u) != 0 ]; then 
   echo "  * ERROR: please run update script as ROOT!\n"
   exit 1
 fi

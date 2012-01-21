@@ -3,7 +3,7 @@
 #################################################################
 # @Author: Paolo Stivanin aka Polslinux
 # @Name: Bash Password Manager Configuration Script
-# @Copyright: 2011
+# @Copyright: 2012
 # @Site: http://projects.polslinux.it
 # @License: GNU AGPL v3 http://www.gnu.org/licenses/agpl.html
 #################################################################
@@ -67,7 +67,7 @@ IFS=$BACKIFS
 exit 0
 }
 
-if [ "$user" = 0 ] ; then
+if [ $(id -u) = 0 ] ; then
  zenity --error --title "Error" --text "You can't start this script as root."
  exit 0
 fi
