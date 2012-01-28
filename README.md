@@ -55,4 +55,4 @@ Notes
 -----
 
 For more information see:<br>
-<http://projects.polslinux.it>
+<http://www.polslinux.it/category/projects/>

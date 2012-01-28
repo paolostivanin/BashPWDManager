@@ -139,6 +139,7 @@
 	* ADDED: choice if use 1 (GPG or OpenSSL) or 2 (GPG+OpenSSL) encryption methods. If you select 2, you are forced to use two differents pwds
 	* ADDED: cli interface
 	* ADDED: log file (wrong pwd, md5 error, backup info, etc)
+	* ADDED: option to uninstall the script (--uninstall)
 	* IMPROVED: core code have been revisited
 	* IMPROVED: installer have been improved to match all the new changes (oxygen-gtk? + yad + bash v4)
 	* IMPROVED: uninstaller have been improved to match all the new changes
