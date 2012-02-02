@@ -37,8 +37,8 @@ How to install
 --------------
 
 Download the archive and after you have extract it, open the terminal and type:<br>
-`chmod +x PATH_TO_EXTRACTED_FOLDER/install`<br>
-`sudo bash PATH_TO_EXTRACTED_FOLDER/install`
+`chmod +x PATH_TO_EXTRACTED_FOLDER/install.sh`<br>
+`sudo bash PATH_TO_EXTRACTED_FOLDER/install.sh`
 
 Extra options
 -------------
