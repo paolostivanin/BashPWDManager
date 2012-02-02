@@ -10,7 +10,7 @@
 
 BACKIFS=$IFS
 IFS=$'\n'
-version="1.9.901"
+version="1.2.0"
 user=$(id -u)
 conf_file="/home/$USER/.config/bpwdman.conf"
 
@@ -296,6 +296,14 @@ elif [ "$1" = "--change-name" ] || [ "$1" = "-n" ] ; then
 elif [ "$1" = "-u" ] || [ "$1" = "--update" ] ; then
  source bashpwdm_update
  exit 0
+elif [ "$1" = "--uninstall" ] ; then
+  if [ $(id -u) != 0 ] ;then
+    echo -e "** ERROR: you have to run the uninstaller as root.\nBecome root and try again. **"
+    exit 1
+  else
+    chmod +x /usr/share/doc/bash-pwd-manager/uninstall.sh
+    source /usr/share/doc/bash-pwd-manager/uninstall.sh
+  fi  
 elif [ "$1" = "-h" ] || [ "$1" = "--help" ] ; then
  echo -e "You are using Bash PWD Manager v$version.\nTo start using the script just search for 'BashPWDManager' into your app menu\nor type 'bashpwdm' into the terminal.
 The syntax for the following options is: bashpwdm [OPTIONS]\nwhere [OPTIONS] can be:\n

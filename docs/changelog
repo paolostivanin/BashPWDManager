@@ -130,7 +130,7 @@
 	* NEW:   yad has replaced zenity (yad is MORE powerful than zenity and also it has good integration with KDE thanks to oxygen-gtk)
 	* ADDED: sqlite db. Now your password are stored encrypted into an encrypted sqlite db :)
 	* ADDED: group feature
-	* ADDED: note feautre
+	* ADDED: note feature
 	* ADDED: pwd expiration date
 	* ADDED: when you'll decrypt the db a screen will give you all your titles and you can choose what to display
 	* ADDED: check db integrity with md5sum
@@ -139,8 +139,8 @@
 	* ADDED: choice if use 1 (GPG or OpenSSL) or 2 (GPG+OpenSSL) encryption methods. If you select 2, you are forced to use two differents pwds
 	* ADDED: cli interface
 	* ADDED: log file (wrong pwd, md5 error, backup info, etc)
-	* ADDED: option to uninstall the script (--uninstall)
+	* ADDED: option to uninstall the script (--uninstall) ----------------------------------------------[done]
 	* IMPROVED: core code have been revisited
-	* IMPROVED: installer have been improved to match all the new changes (oxygen-gtk? + yad + bash v4) [done]
-	* IMPROVED: uninstaller have been improved to match all the new changes				    [done]
+	* IMPROVED: installer have been improved to match all the new changes (oxygen-gtk? + yad + bash v4)-[done]
+	* IMPROVED: uninstaller have been improved to match all the new changes ----------------------------[done]
 	* UPDATED: readme file has been updated

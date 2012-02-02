@@ -50,7 +50,8 @@ Open the terminal and type:<br>
 - `bashpwdm --generate-pwd` or `bashpwdm -p`<pre>-> to create a strong password</pre>
 - `bashpwdm --change-dir` or `bashpwdm -d`<pre>-> to change db directory (if you have saved it)</pre>
 - `bashpwdm --change-name` or `bashpwdm -n`<pre>-> to change db name (if you have saved it)</pre>
-- `bashpwdm --update` or `bashpwdm -u`<pre>-> to automatically update BashPWDManager to lastest version</pre>
+- `bashpwdm --update` or `bashpwdm -u`<pre>-> to automatically update Bash PWD Manager to lastest version</pre>
+- `bashpwdm --uninstall`<pre>-> to uninstall Bash PWD Manager</pre>
 
 Notes
 -----
