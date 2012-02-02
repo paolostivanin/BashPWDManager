@@ -2,7 +2,9 @@
 Name=Bash PWD Manager
 Exec=/usr/local/bin/bashpwdm %f
 Icon=/usr/share/pixmaps/bpwdm.png
-Comment=Perform secure files deletion
+Comment=Store Your Password in a secure way
+Comment[it]=Salva le tue password in modo sicuro
 Terminal=false
 Type=Application
 Categories=Utility;Security;
+GenericName=Bash Password Manager

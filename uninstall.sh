@@ -10,15 +10,27 @@
 
 distro=$(cat /etc/issue | cut -d' ' -f1 -s)
 
-echo "  * Checking user's privileges..."
-if [ "$(id -u)" != "0" ]; then 
-  echo "	ERROR: User $(whoami) is not root, and does not have sudo privileges"
-  if [ $distro == "Debian" ] ; then echo "    Type su in the terminal and re-run this script"
-  elif [ $distro == "Ubuntu" ] ; then echo "    Type sudo su in the terminal and re-run this script"
-  elif [ $distro == "Arch" ] ; then echo "    Type su in the terminal and re-run this script"
+echo -e "* Checking user's privileges...\n"
+if [ $(id -u) != 0 ]; then 
+  echo "--> ERROR: User $(whoami) is not root, and does not have sudo privileges"
+  if [ "$distro" = "Debian" ] ; then echo "--> Type su in the terminal and re-run this script"
+  elif [ "$distro" = "Ubuntu" ] ; then echo "--> Type sudo su in the terminal and re-run this script"
+  elif [ "$distro" = "Arch" ] ; then echo "--> Type su in the terminal and re-run this script"
   fi
   exit 1
 else
+  while [ $check_user -eq 0 ]; do
+    echo "--> Write your exact username:"
+    read username
+    id -u -r $username &> /dev/null
+    if [ $? -eq 0 ]; then
+      check_user="1"
+    else
+    echo "--> Username don't exists! Please insert a valid username."
+    fi
+  done
+fi
+
 echo "  * Removing files..."
   if [ -d /usr/share/doc/bash-pwd-manager ] ; then
    rm -r /usr/share/doc/bash-pwd-manager

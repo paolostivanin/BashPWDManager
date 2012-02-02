@@ -141,6 +141,6 @@
 	* ADDED: log file (wrong pwd, md5 error, backup info, etc)
 	* ADDED: option to uninstall the script (--uninstall)
 	* IMPROVED: core code have been revisited
-	* IMPROVED: installer have been improved to match all the new changes (oxygen-gtk? + yad + bash v4)
-	* IMPROVED: uninstaller have been improved to match all the new changes
+	* IMPROVED: installer have been improved to match all the new changes (oxygen-gtk? + yad + bash v4) [done]
+	* IMPROVED: uninstaller have been improved to match all the new changes				    [done]
 	* UPDATED: readme file has been updated
