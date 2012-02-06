@@ -10,7 +10,7 @@
 
 BACKIFS=$IFS
 IFS=$'\n'
-version="1.2.0"
+version="2.0-alpha1~exp"
 user=$(id -u)
 conf_file="/home/$USER/.config/bpwdman.conf"
 
