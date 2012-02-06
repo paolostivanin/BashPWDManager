@@ -10,8 +10,7 @@
 
 BACKIFS=$IFS
 IFS=$'\n'
-version="2.0-alpha1~exp"
-user=$(id -u)
+version="2.0-alpha1~experimental"
 conf_file="/home/$USER/.config/bpwdman.conf"
 
 
@@ -253,8 +252,10 @@ else
 fi
 }
 
-if [ "$user" = 0 ] ; then
- zenity --error --title "Error" --text "You can't start this script as root."
+# CODICE VERIFICATO FINO A QUI. PROSEGUIRE VERSO L'ALTO
+
+if [ $(id -u) = 0 ] ; then
+ yad --title "Error" --text "You can't start this script as root."
  exit 0
 fi
 
@@ -262,20 +263,23 @@ if [ "$1" = "-v" ] || [ "$1" = "--version" ]; then
  echo "Bash Password Manager v$version developed by Polslinux <http://www.polslinux.it>"
  exit 0
 elif [ "$1" = "--generate-pwd" ] || [ "$1" = "-p" ]; then
- nchar=$(zenity --entry --title="Character" --text="Write number of password character:" --entry-text "")
+ nchar=$(yad --entry --title="Characters" --text="Write number of password characters:" --numeric | cut -f1 -d',')
  check_pwd_char
- char="[:graph:]"
- echo $(</dev/urandom tr -dc $char | head -c $nchar) | zenity --text-info --title "Your password is:" --height=150 --width=300
+ echo $(</dev/urandom tr -dc '[:graph:]' | head -c $nchar) | yad --text-info --title "Your password is:" --height=150 --width=300
  exit 0
 elif [ "$1" = "--change-algo" ] || [ "$1" = "-c" ] ; then
- file_db=$(zenity --file-selection --title "Choose database")
+ file_db=$(yad --file --title "Choose database" --height=600 --width=800)
  exit_script
+ if [ -d $file_db ]; then
+  yad --title "ERROR" --text "You have choose a directory instead of a file."
+  exit 1
+ fi
  crypto_algo=$(cat $conf_file | cut -f1 -d' ')
  path_db=$(dirname $file_db)
  gpg -o $path_db/out_db_gpg --cipher-algo=$crypto_algo -d $file_db
  openssl aes-256-cbc -d -a -in $path_db/out_db_gpg -out $path_db/out_db
  mv $path_db/out_db $file_db
- typ=$(zenity  --list  --text "Choose the new cipher algo" --radiolist  --column "Choice" --column "Type" TRUE CAST5 FALSE 3DES FALSE AES256 FALSE TWOFISH FALSE  BLOWFISH | tr '[A-Z]' '[a-z]')
+ typ=$(yad --list --separator="" --height=220 --width=250 --text "Choose the new cipher algo" --column "Type" CAST5 3DES AES256 TWOFISH BLOWFISH | tr '[A-Z]' '[a-z]')
  exit_script
  sed -i "/algo/c algo=$typ" $conf_file
  openssl aes-256-cbc -a -salt -in $file_db -out $path_db/enc_db_openssl
@@ -283,13 +287,13 @@ elif [ "$1" = "--change-algo" ] || [ "$1" = "-c" ] ; then
  mv $path_db/enc_db $file_db
  exit 0
 elif [ "$1" = "--change-dir" ] || [ "$1" = "-d" ]; then
- newdir=$(zenity --file-selection --directory --title "New DB direcory" --text "Choose your new database directory")
+ newdir=$(yad --file --directory --title "New DB direcory" --text "Choose your new database directory" --height=600 --width=800)
  sed -i '/database-path*/d' $conf_file
  db_name=$(cat $conf_file | grep "database-name" | cut -f2 -d'=')
  echo "database-path=$newdir/$db_name" >> $conf_file
  exit 0
 elif [ "$1" = "--change-name" ] || [ "$1" = "-n" ] ; then
- new_db_name=$(zenity --entry --title "Database name" --text "Write the new name of your database")
+ new_db_name=$(yad --entry --title "Database name" --text "Write the new name of your database" --separator="")
  sed -i '/database-name*/d' $conf_file
  echo $new_db_name >> $conf_file
  exit 0
@@ -317,7 +321,7 @@ The syntax for the following options is: bashpwdm [OPTIONS]\nwhere [OPTIONS] can
 fi
 
 check_before_start
-pass=$(zenity --entry --hide-text --title "Password" --text "Write your DB password")
+pass=$(yad --class="GSu" --title="Password" --text="Write your DB password" --image="dialog-password" --entry --hide-text --separator="")
 view_or_add
 check_db
 decrypt_db
