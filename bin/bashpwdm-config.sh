@@ -4,7 +4,7 @@
 # @Author: Paolo Stivanin aka Polslinux
 # @Name: Bash Password Manager Configuration Script
 # @Copyright: 2012
-# @Site: http://projects.polslinux.it
+# @Site: http://www.polslinux.it
 # @License: GNU AGPL v3 http://www.gnu.org/licenses/agpl.html
 #################################################################
 

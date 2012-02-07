@@ -4,7 +4,7 @@
 # @Author:    Paolo Stivanin aka Polslinux
 # @Name:      Bash PWD Manager Update Script      
 # @Copyright: 2012
-# @Site:      http://projects.polslinux.it
+# @Site:      http://www.polslinux.it
 # @License:   GNU AGPL v3 http://www.gnu.org/licenses/agpl.html 
 #################################################################
 
@@ -13,12 +13,12 @@ last_version=$(cd /tmp && wget --no-check-certificate https://raw.github.com/pol
 
 function update_bashpwdm(){
 if [ $(id -u) != 0 ]; then 
-  echo "  * ERROR: please run update script as ROOT!\n"
+  echo "--> ERROR: please run update script as ROOT!"
   exit 1
 fi
-echo "  * Write your exact username:"
+echo "--> Write your exact username:"
 read username
-echo "  * Checking Bash PWD Manager version..."
+echo "--> Checking Bash PWD Manager version..."
 echo "    Your version is $version
     Newest version is $last_version"
 if [ "$version" != "$last_version" ] ; then
@@ -37,9 +37,9 @@ if [ "$version" != "$last_version" ] ; then
   chmod +x /usr/local/bin/bashpwdm-config
   chmod +x /usr/local/bin/bashpwdm_update
   cd .. && rm -r bashpwdm_tmp && rm -f bashpwdm_v$last_version.tar.bz2
-  echo "  * All done, Bash PWD Manager has been updated :)"
+  echo "--> All done, Bash PWD Manager has been updated :)"
 elif [ "$version" = "$last_version" ] ; then
-  echo "  * Bash PWD Manager is already up-to-date"
+  echo "--> Bash PWD Manager is already up-to-date"
 fi
 }
 

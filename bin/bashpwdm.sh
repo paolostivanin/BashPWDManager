@@ -4,7 +4,7 @@
 # @Author: Paolo Stivanin aka Polslinux
 # @Name: Bash Password Manager
 # @Copyright: 2012
-# @Site: http://projects.polslinux.it
+# @Site: http://www.polslinux.it
 # @License: GNU AGPL v3 http://www.gnu.org/licenses/agpl.html
 #################################################################
 
@@ -26,19 +26,21 @@ fi
 
 function check_gpg_openssl_pwd_encrypt(){
 if [ $? != 0 ] ; then
- zenity --error --title "Password Error" --text "You have entered a wrong password, try again!" --width=450
- pass=$(zenity --entry --title "DB Password" --text "Write your DB password" --hide-text)
+ yad --title "Password Error" --text "You have entered a wrong password, try again!" --width=450 --height=150
+ pass=$(yad --form --field "DB Password:H" --separator="")
  encrypt_db
 fi
 }
 
 function check_gpg_openssl_pwd_decrypt(){
 if [ $? != 0 ] ; then
- zenity --error --title "Password Error" --text "You have entered a wrong password, try again!" --width=450
- pass=$(zenity --entry --title "DB Password" --text "Write your DB password" --hide-text)
+ yad --title "Password Error" --text "You have entered a wrong password, try again!" --width=450 --height=150
+ pass=$(yad --form --field "DB Password:H" --separator="")
  decrypt_db
 fi
 }
+
+# CODICE VERIFICATO FINO A QUI. PROSEGUIRE VERSO IL BASSO
 
 function retype_nchar(){
 nchar=$(zenity --entry --title="Character" --text="Write number of password character:" --entry-text "")
@@ -232,12 +234,14 @@ elif [ "$ans" = "Change" ]; then
 fi
 }
 
+# CODICE VERIFICATO FINO A QUI. PROSEGUIRE VERSO L'ALTO
+
 function check_before_start(){
 if [ ! -f $conf_file ] ; then
-zenity --question --text "You have open the terminal and write
+yad --text "You have to open the terminal and write
 'bashpwdm-config' before use this script.
-Do you want to do this now?" --title "Warning" --width=350 --ok-label=Yes --cancel-label=No
- if [ "$?" = 0 ] ; then
+Do you want to do this now?" --title "Configuration Needed" --width=350 --height=200 --button=Yes --button=No
+ if [ $? = 0 ] ; then
  source bashpwdm-config.sh
  else 
    exit 0
@@ -251,8 +255,6 @@ else
  fi
 fi
 }
-
-# CODICE VERIFICATO FINO A QUI. PROSEGUIRE VERSO L'ALTO
 
 if [ $(id -u) = 0 ] ; then
  yad --title "Error" --text "You can't start this script as root."
