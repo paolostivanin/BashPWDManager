@@ -10,7 +10,7 @@
 
 distro=$(cat /etc/issue | cut -d' ' -f1 -s)
 
-echo -e "* Checking user's privileges...\n"
+echo "--> Checking user's privileges..."
 if [ $(id -u) != 0 ]; then 
   echo "--> ERROR: User $(whoami) is not root, and does not have sudo privileges"
   if [ "$distro" = "Debian" ] ; then echo "--> Type su in the terminal and re-run this script"
@@ -26,12 +26,12 @@ else
     if [ $? -eq 0 ]; then
       check_user="1"
     else
-    echo "--> Username don't exists! Please insert a valid username."
+    echo "--> Username doesn't exist! Please write a valid username."
     fi
   done
 fi
 
-echo "  * Removing files..."
+echo "--> Removing files..."
   if [ -d /usr/share/doc/bash-pwd-manager ] ; then
    rm -r /usr/share/doc/bash-pwd-manager
   fi
@@ -51,5 +51,5 @@ echo "  * Removing files..."
    rm -f /usr/share/pixmaps/bpwdm.png
   fi
 fi
-echo "Thanks to have used my script! Bye bye :)"
+echo -e "\n--> Uninstalling done. Thanks to have used my script! Bye bye :)"
 exit 0

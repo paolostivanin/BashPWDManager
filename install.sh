@@ -22,7 +22,7 @@ application=(
 	   ["openssl"]="$(which openssl 2>/dev/null)")
 app_yad="$(which yad 2>/dev/null)"
 
-echo -e "* Checking user's privileges...\n"
+echo "--> Checking user's privileges..."
 if [ $(id -u) != 0 ]; then 
   echo "--> ERROR: User $(whoami) is not root, and does not have sudo privileges"
   if [ "$distro" = "Debian" ] ; then echo "--> Type su in the terminal and re-run this script"
@@ -38,12 +38,12 @@ else
     if [ $? -eq 0 ]; then
       check_user="1"
     else
-    echo "--> Username don't exists! Please insert a valid username."
+    echo "--> Username doesn't exist! Please write a valid username."
     fi
   done
 fi
 
-echo -e "\n* Checking type of your linux distros..."
+echo "--> Checking type of your linux distros..."
 if [ "$distro" = "Debian" ] || [ "$distro" = "Ubuntu" ] || [ "$distro" = "Arch" ] || [ "$(cat /etc/issue | cut -d' ' -f2 -s)" = "Linux Mint" ]; then
 	echo "   Ok, you're running a compatible distro :)"
 else
@@ -51,7 +51,7 @@ else
 	echo  "   try it on your system and tell me if there is something wrong!"
 fi
 
-echo -e "\n* Checking deps..."
+echo -e "--> Checking deps..."
 for key in "bash" "wget" "gpg" "openssl" "yad"; do
   if [ -n "${application[$key]}" ]; then
     echo "   -  Package [ $key ] => [ OK ]"
@@ -62,17 +62,17 @@ for key in "bash" "wget" "gpg" "openssl" "yad"; do
   fi
 done
 if [ $check_app -eq 1 ]; then
-  echo -e "\n* ERROR: you have to install yad curl wget bash and wipe before you"
-  echo "  can you this script!"
-  echo -e "\n* Please open a terminal and write:"
+  echo "--> ERROR: you have to install yad curl wget bash and wipe before you"
+  echo "    can you this script!"
+  echo "    Please open a terminal and write:"
   if [ "$distro" = "Debian" ] || [ "$distro" = "Ubuntu" ] || [ "$(cat /etc/issue | cut -d' ' -f2 -s)" = "Linux Mint" ];then
-    echo "--> sudo apt-get install $app_install"
+    echo "    sudo apt-get install $app_install"
     if [ ! -n "${app_yad}" ];then
       echo "Ubuntu/Debian/Mint ecc doesn't have yad into their"
       echo "official repo. You have to manually install yad or"
       echo "you can use my script that will do this for you :)"
       echo "Type Y if you want to auto-install yad or type N"
-      echo "if you want to do this manually."
+      echo "if you want to do install it manually."
       echo "Please write Y or N:"
       read ans_yad
       case "$ans_yad" in
@@ -94,7 +94,7 @@ if [ $check_app -eq 1 ]; then
   exit 1
 fi
 
-echo "* Installing files..."
+echo "--> Installing files..."
 if [ ! -d /usr/share/doc/bash-pwd-manager ] ; then
  mkdir /usr/share/doc/bash-pwd-manager
 fi
@@ -110,6 +110,6 @@ chown $username /usr/local/bin/bashpwdm_update
 chmod +x /usr/local/bin/bashpwdm
 chmod +x /usr/local/bin/bashpwdm-config
 chmod +x /usr/local/bin/bashpwdm_update
-echo -e "\n ** --> Please note that if you want better KDE integration you have to install oxygen-gtk <-- **"
-echo -e "\n* Ok, all done! Now you can use Bash PWD Manager :)"
+echo "** --> Please note that if you want to have a better KDE integration you have to install oxygen-gtk <-- **"
+echo -e "\n--> Ok all done! Now you can use Bash PWD Manager :)"
 exit 0

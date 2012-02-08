@@ -27,7 +27,7 @@ fi
 function check_gpg_openssl_pwd_encrypt(){
 if [ $? != 0 ] ; then
  yad --title "Password Error" --text "You have entered a wrong password, try again!" --width=450 --height=150
- pass=$(yad --form --field "DB Password:H" --separator="")
+ pass=$(yad --entry --hide-text --title "DB Password" --text "Type your database password" --image="dialog-password")
  encrypt_db
 fi
 }
@@ -35,29 +35,27 @@ fi
 function check_gpg_openssl_pwd_decrypt(){
 if [ $? != 0 ] ; then
  yad --title "Password Error" --text "You have entered a wrong password, try again!" --width=450 --height=150
- pass=$(yad --form --field "DB Password:H" --separator="")
+ pass=$(yad --entry --hide-text --title "DB Password" --text "Type your database password" --image="dialog-password")
  decrypt_db
 fi
 }
 
-# CODICE VERIFICATO FINO A QUI. PROSEGUIRE VERSO IL BASSO
-
 function retype_nchar(){
-nchar=$(zenity --entry --title="Character" --text="Write number of password character:" --entry-text "")
+nchar=$(yad --entry --title="Character" --text="Write the number of password's characters (>= 8):" --numeric 8 65000 | cut -f1 -d',')
 check_pwd_char
 }
 
 function check_pwd_char(){
 if [ $nchar -lt 8 ] ; then
- zenity --warning --title "Low password characters" --text "You have choose low password characters, please choose a number >=8"
+ yad --title "ERROR" --text "You have choosen few password's characters, please choose a number >=8"
  retype_nchar
 fi
 }
 
 function check_db(){
 path_to_db=$(cat $conf_file | grep database-path | cut -f2 -d'=')
-if [ $path_to_db = "0" ] ; then
- file_db=$(zenity --file-selection --title "Choose database")
+if [ $path_to_db = 0 ]; then
+ file_db=$(yad --file --title "Choose database" --width=800 --height=600)
 else
  file_db=$(cat $conf_file | grep database-path | cut -f2 -d'=')
  exit_script
@@ -66,7 +64,7 @@ crypto_algo=$(cat $conf_file | grep algo | cut -f2 -d'=')
 path_db=$(dirname $file_db)
 local permission=$(ls -l $file_db | cut -f2 -d'-')
 if [ ! -f $file_db ] || [ "$permission" != "rw" ]; then
- zenity --error --text "Database doesn't exist or hasn't read & write permissions." --title "Database Error"
+ yad --text "Database doesn't exist or hasn't read & write permissions." --title "Database Error"
  exit 1
 fi
 }
@@ -90,22 +88,22 @@ mv $path_db/enc_db $file_db
 }
 
 function check_pwd_before_write(){
-password_retype=`zenity --entry --hide-text --title "Password" --text "Retype your password"`
+password_retype=$(yad --entry --hide-text --title "Password" --text "Retype your password" --image="dialog-password")
 if [ "$password" !=  "$password_retype" ] ; then
- zenity --error --title "Errore" --text "Passwords are different, please try again!"
+ yad --title "Error" --text "Passwords are different. Please try again!"
  pwd_insert
 fi
 }
 
 function input_info(){
-title=$(zenity --entry --title "Title" --text "Write Title")
+title=$(yad --entry --title "Title" --text "Write Title")
 exit_script
-username=$(zenity --entry --title "Username" --text "Write Username")
+username=$(yad --entry --title "Username" --text "Write Username")
 exit_script
 } 
 
 function pwd_insert(){
-password=$(zenity --entry --hide-text --title "Password" --text "Write password")
+password=$(yad --entry --hide-text --title "Password" --text "Write password" --image="dialog-password")
 exit_script
 check_pwd_before_write
 echo "TITLE: $title | USER: $username | PASSWORD: $password" >> $file_db
@@ -113,37 +111,37 @@ echo "-------------------------------------" >> $file_db
 }
 
 function delete_again(){
-zenity --question --title "Another?" --text "Do you want to delete another password?" --ok-label=Yes --cancel-label=No
-if [ "$?" = 0 ] ; then
+yad --title "Another?" --text "Do you want to delete another password?" --button=Yes --button=No
+if [ $? = 0 ] ; then
  delete_pwd
 fi
 }
 
 function delete_pwd(){
-to_delete=$(zenity --entry --title "Choose PWD" --text "Write the EXACT title of PWD to delete")
-cat $file_db | grep $to_delete | zenity --text-info --title "Click OK to delete this password" --width=400 --height=200
+to_delete=$(yad --entry --title "Choose PWD" --text "Write the EXACT title of PWD to delete")
+cat $file_db | grep $to_delete | yad --text-info --title "Click OK to delete this password" --width=400 --height=200
 if [ $? = 0 ]; then
  sed -i '/\<'$to_delete'\>/d' $file_db
  delete_again
 else
- zenity --warning --title "No deletion" --text "No password has been deleted"
+ yad --title "Warning" --text "No password has been deleted"
 fi
 }
 
 function new_pwd_and_check(){
-newpwd=$(zenity --entry --title "New Password" --text "Write your new password" --hide-text)
+newpwd=$(yad --entry --hide-text --title "Password" --text "Write password your new password" --image="dialog-password")
 exit_script
-newpwd_2=$(zenity --entry --title "New Password" --text "Retype your password" --hide-text)
+newpwd_2=$(yad --entry --hide-text --title "Password" --text "Retype your password" --image="dialog-password")
 exit_script
 if [ "$newpwd" != "$newpwd_2" ]; then
- zenity --error --title "Wrong PWD" --text "Passwords aren't the same, please try again"
+ yad --title "Error" --text "Passwords are different. Please try again"
  exit_script
  new_pwd_and_check
 fi
 }
 
 function change_again(){
-zenity --question --title "Another?" --text "Do you want to change another password?" --ok-label=Yes --cancel-label=No
+yad --title "Another?" --text "Do you want to change another password?" --button=Yes --button=No
 if [ $? = 0 ] ; then
  change_pwd
 fi
@@ -151,18 +149,18 @@ fi
 
 function change_pwd(){
 new_pwd_and_check
-to_change=$(zenity --entry --title "Choose PWD" --text "Write the EXACT title of PWD to change")
-cat $file_db | grep $to_change | zenity --text-info --title "Click OK to change this password" --width=400 --height=200
+to_change=$(yad --entry --title "Choose PWD" --text "Write the EXACT title of PWD to change")
+cat $file_db | grep $to_change | yad --text-info --title "Click OK to change this password" --width=400 --height=200
 if [ $? = 0 ]; then
  sed -i '/^TITLE: '$to_change'/s/PASSWORD:.*/PASSWORD: '$newpwd'/' $file_db
  change_again
 else
- zenity --warning --title "No changing" --text "No password has been changed"
+ yad --title "Warning" --text "No password has been changed"
 fi
 }
 
 function input_again(){
-zenity --question --title "Another?" --text "Do you want to add another password?" --ok-label=Yes --cancel-label=No
+yad --title "Another?" --text "Do you want to add another password?" --button=Yes --button=No
 if [ "$?" = 0 ] ; then
  input_info
  pwd_insert
@@ -191,25 +189,25 @@ exit 0
 }
 
 function view_again(){
-zenity --question --title "Another?" --text "Do you want to see another password?" --ok-label=Yes --cancel-label=No
+yad --title "Another?" --text "Do you want to see another password?" --button=Yes --button=No
 if [ "$?" = "0" ] ; then
  view_db
 fi
 }
 
 function view_db(){
-if [ "$ans" == "View All" ] ; then
- cat $file_db | zenity --text-info --width=800 --height=600
+if [ "$ans" = "View All" ] ; then
+ cat $file_db | yad --text-info --width=800 --height=600
  encrypt_db
  fine_prog_from_view
-elif [ "$ans" == "View One" ] ; then
- local titlepass=$(zenity --entry --title="Title" --text="Write the TITLE (ex Facebook, Gmail, ecc):" --entry-text "")
- cat $file_db | grep -i $titlepass | zenity --text-info
+elif [ "$ans" = "View One" ] ; then
+ local titlepass=$(yad --entry --title="Title" --text="Write the TITLE (ex Facebook, Gmail, ecc):")
+ cat $file_db | grep -i $titlepass | yad --text-info
 fi
 }
 
 function view_or_add(){
-ans=$(zenity  --list  --text "Do you want to add, change, delete or view password?" --radiolist  --column "Pick" --column "Choice" TRUE Add FALSE Change FALSE Delete FALSE "View All" FALSE "View One")
+ans=$(yad --list --column="Action" Add Change Delete "View All" "View One" --separator="" --height=200 --width=180)
 if [ "$ans" = "View All" ] || [ "$ans" = "View One" ] ; then
  check_db
  decrypt_db
@@ -233,8 +231,6 @@ elif [ "$ans" = "Change" ]; then
  fine_prog_from_view
 fi
 }
-
-# CODICE VERIFICATO FINO A QUI. PROSEGUIRE VERSO L'ALTO
 
 function check_before_start(){
 if [ ! -f $conf_file ] ; then

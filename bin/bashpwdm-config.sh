@@ -31,13 +31,13 @@ fi
 }
 
 function retype_pass(){
-pass=$(zenity --entry --title "DB Password" --text "Choose your DB password" --hide-text)
+pass=$(yad --entry --hide-text --title "DB Password" --text "Type your database password" --image="dialog-password")
 check_pwd_char
 }
 
 function check_pwd_char(){
 if [ ${#pass} -lt 8 ] ; then
- zenity --error --title "Password characters" --text "Your password characters are ${#pass}.
+ yad --title "Error" --text "Your password characters are ${#pass}.
 You MUST choose a password equal or greater than 8 charactes. 
 Thanks :)"
  retype_pass
@@ -53,9 +53,9 @@ mv $db_dir/enc_db $db_dir/$db_name.bpm
 }
 
 function save_db_path(){
-zenity --question --text "Do you want to save the path of the DB so every time you
-start the script you won't have to select it?" --title "Save DB path?" --width=410 --ok-label=Yes --cancel-label=No
-if [ "$?" = 0 ] ; then
+yad --text "Do you want to save the path of the DB so every time you
+start the script you won't have to select it?" --title "Save DB path?" --width=410 --button=Yes --button=No
+if [ $? = 0 ] ; then
  echo "database-path=$db_dir/$db_name.bpm" >> $conf_file   
 else
  echo "database-path=0" >> $conf_file
@@ -68,34 +68,34 @@ exit 0
 }
 
 if [ $(id -u) = 0 ] ; then
- zenity --error --title "Error" --text "You can't start this script as root."
+ yad --title "Error" --text "You can't start this script as root."
  exit 0
 fi
 
 if [ ! -f $conf_file ] ; then
- typ=$(zenity  --list  --text "What type of cipher algo do you want to use?" --radiolist  --column "Choice" --column "Type" TRUE CAST5 FALSE 3DES FALSE AES256 FALSE TWOFISH FALSE BLOWFISH)
+ typ=$(yad --list --column="Cipher Algo" cast5 3des aes256 twofish blowfish --separator="" --height=200 --width=180)
  exit_script
- echo "algo=$typ"  | tr '[A-Z]' '[a-z]' >> $conf_file
- db_dir=$(zenity --file-selection --directory --title "Choose database directory")
+ echo "algo=$typ" >> $conf_file
+ db_dir=$(yad --file --directory --title "Choose database directory" --width=800 --height=600)
  exit_script
- db_name=$(zenity --entry --title "Database name" --text "Write the name of your database")
+ db_name=$(yad --entry --title "Database name" --text "Write the name of your database")
  exit_script
  db_name_tmp=$(echo $db_name | sed 's/ //g')
  if [ -z "$db_name_tmp" ]; then
-   zenity --error --title "Error" --text "You cannot create DB with no name"
+   yad --title "Error" --text "You cannot create DB with no name"
    rm -f $conf_file
    exit 1
  fi
  echo "database-name=$db_name.bpm" >> $conf_file
  touch $db_dir/$db_name.bpm
- pass=$(zenity --entry --title "DB Password" --text "Choose your DB password" --hide-text)
+ pass=$(yad --entry --hide-text --title "DB Password" --text "Type your database password" --image="dialog-password")
  check_pwd_char
  echo "db_created=1" >> $conf_file
  save_db_path
  disable_useagent
  first_encryption
- zenity --info --text "Bash Password Manager has been configured!" --title "All done!" --width=400
+ yad --text "Bash Password Manager has been configured :)" --title "Finish" --width=310
  fine_prog
  elif [ -f $conf_file ] ; then
- zenity --info --text "Bash Password Manager has already been configured!" --title "All done!" --width=400
+ yad --text "Bash Password Manager has already been configured :)" --title "Finish" --width=310
 fi

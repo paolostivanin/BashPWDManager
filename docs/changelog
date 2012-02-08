@@ -126,7 +126,7 @@
 	* NEWSTABLE RELEASE :)
 
 (xx/03/2012) - v1.9.901 (2.0-beta1)
-	* NEW:   new UI
+	* NEW:   new UI (insert dialog + view/add/etc with button)
 	* NEW:   yad has replaced zenity (yad is MORE powerful than zenity and also it has good integration with KDE thanks to oxygen-gtk)
 	* ADDED: sqlite db. Now your password are stored encrypted into an encrypted sqlite db :)
 	* ADDED: group feature
