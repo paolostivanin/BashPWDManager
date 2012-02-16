@@ -10,7 +10,7 @@
 
 BACKIFS=$IFS
 IFS=$'\n'
-version="2.0-alpha1~experimental"
+version="2.0-alpha"
 conf_file="/home/$USER/.config/bpwdman.conf"
 
 
@@ -289,7 +289,7 @@ fi
 }
 
 if [ $(id -u) = 0 ] ; then
- yad --title "Error" --text "You can't start this script as root."
+ yad --title "Error" --text "You <b>can't</b> start this script <b>as root</b>."
  exit 0
 fi
 
@@ -356,5 +356,6 @@ fi
 
 check_before_start
 pass=$(yad --class="GSu" --title="Password" --text="Write your DB password" --image="dialog-password" --entry --hide-text --separator="")
+exit_script
 yad --title "Choose Action" --form --field "Add Password:BTN" --field "Change Password:BTN" --field "Delete Password:BTN" --field "View All Password:BTN" --field "View One Password:BTN" --field "Help & About:BTN" "bash -c add_pwd" "bash -c ch_pwd" "bash -c del_pwd" "bash -c viewall_pwd" "bash -c viewone_pwd" "bash -c help_gui" --height=200 --width=220
 
