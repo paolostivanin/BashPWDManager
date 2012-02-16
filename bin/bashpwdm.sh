@@ -15,7 +15,7 @@ conf_file="/home/$USER/.config/bpwdman.conf"
 
 
 function exit_script(){
-if [ $? != "0" ] ; then
+if [ $? != 0 ] ; then
  type_of=$(file $file_db | cut -f2 -d':' | sed '/ /s/^ //' | cut -f1 -d' ')
  if [ "$type_of" = "ASCII" ]; then
   encrypt_db
@@ -188,49 +188,69 @@ fi
 exit 0
 }
 
+function add_pwd(){
+check_db
+decrypt_db
+input_info
+pwd_insert
+input_again
+encrypt_db
+fine_prog
+}
+export -f add_pwd
+
+function ch_pwd(){
+check_db
+decrypt_db
+change_pwd
+change_again
+encrypt_db
+fine_prog_from_view
+}
+export -f ch_pwd
+
+function del_pwd(){
+check_db
+decrypt_db
+delete_pwd
+delete_again
+encrypt_db
+fine_prog_from_view
+}
+export -f del_pwd
+
+function view_another(){
+local titlepass=$(yad --entry --title="Title" --text="Write the TITLE (ex Facebook, Gmail, ecc):")
+cat $file_db | grep -i $titlepass | yad --text-info
+view_again
+}
+
 function view_again(){
 yad --title "Another?" --text "Do you want to see another password?" --button=Yes --button=No
-if [ "$?" = "0" ] ; then
- view_db
+if [ $? = 0 ] ; then
+ view_another
 fi
 }
 
-function view_db(){
-if [ "$ans" = "View All" ] ; then
- cat $file_db | yad --text-info --width=800 --height=600
- encrypt_db
- fine_prog_from_view
-elif [ "$ans" = "View One" ] ; then
- local titlepass=$(yad --entry --title="Title" --text="Write the TITLE (ex Facebook, Gmail, ecc):")
- cat $file_db | grep -i $titlepass | yad --text-info
-fi
+function viewall_pwd(){
+check_db
+decrypt_db
+cat $file_db | yad --text-info --width=800 --height=600
+encrypt_db
+fine_prog_from_view
 }
+export -f viewall_pwd
 
-function view_or_add(){
-ans=$(yad --list --column="Action" Add Change Delete "View All" "View One" --separator="" --height=200 --width=180)
-if [ "$ans" = "View All" ] || [ "$ans" = "View One" ] ; then
- check_db
- decrypt_db
- view_db
- view_again
- encrypt_db
- fine_prog_from_view
-elif [ "$ans" = "Delete" ]; then
- check_db
- decrypt_db
- delete_pwd
- delete_again
- encrypt_db
- fine_prog_from_view
-elif [ "$ans" = "Change" ]; then
- check_db
- decrypt_db
- change_pwd
- change_again
- encrypt_db
- fine_prog_from_view
-fi
+function viewone_pwd(){
+check_db
+decrypt_db
+local titlepass=$(yad --entry --title="Title" --text="Write the TITLE (ex Facebook, Gmail, ecc):")
+cat $file_db | grep -i $titlepass | yad --text-info
+view_again
+encrypt_db
+fine_prog_from_view
 }
+export -f viewone_pwd
 
 function check_before_start(){
 if [ ! -f $conf_file ] ; then
@@ -300,7 +320,7 @@ elif [ "$1" = "-u" ] || [ "$1" = "--update" ] ; then
  exit 0
 elif [ "$1" = "--uninstall" ] ; then
   if [ $(id -u) != 0 ] ;then
-    echo -e "** ERROR: you have to run the uninstaller as root.\nBecome root and try again. **"
+    echo -e "** ERROR: you have to run the uninstaller as root.\n   Become root and try again. **"
     exit 1
   else
     chmod +x /usr/share/doc/bash-pwd-manager/uninstall.sh
@@ -320,11 +340,5 @@ fi
 
 check_before_start
 pass=$(yad --class="GSu" --title="Password" --text="Write your DB password" --image="dialog-password" --entry --hide-text --separator="")
-view_or_add
-check_db
-decrypt_db
-input_info
-pwd_insert
-input_again
-encrypt_db
-fine_prog
+yad --title "Choose Action" --form --field "Add Password:BTN" --field "Change Password:BTN" --field "Delete Password:BTN" --field "View All Password:BTN" --field "View One Password:BTN" "bash -c add_pwd" "bash -c ch_pwd" "bash -c del_pwd" "bash -c viewall_pwd" "bash -c viewone_pwd" --height=200 --width=220
+
