@@ -188,6 +188,21 @@ fi
 exit 0
 }
 
+#################
+#Funzioni per YAD
+function help_gui(){
+yad --title "Bash PWD Manager Help" --text "
+You are using Bash PWD Manager <b>v${version}</b> developed by:
+<b>Paolo Stivanin</b> aka Polslinux <http://www.polslinux.it>
+Possible options are:
+<b>-c</b> or <b>--change-algo</b> to change your DB cipher-algo
+<b>-p</b> or <b>--generate-pwd</b> to generate a strong password
+<b>-d</b> or <b>--change-dir</b> to change the directory where your DB is saved
+<b>-n</b> or <b>--change-name</b> to change your DB name
+<b>-u</b> or <b>--update</b> to update the script to lastest version" --width=300 --height=200
+}
+export -f help_gui
+
 function add_pwd(){
 check_db
 decrypt_db
@@ -251,6 +266,7 @@ encrypt_db
 fine_prog_from_view
 }
 export -f viewone_pwd
+#################
 
 function check_before_start(){
 if [ ! -f $conf_file ] ; then
@@ -340,5 +356,5 @@ fi
 
 check_before_start
 pass=$(yad --class="GSu" --title="Password" --text="Write your DB password" --image="dialog-password" --entry --hide-text --separator="")
-yad --title "Choose Action" --form --field "Add Password:BTN" --field "Change Password:BTN" --field "Delete Password:BTN" --field "View All Password:BTN" --field "View One Password:BTN" "bash -c add_pwd" "bash -c ch_pwd" "bash -c del_pwd" "bash -c viewall_pwd" "bash -c viewone_pwd" --height=200 --width=220
+yad --title "Choose Action" --form --field "Add Password:BTN" --field "Change Password:BTN" --field "Delete Password:BTN" --field "View All Password:BTN" --field "View One Password:BTN" --field "Help & About:BTN" "bash -c add_pwd" "bash -c ch_pwd" "bash -c del_pwd" "bash -c viewall_pwd" "bash -c viewone_pwd" "bash -c help_gui" --height=200 --width=220
 
