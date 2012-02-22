@@ -17,11 +17,15 @@ declare -A application
 application=(
 	   ["bash"]="$(which bash 2>/dev/null)"
 	   ["wget"]="$(which wget 2>/dev/null)"
-	   ["gpg"]="$(which gpg 2>/dev/null)"
+	   ["gnupg"]="$(which gpg 2>/dev/null)"
 	   ["yad"]="$(which yad 2>/dev/null)"
 	   ["openssl"]="$(which openssl 2>/dev/null)")
 app_yad="$(which yad 2>/dev/null)"
-
+bash_ver=$(echo $BASH_VERSINFO)
+if [ $bash_ver -lt 4 ]; then
+ echo "ERROR: This script is tested to work with Bash >= 4.0. Exiting..."
+ exit 0
+fi
 echo "--> Checking user's privileges..."
 if [ $(id -u) != 0 ]; then 
   echo "--> ERROR: User $(whoami) is not root, and does not have sudo privileges"
@@ -52,7 +56,7 @@ else
 fi
 
 echo -e "--> Checking deps..."
-for key in "bash" "wget" "gpg" "openssl" "yad"; do
+for key in "bash" "wget" "gnupg" "openssl" "yad"; do
   if [ -n "${application[$key]}" ]; then
     echo "   -  Package [ $key ] => [ OK ]"
   else
@@ -110,6 +114,6 @@ chown $username /usr/local/bin/bashpwdm_update
 chmod +x /usr/local/bin/bashpwdm
 chmod +x /usr/local/bin/bashpwdm-config
 chmod +x /usr/local/bin/bashpwdm_update
-echo "** --> Please note that if you want to have a better KDE integration you have to install oxygen-gtk <-- **"
+echo "** --> Please note that if you want to have better KDE integration you have to install oxygen-gtk <-- **"
 echo -e "\n--> Ok all done! Now you can use Bash PWD Manager :)"
 exit 0

@@ -125,7 +125,7 @@
 (08/01/2012) - v1.2.0
 	* NEWSTABLE RELEASE :)
 
-(xx/03/2012) - v1.9.901 (2.0-beta1)
+(xx/yy/2012) - v1.9.901 (2.0-beta1)
 	* NEW:   new UI (insert dialog + view/add/etc with button)
 	* NEW:   yad has replaced zenity -------------------------------------------------------------------[done]
 	* ADDED: sqlite db. Now your password are stored encrypted into an encrypted sqlite db :)
