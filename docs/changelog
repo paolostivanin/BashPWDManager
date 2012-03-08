@@ -144,4 +144,5 @@
 	* IMPROVED: core code have been revisited
 	* IMPROVED: installer have been improved to match all the new changes (oxygen-gtk? + yad + bash v4)-[done]
 	* IMPROVED: uninstaller have been improved to match all the new changes ----------------------------[done]
+	* IMPROVED: if script closed in wrong way at next startup check db encryption
 	* UPDATED: readme file has been updated

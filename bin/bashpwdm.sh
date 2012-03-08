@@ -13,6 +13,8 @@ IFS=$'\n'
 version="2.0-alpha"
 conf_file="/home/$USER/.config/bpwdman.conf"
 
+###################################################
+# Check exit status
 
 function exit_script(){
 if [ $? != 0 ] ; then
@@ -24,6 +26,12 @@ if [ $? != 0 ] ; then
 fi
 }
 
+###################################################
+
+
+###################################################
+# Encryption functions
+
 function check_gpg_openssl_pwd_encrypt(){
 if [ $? != 0 ] ; then
  yad --title "Password Error" --text "You have entered a wrong password, try again!" --width=450 --height=150
@@ -32,6 +40,21 @@ if [ $? != 0 ] ; then
 fi
 }
 
+function encrypt_db(){
+openssl aes-256-cbc -a -salt -pass pass:$pass -in $file_db -out $path_db/enc_db_openssl
+check_gpg_openssl_pwd_encrypt
+mv $path_db/enc_db_openssl $file_db
+echo $pass | gpg --passphrase-fd 0 -o $path_db/enc_db --cipher-algo=$crypto_algo -c $file_db
+check_gpg_openssl_pwd_encrypt
+mv $path_db/enc_db $file_db
+}
+
+###################################################
+
+
+###################################################
+# Decryption functions
+
 function check_gpg_openssl_pwd_decrypt(){
 if [ $? != 0 ] ; then
  yad --title "Password Error" --text "You have entered a wrong password, try again!" --width=450 --height=150
@@ -39,6 +62,21 @@ if [ $? != 0 ] ; then
  decrypt_db
 fi
 }
+
+function decrypt_db(){
+echo $pass | gpg --passphrase-fd 0 -o $path_db/out_db_gpg --cipher-algo=$crypto_algo -d $file_db
+check_gpg_openssl_pwd_decrypt
+mv $path_db/out_db_gpg $file_db
+openssl aes-256-cbc -d -a -pass pass:$pass -in $file_db -out $path_db/out_db
+check_gpg_openssl_pwd_decrypt
+mv $path_db/out_db $file_db
+}
+
+###################################################
+
+
+###################################################
+# Check pwd's chars and retype functions
 
 function retype_nchar(){
 nchar=$(yad --entry --title="Character" --text="Write the number of password's characters (>= 8):" --numeric 8 65000 | cut -f1 -d',')
@@ -51,6 +89,8 @@ if [ $nchar -lt 8 ] ; then
  retype_nchar
 fi
 }
+
+###################################################
 
 function check_db(){
 path_to_db=$(cat $conf_file | grep database-path | cut -f2 -d'=')
@@ -67,24 +107,6 @@ if [ ! -f $file_db ] || [ "$permission" != "rw" ]; then
  yad --text "Database doesn't exist or hasn't read & write permissions." --title "Database Error"
  exit 1
 fi
-}
-
-function decrypt_db(){
-echo $pass | gpg --passphrase-fd 0 -o $path_db/out_db_gpg --cipher-algo=$crypto_algo -d $file_db
-check_gpg_openssl_pwd_decrypt
-mv $path_db/out_db_gpg $file_db
-openssl aes-256-cbc -d -a -pass pass:$pass -in $file_db -out $path_db/out_db
-check_gpg_openssl_pwd_decrypt
-mv $path_db/out_db $file_db
-}
-
-function encrypt_db(){
-openssl aes-256-cbc -a -salt -pass pass:$pass -in $file_db -out $path_db/enc_db_openssl
-check_gpg_openssl_pwd_encrypt
-mv $path_db/enc_db_openssl $file_db
-echo $pass | gpg --passphrase-fd 0 -o $path_db/enc_db --cipher-algo=$crypto_algo -c $file_db
-check_gpg_openssl_pwd_encrypt
-mv $path_db/enc_db $file_db
 }
 
 function check_pwd_before_write(){
@@ -170,26 +192,12 @@ fi
 
 function fine_prog(){
 IFS=$BACKIFS
-if [ -f /home/$USER/.gnupg/gpg.conf ]; then
- if [ "$is_using" = "yes" ] ; then
-  sed -i '/use-agent/s/^#//' /home/$USER/.gnupg/gpg.conf
- fi
-fi
 exit 0
 }
 
-function fine_prog_from_view(){
-IFS=$BACKIFS
-if [ -f /home/$USER/.gnupg/gpg.conf ]; then
- if [ "$is_using" = "yes" ] ; then
-  sed -i '/use-agent/s/^#//' /home/$USER/.gnupg/gpg.conf
- fi
-fi
-exit 0
-}
+###################################################
+# YAD's core functions
 
-#################
-#Funzioni per YAD
 function help_gui(){
 yad --title "Bash PWD Manager Help" --text "
 You are using Bash PWD Manager <b>v${version}</b> developed by:
@@ -220,7 +228,7 @@ decrypt_db
 change_pwd
 change_again
 encrypt_db
-fine_prog_from_view
+fine_prog
 }
 export -f ch_pwd
 
@@ -230,7 +238,7 @@ decrypt_db
 delete_pwd
 delete_again
 encrypt_db
-fine_prog_from_view
+fine_prog
 }
 export -f del_pwd
 
@@ -252,7 +260,7 @@ check_db
 decrypt_db
 cat $file_db | yad --text-info --width=800 --height=600
 encrypt_db
-fine_prog_from_view
+fine_prog
 }
 export -f viewall_pwd
 
@@ -263,27 +271,25 @@ local titlepass=$(yad --entry --title="Title" --text="Write the TITLE (ex Facebo
 cat $file_db | grep -i $titlepass | yad --text-info
 view_again
 encrypt_db
-fine_prog_from_view
+fine_prog
 }
 export -f viewone_pwd
-#################
+
+###################################################
+
+
+###################################################
+# Extra args and startup check
 
 function check_before_start(){
-if [ ! -f $conf_file ] ; then
+if [ ! -f $conf_file ]; then
 yad --text "You have to open the terminal and write
-'bashpwdm-config' before use this script.
+'bashpwdm-config' before you can use this script.
 Do you want to do this now?" --title "Configuration Needed" --width=350 --height=200 --button=Yes --button=No
  if [ $? = 0 ] ; then
- source bashpwdm-config.sh
- else 
-   exit 0
- fi
-else
- if [ -f /home/$USER/.gnupg/gpg.conf ]; then
-  is_using=$(cat $conf_file | grep "using-agent" | cut -f2 -d'=')
-  if [ "$is_using" = "yes" ] ; then
-   sed -i '/use-agent/s/^/#/' /home/$USER/.gnupg/gpg.conf
-  fi
+  source bashpwdm-config.sh
+ else
+  exit 0
  fi
 fi
 }
@@ -354,7 +360,15 @@ The syntax for the following options is: bashpwdm [OPTIONS]\nwhere [OPTIONS] can
  exit 0
 fi
 
+###################################################
+
+
+###################################################
+# Main script
+
 check_before_start
 pass=$(yad --class="GSu" --title="Password" --text="Write your DB password" --image="dialog-password" --entry --hide-text --separator="")
 exit_script
 yad --title "Choose Action" --form --field "Add Password:BTN" --field "Change Password:BTN" --field "Delete Password:BTN" --field "View All Password:BTN" --field "View One Password:BTN" --field "Help & About:BTN" "bash -c add_pwd" "bash -c ch_pwd" "bash -c del_pwd" "bash -c viewall_pwd" "bash -c viewone_pwd" "bash -c help_gui" --height=200 --width=220
+
+###################################################
