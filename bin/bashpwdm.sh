@@ -76,7 +76,7 @@ mv $path_db/out_db $file_db
 # Check pwd's chars and retype functions
 #
 function retype_nchar(){
-nchar=$(yad --entry --title="Character" --text="Write the number of password's characters (>= 8):" --numeric 8 65000 | cut -f1 -d',')
+nchar=$(yad --entry --title="Characters" --text="Write the number of password's characters (>= 8):" --numeric 8 65000 | cut -f1 -d',')
 check_pwd_char
 }
 
@@ -315,7 +315,7 @@ if [ "$1" = "-v" ] || [ "$1" = "--version" ]; then
  echo "Bash Password Manager v$version developed by Polslinux <http://www.polslinux.it>"
  exit 0
 elif [ "$1" = "--generate-pwd" ] || [ "$1" = "-p" ]; then
- nchar=$(yad --entry --title="Characters" --text="Write number of password characters:" --numeric | cut -f1 -d',')
+ nchar=$(yad --entry --title="Characters" --text="Write the number of password's characters (>= 8):" --numeric 8 65000 | cut -f1 -d',')
  check_pwd_char
  echo $(</dev/urandom tr -dc '[:graph:]' | head -c $nchar) | yad --text-info --title "Your password is:" --height=150 --width=300
  exit 0

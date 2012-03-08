@@ -21,15 +21,6 @@ exit 0
 fi
 }
 
-function disable_useagent(){
-if [ -f /home/$USER/.gnupg/gpg.conf ]; then
- local first_char=$(cat /home/$USER/.gnupg/gpg.conf | grep use-agent | cut -f1 -d ' ')
- if [ "$first_char" != "#" ] ; then
-  echo "using-agent=yes" >> $conf_file
- fi
-fi
-}
-
 function retype_pass(){
 pass=$(yad --entry --hide-text --title "DB Password" --text "Type your database password" --image="dialog-password")
 check_pwd_char
@@ -46,17 +37,17 @@ fi
 
 function first_encryption(){
 local typ_algo=$(echo $typ | tr '[A-Z]' '[a-z]')
-openssl aes-256-cbc -a -salt -pass pass:$pass -in $db_dir/$db_name.bpm -out $db_dir/enc_db_openssl
-mv $db_dir/enc_db_openssl $db_dir/$db_name.bpm
-echo $pass | gpg --passphrase-fd 0 -o $db_dir/enc_db --cipher-algo=$typ -c $db_dir/$db_name.bpm
-mv $db_dir/enc_db $db_dir/$db_name.bpm
+openssl aes-256-cbc -a -salt -pass pass:$pass -in $db_dir/${db_name}.bpm -out $db_dir/enc_db_openssl
+mv $db_dir/enc_db_openssl $db_dir/${db_name}.bpm
+echo $pass | gpg --passphrase-fd 0 -o $db_dir/enc_db --cipher-algo=$typ -c $db_dir/${db_name}.bpm
+mv $db_dir/enc_db $db_dir/${db_name}.bpm
 }
 
 function save_db_path(){
 yad --text "Do you want to save the path of the DB so every time you
 start the script you won't have to select it?" --title "Save DB path?" --width=410 --button=Yes --button=No
 if [ $? = 0 ] ; then
- echo "database-path=$db_dir/$db_name.bpm" >> $conf_file   
+ echo "database-path=$db_dir/${db_name}.bpm" >> $conf_file   
 else
  echo "database-path=0" >> $conf_file
 fi
@@ -82,17 +73,16 @@ if [ ! -f $conf_file ] ; then
  exit_script
  db_name_tmp=$(echo $db_name | sed 's/ //g')
  if [ -z "$db_name_tmp" ]; then
-   yad --title "Error" --text "You cannot create DB with no name"
+   yad --title "Error" --text "You cannot create DB with no name, exiting..."
    rm -f $conf_file
    exit 1
  fi
- echo "database-name=$db_name.bpm" >> $conf_file
- touch $db_dir/$db_name.bpm
+ echo "database-name=${db_name}.bpm" >> $conf_file
+ touch $db_dir/${db_name}.bpm
  pass=$(yad --entry --hide-text --title "DB Password" --text "Type your database password" --image="dialog-password")
  check_pwd_char
  echo "db_created=1" >> $conf_file
  save_db_path
- disable_useagent
  first_encryption
  yad --text "Bash Password Manager has been configured :)" --title "Finish" --width=310
  fine_prog
