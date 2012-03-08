@@ -15,7 +15,7 @@ conf_file="/home/$USER/.config/bpwdman.conf"
 
 ###################################################
 # Check exit status
-
+#
 function exit_script(){
 if [ $? != 0 ] ; then
  type_of=$(file $file_db | cut -f2 -d':' | sed '/ /s/^ //' | cut -f1 -d' ')
@@ -25,13 +25,12 @@ if [ $? != 0 ] ; then
  exit 0
 fi
 }
-
 ###################################################
 
 
 ###################################################
 # Encryption functions
-
+#
 function check_gpg_openssl_pwd_encrypt(){
 if [ $? != 0 ] ; then
  yad --title "Password Error" --text "You have entered a wrong password, try again!" --width=450 --height=150
@@ -48,13 +47,12 @@ echo $pass | gpg --passphrase-fd 0 -o $path_db/enc_db --cipher-algo=$crypto_algo
 check_gpg_openssl_pwd_encrypt
 mv $path_db/enc_db $file_db
 }
-
 ###################################################
 
 
 ###################################################
 # Decryption functions
-
+#
 function check_gpg_openssl_pwd_decrypt(){
 if [ $? != 0 ] ; then
  yad --title "Password Error" --text "You have entered a wrong password, try again!" --width=450 --height=150
@@ -71,13 +69,12 @@ openssl aes-256-cbc -d -a -pass pass:$pass -in $file_db -out $path_db/out_db
 check_gpg_openssl_pwd_decrypt
 mv $path_db/out_db $file_db
 }
-
 ###################################################
 
 
 ###################################################
 # Check pwd's chars and retype functions
-
+#
 function retype_nchar(){
 nchar=$(yad --entry --title="Character" --text="Write the number of password's characters (>= 8):" --numeric 8 65000 | cut -f1 -d',')
 check_pwd_char
@@ -89,9 +86,12 @@ if [ $nchar -lt 8 ] ; then
  retype_nchar
 fi
 }
-
 ###################################################
 
+
+###################################################
+# Check db
+#
 function check_db(){
 path_to_db=$(cat $conf_file | grep database-path | cut -f2 -d'=')
 if [ $path_to_db = 0 ]; then
@@ -108,15 +108,12 @@ if [ ! -f $file_db ] || [ "$permission" != "rw" ]; then
  exit 1
 fi
 }
+###################################################
 
-function check_pwd_before_write(){
-password_retype=$(yad --entry --hide-text --title "Password" --text "Retype your password" --image="dialog-password")
-if [ "$password" !=  "$password_retype" ] ; then
- yad --title "Error" --text "Passwords are different. Please try again!"
- pwd_insert
-fi
-}
 
+###################################################
+# Input info and validation
+#
 function input_info(){
 title=$(yad --entry --title "Title" --text "Write Title")
 exit_script
@@ -125,13 +122,21 @@ exit_script
 } 
 
 function pwd_insert(){
-password=$(yad --entry --hide-text --title "Password" --text "Write password" --image="dialog-password")
+password=$(yad --form --field "Password:H" --field "Retype Password:H" --separator="@_@" --title "Password" --image="dialog-password")
 exit_script
-check_pwd_before_write
+if [ $(echo $password | awk -F"@_@" '{print $1}') != $(echo $password | awk -F"@_@" '{print $2}') ];then
+ yad --title "Error" --text "Passwords are different. Please try again"
+ pwd_insert
+fi
 echo "TITLE: $title | USER: $username | PASSWORD: $password" >> $file_db
 echo "-------------------------------------" >> $file_db
 }
+###################################################
 
+
+###################################################
+# Add pwd, delete pwd, change pwd
+#
 function delete_again(){
 yad --title "Another?" --text "Do you want to delete another password?" --button=Yes --button=No
 if [ $? = 0 ] ; then
@@ -189,15 +194,22 @@ if [ "$?" = 0 ] ; then
  input_again
 fi
 }
+###################################################
 
+
+###################################################
+# End script
+#
 function fine_prog(){
 IFS=$BACKIFS
 exit 0
 }
+###################################################
+
 
 ###################################################
 # YAD's core functions
-
+#
 function help_gui(){
 yad --title "Bash PWD Manager Help" --text "
 You are using Bash PWD Manager <b>v${version}</b> developed by:
@@ -280,7 +292,7 @@ export -f viewone_pwd
 
 ###################################################
 # Extra args and startup check
-
+#
 function check_before_start(){
 if [ ! -f $conf_file ]; then
 yad --text "You have to open the terminal and write
@@ -365,10 +377,9 @@ fi
 
 ###################################################
 # Main script
-
+#
 check_before_start
 pass=$(yad --class="GSu" --title="Password" --text="Write your DB password" --image="dialog-password" --entry --hide-text --separator="")
 exit_script
 yad --title "Choose Action" --form --field "Add Password:BTN" --field "Change Password:BTN" --field "Delete Password:BTN" --field "View All Password:BTN" --field "View One Password:BTN" --field "Help & About:BTN" "bash -c add_pwd" "bash -c ch_pwd" "bash -c del_pwd" "bash -c viewall_pwd" "bash -c viewone_pwd" "bash -c help_gui" --height=200 --width=220
-
 ###################################################
