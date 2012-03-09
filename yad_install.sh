@@ -10,25 +10,25 @@
 
 work_dir=$(mktemp -d --tmpdir=/tmp yad-install.XXXXXX)
 
-echo "BEFORE INSTALLING YAD PLEASE INSTALL THESE DEPS:
+echo "--> BEFORE INSTALLING YAD PLEASE INSTALL THESE DEPS:
 automake
 autoconf
 intltool"
-echo "Have you already installed all of these? (Y or N)"
+echo "--> Have you already installed all of these? (Y or N)"
 read ans
 case "$ans" in
     [yY]|[eE]|[sS]) echo "--> Ok, let's go :)" ;;
-	 [nN]|[oO]) echo "The script will exit, please install required deps."
+	 [nN]|[oO]) echo "--> The script will exit, please install required deps."
 		    exit 1 ;;
-		 *) echo "Exiting..."
+		 *) echo "--> Exiting..."
 	      exit 1 ;;
 esac
 echo "--> Downloading YAD, please wait..."
 cd $work_dir
-wget http://yad.googlecode.com/files/yad-0.16.3.tar.xz &>/dev/null
+wget http://yad.googlecode.com/files/yad-0.17.1.1.tar.xz &>/dev/null
 echo "--> Extracting archive..."
-tar xJf yad-0.16.3.tar.xz
-cd yad-0.16.3
+tar xJf yad-0.17.1.1.tar.xz
+cd yad-0.17.1.1
 echo "--> Now running configure..."
 ./configure --prefix=/usr
 echo "--> Now runnning make..."

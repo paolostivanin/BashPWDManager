@@ -15,14 +15,15 @@ app_install=""
 username=""
 declare -A application
 application=(
-	   ["bash"]="$(which bash 2>/dev/null)"
-	   ["wget"]="$(which wget 2>/dev/null)"
-	   ["gnupg"]="$(which gpg 2>/dev/null)"
-	   ["yad"]="$(which yad 2>/dev/null)"
-	   ["openssl"]="$(which openssl 2>/dev/null)")
+  ["bash"]="$(which bash 2>/dev/null)"
+  ["wget"]="$(which wget 2>/dev/null)"
+  ["gnupg"]="$(which gpg 2>/dev/null)"
+  ["yad"]="$(which yad 2>/dev/null)"
+  ["openssl"]="$(which openssl 2>/dev/null)"
+  ["sqlite3"]="$(which sqlite3 2>/dev/null)"
+)
 app_yad="$(which yad 2>/dev/null)"
-bash_ver=$(echo $BASH_VERSINFO)
-if [ $bash_ver -lt 4 ]; then
+if [ $(echo $BASH_VERSINFO) -lt 4 ]; then
  echo "ERROR: This script is tested to work with Bash >= 4.0. Exiting..."
  exit 0
 fi
@@ -56,7 +57,7 @@ else
 fi
 
 echo -e "--> Checking deps..."
-for key in "bash" "wget" "gnupg" "openssl" "yad"; do
+for key in "bash" "wget" "gnupg" "openssl" "yad" "sqlite3"; do
   if [ -n "${application[$key]}" ]; then
     echo "   -  Package [ $key ] => [ OK ]"
   else
@@ -66,11 +67,11 @@ for key in "bash" "wget" "gnupg" "openssl" "yad"; do
   fi
 done
 if [ $check_app -eq 1 ]; then
-  echo "--> ERROR: you have to install yad curl wget bash and wipe before you"
+  echo "--> ERROR: you have to install yad wget bash sqlite3 gnupg and openssl before you"
   echo "    can you this script!"
   echo "    Please open a terminal and write:"
   if [ "$distro" = "Debian" ] || [ "$distro" = "Ubuntu" ] || [ "$(cat /etc/issue | cut -d' ' -f2 -s)" = "Linux Mint" ];then
-    echo "    sudo apt-get install $app_install"
+    echo "--> sudo apt-get install $app_install <--"
     if [ ! -n "${app_yad}" ];then
       echo "Ubuntu/Debian/Mint ecc doesn't have yad into their"
       echo "official repo. You have to manually install yad or"

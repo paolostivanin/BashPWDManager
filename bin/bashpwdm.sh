@@ -8,10 +8,15 @@
 # @License: GNU AGPL v3 http://www.gnu.org/licenses/agpl.html
 #################################################################
 
+
+###################################################
+# Variables
+#
 BACKIFS=$IFS
 IFS=$'\n'
 version="2.0-alpha"
 conf_file="/home/$USER/.config/bpwdman.conf"
+###################################################
 
 ###################################################
 # Check exit status
@@ -43,7 +48,7 @@ function encrypt_db(){
 openssl aes-256-cbc -a -salt -pass pass:$pass -in $file_db -out $path_db/enc_db_openssl
 check_gpg_openssl_pwd_encrypt
 mv $path_db/enc_db_openssl $file_db
-echo $pass | gpg --passphrase-fd 0 -o $path_db/enc_db --cipher-algo=$crypto_algo -c $file_db
+eval $pass | gpg --passphrase-fd 0 -o $path_db/enc_db --cipher-algo=$crypto_algo -c $file_db
 check_gpg_openssl_pwd_encrypt
 mv $path_db/enc_db $file_db
 }
@@ -62,7 +67,7 @@ fi
 }
 
 function decrypt_db(){
-echo $pass | gpg --passphrase-fd 0 -o $path_db/out_db_gpg --cipher-algo=$crypto_algo -d $file_db
+eval $pass | gpg --passphrase-fd 0 -o $path_db/out_db_gpg --cipher-algo=$crypto_algo -d $file_db
 check_gpg_openssl_pwd_decrypt
 mv $path_db/out_db_gpg $file_db
 openssl aes-256-cbc -d -a -pass pass:$pass -in $file_db -out $path_db/out_db
@@ -124,12 +129,11 @@ exit_script
 function pwd_insert(){
 password=$(yad --form --field "Password:H" --field "Retype Password:H" --separator="@_@" --title "Password" --image="dialog-password")
 exit_script
-if [ $(echo $password | awk -F"@_@" '{print $1}') != $(echo $password | awk -F"@_@" '{print $2}') ];then
+if [ $(eval $password | awk -F"@_@" '{print $1}') != $(eval $password | awk -F"@_@" '{print $2}') ];then
  yad --title "Error" --text "Passwords are different. Please try again"
  pwd_insert
 fi
-echo "TITLE: $title | USER: $username | PASSWORD: $password" >> $file_db
-echo "-------------------------------------" >> $file_db
+sqlite3 $file_db "INSERT INTO main (title,username,password) VALUES ('$title','$username','$password')";
 }
 ###################################################
 

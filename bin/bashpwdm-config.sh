@@ -22,14 +22,19 @@ fi
 }
 
 function retype_pass(){
-pass=$(yad --entry --hide-text --title "DB Password" --text "Type your database password" --image="dialog-password")
+pass=$(yad --form --field "Password:H" --field "Retype Password:H" --separator="@_@" --title "Password" --image="dialog-password")
+exit_script
+if [ $(eval $password | awk -F"@_@" '{print $1}') != $(eval $password | awk -F"@_@" '{print $2}') ];then
+ yad --title "Error" --text "Passwords are different. Please try again"
+ retype_pass
+fi
 check_pwd_char
 }
 
 function check_pwd_char(){
 if [ ${#pass} -lt 8 ] ; then
  yad --title "Error" --text "Your password characters are ${#pass}.
-You MUST choose a password equal or greater than 8 charactes. 
+You <b>MUST</b> choose a password <b>equal or greater than 8 charactes</b>. 
 Thanks :)"
  retype_pass
 fi
@@ -39,7 +44,7 @@ function first_encryption(){
 local typ_algo=$(echo $typ | tr '[A-Z]' '[a-z]')
 openssl aes-256-cbc -a -salt -pass pass:$pass -in $db_dir/${db_name}.bpm -out $db_dir/enc_db_openssl
 mv $db_dir/enc_db_openssl $db_dir/${db_name}.bpm
-echo $pass | gpg --passphrase-fd 0 -o $db_dir/enc_db --cipher-algo=$typ -c $db_dir/${db_name}.bpm
+eval $pass | gpg --passphrase-fd 0 -o $db_dir/enc_db --cipher-algo=$typ -c $db_dir/${db_name}.bpm
 mv $db_dir/enc_db $db_dir/${db_name}.bpm
 }
 
@@ -51,6 +56,14 @@ if [ $? = 0 ] ; then
 else
  echo "database-path=0" >> $conf_file
 fi
+}
+
+function create_db(){
+STRUCTURE="CREATE TABLE main (title TEXT,username TEXT,password TEXT);";
+cat /dev/null > ${db_dir}/${db_name}.bpm
+echo $STRUCTURE > /tmp/tmpstruct
+sqlite3 ${db_dir}/${db_name}.bpm < /tmp/tmpstruct;
+rm -f /tmp/tmpstruct
 }
 
 function fine_prog(){
@@ -71,15 +84,20 @@ if [ ! -f $conf_file ] ; then
  exit_script
  db_name=$(yad --entry --title "Database name" --text "Write the name of your database")
  exit_script
- db_name_tmp=$(echo $db_name | sed 's/ //g')
+ db_name_tmp=$(eval $db_name | sed 's/ //g')
  if [ -z "$db_name_tmp" ]; then
    yad --title "Error" --text "You cannot create DB with no name, exiting..."
    rm -f $conf_file
    exit 1
  fi
  echo "database-name=${db_name}.bpm" >> $conf_file
- touch $db_dir/${db_name}.bpm
- pass=$(yad --entry --hide-text --title "DB Password" --text "Type your database password" --image="dialog-password")
+ create_db
+ pass=$(yad --form --field "Password:H" --field "Retype Password:H" --separator="@_@" --title "Password" --image="dialog-password")
+ exit_script
+ if [ $(eval $password | awk -F"@_@" '{print $1}') != $(eval $password | awk -F"@_@" '{print $2}') ];then
+  yad --title "Error" --text "Passwords are different. Please try again"
+  retype_pass
+ fi
  check_pwd_char
  echo "db_created=1" >> $conf_file
  save_db_path
