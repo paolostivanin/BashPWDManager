@@ -104,17 +104,17 @@ if [ ! -d /usr/share/doc/bash-pwd-manager ] ; then
  mkdir /usr/share/doc/bash-pwd-manager
 fi
 cp LICENSE README uninstall.sh yad_install.sh docs/* /usr/share/doc/bash-pwd-manager
-cp bin/bashpwdm.sh /usr/local/bin/bashpwdm
-cp bin/bashpwdm-config.sh /usr/local/bin/bashpwdm-config
-cp bin/bashpwdm_update.sh /usr/local/bin/bashpwdm_update
+cp bin/bashpwdm.sh /usr/local/bin/
+cp bin/bashpwdm-config.sh /usr/local/bin/
+cp bin/bashpwdm-update.sh /usr/local/bin/
 cp docs/bashpwdm.desktop /usr/share/applications/
 cp docs/bpwdm.png /usr/share/pixmaps/
-chown $username /usr/local/bin/bashpwdm
-chown $username /usr/local/bin/bashpwdm-config
-chown $username /usr/local/bin/bashpwdm_update
-chmod +x /usr/local/bin/bashpwdm
-chmod +x /usr/local/bin/bashpwdm-config
-chmod +x /usr/local/bin/bashpwdm_update
+chown $username /usr/local/bin/bashpwdm.sh
+chown $username /usr/local/bin/bashpwdm-config.sh
+chown $username /usr/local/bin/bashpwdm-update.sh
+chmod +x /usr/local/bin/bashpwdm.sh
+chmod +x /usr/local/bin/bashpwdm-config.sh
+chmod +x /usr/local/bin/bashpwdm-update.sh
 echo "** --> Please note that if you want to have better KDE integration you have to install oxygen-gtk <-- **"
 echo -e "\n--> Ok all done! Now you can use Bash PWD Manager :)"
 exit 0

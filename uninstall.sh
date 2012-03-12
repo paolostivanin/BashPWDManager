@@ -35,14 +35,14 @@ echo "--> Removing files..."
   if [ -d /usr/share/doc/bash-pwd-manager ] ; then
    rm -r /usr/share/doc/bash-pwd-manager
   fi
-  if [ -f /usr/local/bin/bashpwdm ] ; then
-   rm -f /usr/local/bin/bashpwdm
+  if [ -f /usr/local/bin/bashpwdm.sh ] ; then
+   rm -f /usr/local/bin/bashpwdm.sh
   fi
-  if [ -f /usr/local/bin/bashpwdm-config ] ; then
-   rm -f /usr/local/bin/bashpwdm-config
+  if [ -f /usr/local/bin/bashpwdm-config.sh ] ; then
+   rm -f /usr/local/bin/bashpwdm-config.sh
   fi
-  if [ -f /usr/local/bin/bashpwdm_update ] ; then
-   rm -f /usr/local/bin/bashpwdm_update
+  if [ -f /usr/local/bin/bashpwdm-update.sh ] ; then
+   rm -f /usr/local/bin/bashpwdm-update.sh
   fi
   if [ -f /usr/share/applications/bashpwdm.desktop ] ; then
    rm -f /usr/share/applications/bashpwdm.desktop

@@ -354,7 +354,7 @@ elif [ "$1" = "--change-name" ] || [ "$1" = "-n" ] ; then
  echo $new_db_name >> $conf_file
  exit 0
 elif [ "$1" = "-u" ] || [ "$1" = "--update" ] ; then
- source bashpwdm_update
+ source bashpwdm-update.sh
  exit 0
 elif [ "$1" = "--uninstall" ] ; then
   if [ $(id -u) != 0 ] ;then
