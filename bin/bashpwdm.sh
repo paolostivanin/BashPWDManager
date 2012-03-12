@@ -48,7 +48,7 @@ function encrypt_db(){
 openssl aes-256-cbc -a -salt -pass pass:$pass -in $file_db -out $path_db/enc_db_openssl
 check_gpg_openssl_pwd_encrypt
 mv $path_db/enc_db_openssl $file_db
-eval $pass | gpg --passphrase-fd 0 -o $path_db/enc_db --cipher-algo=$crypto_algo -c $file_db
+echo $pass | gpg --passphrase-fd 0 -o $path_db/enc_db --cipher-algo=$crypto_algo -c $file_db
 check_gpg_openssl_pwd_encrypt
 mv $path_db/enc_db $file_db
 }
@@ -67,7 +67,7 @@ fi
 }
 
 function decrypt_db(){
-eval $pass | gpg --passphrase-fd 0 -o $path_db/out_db_gpg --cipher-algo=$crypto_algo -d $file_db
+echo $pass | gpg --passphrase-fd 0 -o $path_db/out_db_gpg --cipher-algo=$crypto_algo -d $file_db
 check_gpg_openssl_pwd_decrypt
 mv $path_db/out_db_gpg $file_db
 openssl aes-256-cbc -d -a -pass pass:$pass -in $file_db -out $path_db/out_db
@@ -129,7 +129,7 @@ exit_script
 function pwd_insert(){
 password=$(yad --form --field "Password:H" --field "Retype Password:H" --separator="@_@" --title "Password" --image="dialog-password")
 exit_script
-if [ $(eval $password | awk -F"@_@" '{print $1}') != $(eval $password | awk -F"@_@" '{print $2}') ];then
+if [ $(echo $password | awk -F"@_@" '{print $1}') != $(echo $password | awk -F"@_@" '{print $2}') ];then
  yad --title "Error" --text "Passwords are different. Please try again"
  pwd_insert
 fi

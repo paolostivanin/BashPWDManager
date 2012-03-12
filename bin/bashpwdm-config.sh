@@ -24,7 +24,7 @@ fi
 function retype_pass(){
 pass=$(yad --form --field "Password:H" --field "Retype Password:H" --separator="@_@" --title "Password" --image="dialog-password")
 exit_script
-if [ $(eval $password | awk -F"@_@" '{print $1}') != $(eval $password | awk -F"@_@" '{print $2}') ];then
+if [ $(echo $password | awk -F"@_@" '{print $1}') != $(echo $password | awk -F"@_@" '{print $2}') ];then
  yad --title "Error" --text "Passwords are different. Please try again"
  retype_pass
 fi
@@ -44,7 +44,7 @@ function first_encryption(){
 local typ_algo=$(echo $typ | tr '[A-Z]' '[a-z]')
 openssl aes-256-cbc -a -salt -pass pass:$pass -in $db_dir/${db_name}.bpm -out $db_dir/enc_db_openssl
 mv $db_dir/enc_db_openssl $db_dir/${db_name}.bpm
-eval $pass | gpg --passphrase-fd 0 -o $db_dir/enc_db --cipher-algo=$typ -c $db_dir/${db_name}.bpm
+echo $pass | gpg --passphrase-fd 0 -o $db_dir/enc_db --cipher-algo=$typ -c $db_dir/${db_name}.bpm
 mv $db_dir/enc_db $db_dir/${db_name}.bpm
 }
 
@@ -84,7 +84,7 @@ if [ ! -f $conf_file ] ; then
  exit_script
  db_name=$(yad --entry --title "Database name" --text "Write the name of your database")
  exit_script
- db_name_tmp=$(eval $db_name | sed 's/ //g')
+ db_name_tmp=$(echo $db_name | sed 's/ //g')
  if [ -z "$db_name_tmp" ]; then
    yad --title "Error" --text "You cannot create DB with no name, exiting..."
    rm -f $conf_file
@@ -94,7 +94,7 @@ if [ ! -f $conf_file ] ; then
  create_db
  pass=$(yad --form --field "Password:H" --field "Retype Password:H" --separator="@_@" --title "Password" --image="dialog-password")
  exit_script
- if [ $(eval $password | awk -F"@_@" '{print $1}') != $(eval $password | awk -F"@_@" '{print $2}') ];then
+ if [ $(echo $password | awk -F"@_@" '{print $1}') != $(echo $password | awk -F"@_@" '{print $2}') ];then
   yad --title "Error" --text "Passwords are different. Please try again"
   retype_pass
  fi
