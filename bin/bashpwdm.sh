@@ -24,7 +24,7 @@ conf_file="/home/$USER/.config/bpwdman.conf"
 function exit_script(){
 if [ $? != 0 ] ; then
  type_of=$(file $file_db | cut -f2 -d':' | sed '/ /s/^ //' | cut -f1 -d' ')
- if [ "$type_of" = "ASCII" ]; then
+ if [ "$type_of" = "SQLite" ]; then
   encrypt_db
  fi
  exit 0
@@ -133,13 +133,13 @@ if [ $(echo $password | awk -F"@_@" '{print $1}') != $(echo $password | awk -F"@
  yad --title "Error" --text "Passwords are different. Please try again"
  pwd_insert
 fi
-sqlite3 $file_db "INSERT INTO main (title,username,password) VALUES ('$title','$username','$password')";
+sqlite3 $file_db "INSERT INTO main (title,username,password) VALUES ('TITLE:$title','USER:$username','PASS:$password')";
 }
 ###################################################
 
 
 ###################################################
-# Add pwd, delete pwd, change pwd
+# Delete and/or change pwds
 #
 function delete_again(){
 yad --title "Another?" --text "Do you want to delete another password?" --button=Yes --button=No
@@ -150,9 +150,10 @@ fi
 
 function delete_pwd(){
 to_delete=$(yad --entry --title "Choose PWD" --text "Write the EXACT title of PWD to delete")
-cat $file_db | grep $to_delete | yad --text-info --title "Click OK to delete this password" --width=400 --height=200
+local choosen=$(sqlite3 $file_db "SELECT * FROM main WHERE title='$to_delete'";)
+echo $choosen | yad --text-info --title "Click OK to delete this password" --width=400 --height=200
 if [ $? = 0 ]; then
- sed -i '/\<'$to_delete'\>/d' $file_db
+ sqlite3 $file_db "DELETE FROM main WHERE title='$to_delete'";
  delete_again
 else
  yad --title "Warning" --text "No password has been deleted"
@@ -173,7 +174,7 @@ fi
 
 function change_again(){
 yad --title "Another?" --text "Do you want to change another password?" --button=Yes --button=No
-if [ $? = 0 ] ; then
+if [ $? = 0 ]; then
  change_pwd
 fi
 }
@@ -181,10 +182,12 @@ fi
 function change_pwd(){
 new_pwd_and_check
 to_change=$(yad --entry --title "Choose PWD" --text "Write the EXACT title of PWD to change")
-cat $file_db | grep $to_change | yad --text-info --title "Click OK to change this password" --width=400 --height=200
+local choosen=$(sqlite3 $file_db "SELECT * FROM main WHERE title='$to_change'";)
+echo $choosen | yad --text-info --title "Click OK to change this password" --width=400 --height=200
 if [ $? = 0 ]; then
- sed -i '/^TITLE: '$to_change'/s/PASSWORD:.*/PASSWORD: '$newpwd'/' $file_db
+ sqlite3 $file_db "UPDATE main SET password WHERE title='$to_delete'";
  change_again
+ yad --title "Info" --text "Password has been correctly updated"
 else
  yad --title "Warning" --text "No password has been changed"
 fi
@@ -192,7 +195,7 @@ fi
 
 function input_again(){
 yad --title "Another?" --text "Do you want to add another password?" --button=Yes --button=No
-if [ "$?" = 0 ] ; then
+if [ $? = 0 ]; then
  input_info
  pwd_insert
  input_again
@@ -258,23 +261,18 @@ fine_prog
 }
 export -f del_pwd
 
-function view_another(){
-local titlepass=$(yad --entry --title="Title" --text="Write the TITLE (ex Facebook, Gmail, ecc):")
-cat $file_db | grep -i $titlepass | yad --text-info
-view_again
-}
-
 function view_again(){
 yad --title "Another?" --text "Do you want to see another password?" --button=Yes --button=No
 if [ $? = 0 ] ; then
- view_another
+ viewone_pwd
 fi
 }
 
 function viewall_pwd(){
 check_db
 decrypt_db
-cat $file_db | yad --text-info --width=800 --height=600
+local choosen=$(sqlite3 $file_db "SELECT * FROM main";)
+echo $choosen | yad --text-info --width=800 --height=600
 encrypt_db
 fine_prog
 }
@@ -284,7 +282,8 @@ function viewone_pwd(){
 check_db
 decrypt_db
 local titlepass=$(yad --entry --title="Title" --text="Write the TITLE (ex Facebook, Gmail, ecc):")
-cat $file_db | grep -i $titlepass | yad --text-info
+local choosen=$(sqlite3 $file_db "SELECT * FROM main WHERE title='$titlepass'";)
+echo $choosen | yad --text-info --width=300 --height=200
 view_again
 encrypt_db
 fine_prog

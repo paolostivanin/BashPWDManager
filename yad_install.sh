@@ -1,27 +1,29 @@
 #!/bin/bash
 
 ###############################################################################
-# @Author & Main Developer:  Paolo Stivanin aka Polslinux
-# @Name			  :  Yad Install Script
-# @Copyright		  :  2012
-# @Site			  :  http://www.polslinux.it                        
-# @License		  :  GNU AGPL v3 http://www.gnu.org/licenses/agpl.html 
+# @Author	:  Paolo Stivanin aka Polslinux
+# @Developer	:  Ennio aka Toshidex <http://www.toshidex.org>
+# @Name		:  Secure Delete
+# @Copyright	:  2012
+# @Site		:  http://www.polslinux.it                        
+# @License	:  GNU AGPL v3 http://www.gnu.org/licenses/agpl.html 
 ###############################################################################
 
 work_dir=$(mktemp -d --tmpdir=/tmp yad-install.XXXXXX)
 
-echo "--> BEFORE INSTALLING YAD PLEASE INSTALL THESE DEPS:
+echo "BEFORE INSTALLING YAD PLEASE INSTALL THESE DEPS:
 automake
 autoconf
-intltool"
-echo "--> Have you already installed all of these? (Y or N)"
+intltool
+libgtk2.0-dev"
+echo "Have you already installed all of these? (Y or N)"
 read ans
 case "$ans" in
-    [yY]|[eE]|[sS]) echo "--> Ok, let's go :)" ;;
-	 [nN]|[oO]) echo "--> The script will exit, please install required deps."
-		    exit 1 ;;
-		 *) echo "--> Exiting..."
-	      exit 1 ;;
+    [yY]|[yY][eE][sS]) echo "--> Ok, let's go :)";;
+    [nN]|[nN][oO]) echo "The script will exit, please install required deps."
+	      exit 1;;
+	   *) echo "Exiting..."
+	      exit 1;;
 esac
 echo "--> Downloading YAD, please wait..."
 cd $work_dir
