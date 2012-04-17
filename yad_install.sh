@@ -10,6 +10,7 @@
 ###############################################################################
 
 work_dir=$(mktemp -d --tmpdir=/tmp yad-install.XXXXXX)
+yad_ver=0.17.1.1
 
 echo "BEFORE INSTALLING YAD PLEASE INSTALL THESE DEPS:
 automake
@@ -27,10 +28,10 @@ case "$ans" in
 esac
 echo "--> Downloading YAD, please wait..."
 cd $work_dir
-wget http://yad.googlecode.com/files/yad-0.17.1.1.tar.xz &>/dev/null
+wget http://yad.googlecode.com/files/yad-${yad_ver}.tar.xz &>/dev/null
 echo "--> Extracting archive..."
-tar xJf yad-0.17.1.1.tar.xz
-cd yad-0.17.1.1
+tar xJf yad-${yad_ver}.tar.xz
+cd yad-${yad_ver}
 echo "--> Now running configure..."
 ./configure --prefix=/usr
 echo "--> Now runnning make..."
