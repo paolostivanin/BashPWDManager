@@ -12,11 +12,12 @@ Requirements
 * gpg    : to encrypt/decrypt db
 * openssl: to encrypt/decrypt db
 * wget   : to download newest Bash PWD Manager version
+* sqlite3: to store your username and passwords
 
 How it works
 ------------
 
-The script will create and encrypt the DB.<br> 
+The script will create and encrypt the DB (sqlite3 db).<br> 
 After that you can add, delete, view or store new passwords.<br>
 This script has lot of features such:<br>
 
