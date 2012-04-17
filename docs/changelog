@@ -125,25 +125,24 @@
 (08/01/2012) - v1.2.0
 	* NEWSTABLE RELEASE :)
 
-(xx/04-05/2012) - v1.9.901 (2.0-beta1)
-	* NEW:   new UI (insert dialog + view/add/etc with button)
-	* NEW:   yad has replaced zenity -------------------------------------------------------------------[done]
-	* ADDED: sqlite db. Now your password are stored encrypted into an encrypted sqlite db :)
+(xx/05-06/2012) - v1.9.901 (2.0-beta1)
+	* NEW:   new UI (insert dialog + view/add/etc with button) ------------------------------------------[done]
+	* NEW:   yad has replaced zenity --------------------------------------------------------------------[done]
+	* ADDED: sqlite db. Now your password are stored encrypted into an encrypted sqlite db --------------[done]
 	* ADDED: group feature
 	* ADDED: note feature
 	* ADDED: pwd expiration date
 	* ADDED: when you'll decrypt the db a screen will give you all your titles and you can choose what to display
 	* ADDED: check db integrity with md5sum
-	* ADDED: lock db with chattr +i
 	* ADDED: check if password is dictionary based
 	* ADDED: options to backup db
-	* ADDED: choice if use 1 (GPG or OpenSSL) or 2 (GPG+OpenSSL) encryption methods. If you select 2, you are forced to use two differents pwds
+	* ADDED: choice if use 1 (GPG or OpenSSL) or 2 (GPG+OpenSSL) encryption methods
 	* ADDED: cli interface
 	* ADDED: log file (wrong pwd, md5 error, backup info, etc)
-	* ADDED: option to uninstall the script (--uninstall) ----------------------------------------------[done]
+	* ADDED: option to uninstall the script (--uninstall) -----------------------------------------------[done]
 	* IMPROVED: core code have been revisited
-	* IMPROVED: installer have been improved to match all the new changes (oxygen-gtk? + yad + bash v4)-[done]
-	* IMPROVED: uninstaller have been improved to match all the new changes ----------------------------[done]
-	* IMPROVED: if script closed in wrong way at next startup check db encryption
-	* IMPROVED: updater script has been improved
+	* IMPROVED: installer have been improved to match all the new changes (oxygen-gtk? + yad + bash v4)--[done]
+	* IMPROVED: uninstaller have been improved to match all the new changes -----------------------------[done]
+	* IMPROVED: if the script will be closed in wrong way at next startup it will check db encryption ---[done]
+	* IMPROVED: updater script has been improved --------------------------------------------------------[done]
 	* UPDATED: readme file has been updated

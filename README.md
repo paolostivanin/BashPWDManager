@@ -9,9 +9,9 @@ Requirements
 
 * bash   : v4.0 and above (may work with v3 but not tested)
 * yad	 : message dialogs
-* gpg    : encrypt/decrypt db
-* openssl: encrypt/decrypt db
-* wget   : download newest Bash PWD Manager version
+* gpg    : to encrypt/decrypt db
+* openssl: to encrypt/decrypt db
+* wget   : to download newest Bash PWD Manager version
 
 How it works
 ------------

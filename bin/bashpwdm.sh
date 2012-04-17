@@ -18,6 +18,7 @@ version="2.0-alpha"
 conf_file="/home/$USER/.config/bpwdman.conf"
 ###################################################
 
+
 ###################################################
 # Check exit status
 #
@@ -117,7 +118,7 @@ fi
 
 
 ###################################################
-# Input info and validation
+# Input info and validation !!!!! DEVO SANITIZZARE L'INPUT OVVERO DEVO MODIFICARE ' IN \' !!!!!
 #
 function input_info(){
 title=$(yad --entry --title "Title" --text "Write Title")
