@@ -2,8 +2,7 @@
 
 ###############################################################################
 # @Author	:  Paolo Stivanin aka Polslinux
-# @Developer	:  Ennio aka Toshidex <http://www.toshidex.org>
-# @Name		:  Secure Delete
+# @Name		:  Yad Install Script
 # @Copyright	:  2012
 # @Site		:  http://www.polslinux.it                        
 # @License	:  GNU AGPL v3 http://www.gnu.org/licenses/agpl.html 
