@@ -5,7 +5,7 @@
 # @Name		:  Yad Install Script
 # @Copyright	:  2012
 # @Site		:  http://www.polslinux.it                        
-# @License	:  GNU AGPL v3 http://www.gnu.org/licenses/agpl.html 
+# @License	:  GNU GPL v3 http://www.gnu.org/licenses/gpl.html 
 ###############################################################################
 
 work_dir=$(mktemp -d --tmpdir=/tmp yad-install.XXXXXX)

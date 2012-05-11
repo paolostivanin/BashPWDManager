@@ -5,7 +5,7 @@
 # @Name:      Bash Password Manager Uninstall Script
 # @Copyright: 2012
 # @Site:      http://www.polslinux.it                          
-# @License:   AGNU GPL v3 http://www.gnu.org/licenses/agpl.html  
+# @License:   GNU GPL v3 http://www.gnu.org/licenses/gpl.html  
 ################################################################
 
 distro=$(cat /etc/issue | cut -d' ' -f1 -s)
