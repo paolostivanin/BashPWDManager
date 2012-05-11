@@ -9,15 +9,15 @@
 ################################################################
 
 distro=$(cat /etc/issue | cut -d' ' -f1 -s)
+check_user=0
 
 echo "--> Checking user's privileges..."
 if [ $(id -u) != 0 ]; then 
   echo "--> ERROR: User $(whoami) is not root, and does not have sudo privileges"
-  if [ "$distro" = "Debian" ] ; then echo "--> Type su in the terminal and re-run this script"
-  elif [ "$distro" = "Ubuntu" ] ; then echo "--> Type sudo su in the terminal and re-run this script"
-  elif [ "$distro" = "Arch" ] ; then echo "--> Type su in the terminal and re-run this script"
+  if [ "$distro" = "Debian" ] || [ "$distro" = "Arch" ]; then echo "--> Type su in the terminal and re-run this script"
+    elif [ "$distro" = "Ubuntu" ] ; then echo "--> Type sudo su in the terminal and re-run this script"
+    exit 1  
   fi
-  exit 1
 else
   while [ $check_user -eq 0 ]; do
     echo "--> Write your exact username:"

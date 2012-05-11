@@ -35,7 +35,6 @@ echo "--> Now running configure..."
 ./configure --prefix=/usr
 echo "--> Now runnning make..."
 make || return 1
-echo "--> Now installing..."
 echo "--> Please enter your ROOT PASSWORD to install yad."
 sudo make install || return 1
 rm -r $work_dir

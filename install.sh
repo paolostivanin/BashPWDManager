@@ -30,11 +30,10 @@ fi
 echo "--> Checking user's privileges..."
 if [ $(id -u) != 0 ]; then 
   echo "--> ERROR: User $(whoami) is not root, and does not have sudo privileges"
-  if [ "$distro" = "Debian" ] ; then echo "--> Type su in the terminal and re-run this script"
-  elif [ "$distro" = "Ubuntu" ] ; then echo "--> Type sudo su in the terminal and re-run this script"
-  elif [ "$distro" = "Arch" ] ; then echo "--> Type su in the terminal and re-run this script"
+  if [ "$distro" = "Debian" ] || [ "$distro" = "Arch" ] ; then echo "--> Type su in the terminal and re-run this script"
+    elif [ "$distro" = "Ubuntu" ] ; then echo "--> Type sudo su in the terminal and re-run this script"
+    exit 1
   fi
-  exit 1
 else
   while [ $check_user -eq 0 ]; do
     echo "--> Write your exact username:"
@@ -52,7 +51,7 @@ echo "--> Checking type of your linux distros..."
 if [ "$distro" = "Debian" ] || [ "$distro" = "Ubuntu" ] || [ "$distro" = "Arch" ] || [ "$(cat /etc/issue | cut -d' ' -f2 -s)" = "Linux Mint" ]; then
 	echo "   Ok, you're running a compatible distro :)"
 else
-	echo  "   WARNING: Secure Delete is tested to work with Debian, Ubuntu, Linux Mint and Archlinux,"
+	echo  "   WARNING: Bash Password Manager is tested to work with Debian, Ubuntu, Linux Mint or Archlinux,"
 	echo  "   try it on your system and tell me if there is something wrong!"
 fi
 
@@ -73,7 +72,7 @@ if [ $check_app -eq 1 ]; then
   if [ "$distro" = "Debian" ] || [ "$distro" = "Ubuntu" ] || [ "$(cat /etc/issue | cut -d' ' -f2 -s)" = "Linux Mint" ];then
     echo "--> sudo apt-get install $app_install <--"
     if [ ! -n "${app_yad}" ];then
-      echo "Ubuntu/Debian/Mint ecc doesn't have yad into their"
+      echo "Ubuntu/Debian/Mint doesn't have yad into their"
       echo "official repo. You have to manually install yad or"
       echo "you can use my script that will do this for you :)"
       echo "Type Y if you want to auto-install yad or type N"
