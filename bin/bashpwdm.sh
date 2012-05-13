@@ -134,12 +134,13 @@ exit_script
 } 
 
 function pwd_insert(){
-password=$(yad --form --field "Password:H" --field "Retype Password:H" --separator="@1212@" --title "Password" --image="dialog-password")
+pass_tmp=$(yad --form --field "Password:H" --field "Retype Password:H" --separator="@1212@" --title "Password" --image="dialog-password")
 exit_script
-if [ $(echo $password | awk -F"@1212@" '{print $1}') != $(echo $password | awk -F"@1212@" '{print $2}') ];then
- yad --title "Error" --text "Passwords are different. Please try again"
- pwd_insert
+if [ $(echo $pass_tmp | awk -F"@1212@" '{print $1}') != $(echo $pass_tmp | awk -F"@1212@" '{print $2}') ];then
+	yad --title "Error" --text "Passwords are different. Please try again"
+	pwd_insert
 fi
+password=$(echo pass_tmp | awk -F"@1212@" '{print $1}' | sed "s/[\ \"']/\\''/g")
 sqlite3 $file_db "INSERT INTO main (title,username,password) VALUES ('TITLE:$title','USER:$username','PASS:$password')";
 }
 ###################################################
@@ -151,7 +152,7 @@ sqlite3 $file_db "INSERT INTO main (title,username,password) VALUES ('TITLE:$tit
 function delete_again(){
 yad --title "Another?" --text "Do you want to delete another password?" --button=Yes --button=No
 if [ $? = 0 ] ; then
- delete_pwd
+	delete_pwd
 fi
 }
 
@@ -160,43 +161,44 @@ to_delete=$(yad --entry --title "Choose PWD" --text "Write the EXACT title of PW
 local choosen=$(sqlite3 $file_db "SELECT * FROM main WHERE title='$to_delete'";)
 echo $choosen | yad --text-info --title "Click OK to delete this password" --width=400 --height=200
 if [ $? = 0 ]; then
- sqlite3 $file_db "DELETE FROM main WHERE title='$to_delete'";
- delete_again
+	sqlite3 $file_db "DELETE FROM main WHERE title='$to_delete'";
+	delete_again
 else
- yad --title "Warning" --text "No password has been deleted"
+	yad --title "Warning" --text "No password has been deleted"
 fi
 }
 
 function new_pwd_and_check(){
-newpwd=$(yad --entry --hide-text --title "Password" --text "Write password your new password" --image="dialog-password")
+newpwd=$(yad --entry --hide-text --title "Password" --text "Write your new password" --image="dialog-password")
 exit_script
 newpwd_2=$(yad --entry --hide-text --title "Password" --text "Retype your password" --image="dialog-password")
 exit_script
 if [ "$newpwd" != "$newpwd_2" ]; then
- yad --title "Error" --text "Passwords are different. Please try again"
- exit_script
- new_pwd_and_check
+	yad --title "Error" --text "Passwords are different. Please try again"
+	exit_script
+	new_pwd_and_check
 fi
 }
 
 function change_again(){
 yad --title "Another?" --text "Do you want to change another password?" --button=Yes --button=No
 if [ $? = 0 ]; then
- change_pwd
+	change_pwd
 fi
 }
 
 function change_pwd(){
 new_pwd_and_check
+pass_to_insert=$(echo $newpwd | awk -F"@1212@" '{print $1}' | sed "s/[\ \"']/\\''/g")
 to_change=$(yad --entry --title "Choose PWD" --text "Write the EXACT title of PWD to change")
 local choosen=$(sqlite3 $file_db "SELECT * FROM main WHERE title='$to_change'";)
 echo $choosen | yad --text-info --title "Click OK to change this password" --width=400 --height=200
 if [ $? = 0 ]; then
- sqlite3 $file_db "UPDATE main SET password WHERE title='$to_delete'";
- change_again
- yad --title "Info" --text "Password has been correctly updated"
+	sqlite3 $file_db "UPDATE main SET password='$newpwd' WHERE title='$to_change'";
+	change_again
+	yad --title "Info" --text "Password has been correctly updated"
 else
- yad --title "Warning" --text "No password has been changed"
+	yad --title "Warning" --text "No password has been changed"
 fi
 }
 
