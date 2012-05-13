@@ -21,7 +21,7 @@ The script will create and encrypt the DB (sqlite3 db).<br>
 After that you can add, delete, view or store new passwords.<br>
 This script has lot of features such:<br>
 
-- double encryption
+- double encryption <b>(ATTENTION: if you use double encryption you must respect the order of the 2 passwords)</b>
 - possibility to choose your favourite cipher-algo (aes256, blowfish, twofish, ecc)
 - possibility to generate strong random password
 - possibility to add, view, delete or change password

@@ -16,6 +16,7 @@ BACKIFS=$IFS
 IFS=$'\n'
 version="2.0-alpha"
 conf_file="/home/$USER/.config/bpwdman.conf"
+num_of_enc=$(cat $conf_file | grep num_of_enc | cut -f2 -d'=')
 ###################################################
 
 
@@ -37,21 +38,19 @@ fi
 ###################################################
 # Encryption functions
 #
-function check_gpg_openssl_pwd_encrypt(){
-if [ $? != 0 ] ; then
- yad --title "Password Error" --text "You have entered a wrong password, try again!" --width=450 --height=150
- pass=$(yad --entry --hide-text --title "DB Password" --text "Type your database password" --image="dialog-password")
- encrypt_db
-fi
-}
-
 function encrypt_db(){
-openssl aes-256-cbc -a -salt -pass pass:$pass -in $file_db -out $path_db/enc_db_openssl
-check_gpg_openssl_pwd_encrypt
-mv $path_db/enc_db_openssl $file_db
-echo $pass | gpg --passphrase-fd 0 -o $path_db/enc_db --cipher-algo=$crypto_algo -c $file_db
-check_gpg_openssl_pwd_encrypt
-mv $path_db/enc_db $file_db
+if [ $num_of_enc = 2 ]; then
+	pass_1=$(echo $double_pass | awk -F"@1212@" '{print $1}')
+	pass_2=$(echo $double_pass | awk -F"@1212@" '{print $2}')
+	openssl aes-256-cbc -a -salt -pass pass:$pass_2 -in $file_db -out ${path_db}/enc_db_openssl
+	mv ${path_db}/enc_db_openssl $file_db
+	echo $pass_1 | gpg --passphrase-fd 0 -o ${path_db}/enc_db --cipher-algo=$crypto_algo -c $file_db
+	mv ${path_db}/enc_db $file_db
+elif [ $num_of_enc = 1 ]; then
+	echo $pass | gpg --passphrase-fd 0 -o ${path_db}/enc_db --cipher-algo=$crypto_algo -c $file_db
+	check_gpg_openssl_pwd_encrypt
+	mv ${path_db}/enc_db $file_db
+fi
 }
 ###################################################
 
@@ -61,19 +60,26 @@ mv $path_db/enc_db $file_db
 #
 function check_gpg_openssl_pwd_decrypt(){
 if [ $? != 0 ] ; then
- yad --title "Password Error" --text "You have entered a wrong password, try again!" --width=450 --height=150
- pass=$(yad --entry --hide-text --title "DB Password" --text "Type your database password" --image="dialog-password")
- decrypt_db
+ yad --title "Password Error" --text "You have entered a wrong password, exiting..." --width=450 --height=150
+ exit 1
 fi
 }
 
 function decrypt_db(){
-echo $pass | gpg --passphrase-fd 0 -o $path_db/out_db_gpg --cipher-algo=$crypto_algo -d $file_db
-check_gpg_openssl_pwd_decrypt
-mv $path_db/out_db_gpg $file_db
-openssl aes-256-cbc -d -a -pass pass:$pass -in $file_db -out $path_db/out_db
-check_gpg_openssl_pwd_decrypt
-mv $path_db/out_db $file_db
+if [ $num_of_enc = 2 ]; then
+	pass_1=$(echo $double_pass | awk -F"@1212@" '{print $1}')
+	pass_2=$(echo $double_pass | awk -F"@1212@" '{print $2}')
+	echo $pass_1 | gpg --passphrase-fd 0 -o $path_db/out_db_gpg --cipher-algo=$crypto_algo -d $file_db
+	check_gpg_openssl_pwd_decrypt
+	mv $path_db/out_db_gpg $file_db
+	openssl aes-256-cbc -d -a -pass pass:$pass_2 -in $file_db -out $path_db/out_db
+	check_gpg_openssl_pwd_decrypt
+	mv $path_db/out_db $file_db
+elif [ $num_of_enc = 1 ]; then
+	echo $pass | gpg --passphrase-fd 0 -o $path_db/out_db_gpg --cipher-algo=$crypto_algo -d $file_db
+	check_gpg_openssl_pwd_decrypt
+	mv $path_db/out_db_gpg $file_db
+fi
 }
 ###################################################
 
@@ -128,9 +134,9 @@ exit_script
 } 
 
 function pwd_insert(){
-password=$(yad --form --field "Password:H" --field "Retype Password:H" --separator="@_@" --title "Password" --image="dialog-password")
+password=$(yad --form --field "Password:H" --field "Retype Password:H" --separator="@1212@" --title "Password" --image="dialog-password")
 exit_script
-if [ $(echo $password | awk -F"@_@" '{print $1}') != $(echo $password | awk -F"@_@" '{print $2}') ];then
+if [ $(echo $password | awk -F"@1212@" '{print $1}') != $(echo $password | awk -F"@1212@" '{print $2}') ];then
  yad --title "Error" --text "Passwords are different. Please try again"
  pwd_insert
 fi
@@ -363,9 +369,14 @@ elif [ "$1" = "--uninstall" ] ; then
   else
     chmod +x /usr/share/doc/bash-pwd-manager/uninstall.sh
     source /usr/share/doc/bash-pwd-manager/uninstall.sh
-  fi  
+  fi
+elif [ "$1" = "--backup" ] || [ "$1" = "-b" ]; then
+	to_backup=$(yad --file --title "Select DB" --text "Select the database to backup" --width=800 --height=600)
+	cp $to_backup $(dirname $to_backup)/db_$(date +%d-%m-%Y)
+	yad --text "The file\n<b>$to_backup</b>\nhas been backupped as\n<b>$(dirname $to_backup)/db_$(date +%d-%m-%Y)</b>" --title "Backup finished"
+	exit 0
 elif [ "$1" = "-h" ] || [ "$1" = "--help" ] ; then
- echo -e "You are using Bash PWD Manager v$version.\nTo start using the script just search for 'BashPWDManager' into your app menu\nor type 'bashpwdm' into the terminal.
+ 	echo -e "You are using Bash PWD Manager v$version.\nTo start using the script just search for 'BashPWDManager' into your app menu\nor type 'bashpwdm' into the terminal.
 The syntax for the following options is: bashpwdm [OPTIONS]\nwhere [OPTIONS] can be:\n
 (-c) --change-algo  -> change your DB cipher-algo
 (-p) --generate-pwd -> generate a strong password
@@ -373,7 +384,7 @@ The syntax for the following options is: bashpwdm [OPTIONS]\nwhere [OPTIONS] can
 (-n) --change-name  -> change your DB name
 (-u) --update       -> update the script to lastest version
 (-h) --help         -> this help ;)\n"
- exit 0
+	exit 0
 fi
 
 ###################################################
@@ -383,7 +394,12 @@ fi
 # Main script
 #
 check_before_start
-pass=$(yad --class="GSu" --title="Password" --text="Write your DB password" --image="dialog-password" --entry --hide-text --separator="")
-exit_script
+if [ $num_of_enc = 1 ]; then
+	pass=$(yad --class="GSu" --title="Password" --text="Write your DB password" --image="dialog-password" --entry --hide-text --separator="")
+	exit_script
+else
+	double_pass=$(yad --form --field "Password (GPG):H" --field "Password (OpenSSL):H" --separator="@1212@" --title "Password" --image="dialog-password")
+	exit_script
+fi
 yad --title "Choose Action" --form --field "Add Password:BTN" --field "Change Password:BTN" --field "Delete Password:BTN" --field "View All Password:BTN" --field "View One Password:BTN" --field "Help & About:BTN" "bash -c add_pwd" "bash -c ch_pwd" "bash -c del_pwd" "bash -c viewall_pwd" "bash -c viewone_pwd" "bash -c help_gui" --height=200 --width=220
 ###################################################
