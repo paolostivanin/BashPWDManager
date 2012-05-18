@@ -14,7 +14,7 @@
 #
 BACKIFS=$IFS
 IFS=$'\n'
-version="2.0-alpha2"
+version="2.0-alpha3"
 conf_file="/home/$USER/.config/bpwdman.conf"
 num_of_enc=$(cat $conf_file | grep num_of_enc | cut -f2 -d'=')
 ###################################################

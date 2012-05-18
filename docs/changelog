@@ -128,9 +128,9 @@
 (??/05/2012) - v1.9.901 (2.0-beta1)
 	* NEW:   new UI (insert dialog + view/add/etc with button)
 	* NEW:   yad has replaced zenity
-	* ADDED: group feature ------------------------------------------------------------------------------[TO DO]
 	* ADDED: when decrypt db popup with all titles and you can choose what to display
 	* ADDED: options to backup db
+	* ADDED: pwd expiration date ------------------------------------------------------------------------[TO DO]
 	* ADDED: double encryption using GPG or GPG+OpenSSL
 	* ADDED: option to uninstall the script (--uninstall)
 	* IMPROVED: core code have been revisited
@@ -141,7 +141,6 @@
 	* UPDATED: readme file has been updated -------------------------------------------------------------[TO DO]
 	
 (??/??/2012) - v2.0.901 (2.1-beta1)	
-	* ADDED: pwd expiration date
 	* ADDED: cli interface
 	* ADDED: log file (wrong pwd, backup info, etc)
 	* ADDED: check if password is dictionary based
