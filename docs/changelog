@@ -129,7 +129,7 @@
 	* NEW:   new UI (insert dialog + view/add/etc with button)
 	* NEW:   yad has replaced zenity
 	* ADDED: group feature ------------------------------------------------------------------------------[TO DO]
-	* ADDED: when decrypt db popup with all titles and you can choose what to display -------------------[TO DO]
+	* ADDED: when decrypt db popup with all titles and you can choose what to display
 	* ADDED: options to backup db
 	* ADDED: double encryption using GPG or GPG+OpenSSL
 	* ADDED: option to uninstall the script (--uninstall)

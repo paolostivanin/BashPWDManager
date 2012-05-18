@@ -290,8 +290,10 @@ export -f viewall_pwd
 function viewone_pwd(){
 check_db
 decrypt_db
-local titlepass=$(yad --entry --title="Title" --text="Write the TITLE (ex Facebook, Gmail, ecc):")
-local choosen=$(sqlite3 $file_db "SELECT * FROM main WHERE title='$titlepass'";)
+#local titlepass=$(yad --entry --title="Title" --text="Write the TITLE (ex Facebook, Gmail, ecc):")
+local titlename=$(sqlite3 $file_db "SELECT title FROM main";)
+local choose_title=$(yad --list --column="#" $titlename --height=600 --separator="")
+local choosen=$(sqlite3 $file_db "SELECT * FROM main WHERE title='$choose_title'";)
 echo $choosen | yad --text-info --width=300 --height=200
 view_again
 encrypt_db
