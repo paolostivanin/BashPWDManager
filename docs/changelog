@@ -138,7 +138,7 @@
 	* IMPROVED: uninstaller have been improved to match all the new changes
 	* IMPROVED: if the script will be closed in wrong way at next startup it will check db encryption
 	* IMPROVED: updater script has been improved
-	* UPDATED: readme file has been updated -------------------------------------------------------------[TO DO]
+	* UPDATED: readme file has been updated
 	
 (??/??/2012) - v2.0.901 (2.1-beta1)	
 	* ADDED: cli interface

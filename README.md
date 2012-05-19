@@ -25,7 +25,10 @@ This script has lot of features such:<br>
 - possibility to choose your favourite cipher-algo (aes256, blowfish, twofish, ecc)
 - possibility to generate strong random password
 - possibility to add, view, delete or change password
-- lot of customization are possible (see Extra Options)
+- possibility to backup your database
+- possibility to upgrade to lastest version thanks to the updater script
+- password expiration date
+- lot of other customization are possible (see Extra Options)
 
 How to use
 ----------
@@ -52,6 +55,7 @@ Open the terminal and type:<br>
 - `bashpwdm --change-dir` or `bashpwdm -d`<pre>-> to change db directory (if you have saved it)</pre>
 - `bashpwdm --change-name` or `bashpwdm -n`<pre>-> to change db name (if you have saved it)</pre>
 - `bashpwdm --update` or `bashpwdm -u`<pre>-> to automatically update Bash PWD Manager to lastest version</pre>
+- `bashpwdm --backup` or `bashpwdm -b`<pre>-> backup your current database and generate the md5sum of the backupped file</pre>
 - `bashpwdm --uninstall`<pre>-> to uninstall Bash PWD Manager</pre>
 
 Notes

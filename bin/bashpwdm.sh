@@ -377,6 +377,7 @@ elif [ "$1" = "--uninstall" ] ; then
 elif [ "$1" = "--backup" ] || [ "$1" = "-b" ]; then
 	to_backup=$(yad --file --title "Select DB" --text "Select the database to backup" --width=800 --height=600)
 	cp $to_backup $(dirname $to_backup)/db_$(date +%d-%m-%Y)
+	md5sum $(dirname $to_backup)/db_$(date +%d-%m-%Y) > $(dirname $to_backup)/md5sum_of_database
 	yad --text "The file\n<b>$to_backup</b>\nhas been backupped as\n<b>$(dirname $to_backup)/db_$(date +%d-%m-%Y)</b>" --title "Backup finished"
 	exit 0
 elif [ "$1" = "-h" ] || [ "$1" = "--help" ] ; then
@@ -387,6 +388,7 @@ The syntax for the following options is: bashpwdm [OPTIONS]\nwhere [OPTIONS] can
 (-d) --change-dir   -> change the directory where your DB is saved
 (-n) --change-name  -> change your DB name
 (-u) --update       -> update the script to lastest version
+(-b) --backup 		-> backup the currente database
 (-h) --help         -> this help ;)\n"
 	exit 0
 fi
