@@ -55,14 +55,14 @@ if [ $num_of_enc = 2 ]; then
 	pass_1=$(echo $double_pass | awk -F"@1212@" '{print $1}')
 	pass_2=$(echo $double_pass | awk -F"@1212@" '{print $2}')
 	local typ_algo=$(echo $typ | tr '[A-Z]' '[a-z]')
-	openssl aes-256-cbc -a -salt -pass pass:$pass_2 -in ${db_dir}/${db_name}.bpm -out ${db_dir}/enc_db_openssl
-	mv ${db_dir}/enc_db_openssl ${db_dir}/${db_name}.bpm
-	echo $pass_1 | gpg --passphrase-fd 0 -o ${db_dir}/enc_db --cipher-algo=$typ -c ${db_dir}/${db_name}.bpm
-	mv ${db_dir}/enc_db ${db_dir}/${db_name}.bpm
+	openssl aes-256-cbc -a -salt -pass pass:$pass_2 -in ${db_dir}/${db_name}.sl3 -out ${db_dir}/enc_db_openssl
+	mv ${db_dir}/enc_db_openssl ${db_dir}/${db_name}.sl3
+	echo $pass_1 | gpg --passphrase-fd 0 -o ${db_dir}/enc_db --cipher-algo=$typ -c ${db_dir}/${db_name}.sl3
+	mv ${db_dir}/enc_db ${db_dir}/${db_name}.sl3
 elif [ $num_of_enc = 1 ]; then
 	local typ_algo=$(echo $typ | tr '[A-Z]' '[a-z]')
-	echo $pass | gpg --passphrase-fd 0 -o ${db_dir}/enc_db --cipher-algo=$typ -c ${db_dir}/${db_name}.bpm
-	mv ${db_dir}/enc_db ${db_dir}/${db_name}.bpm
+	echo $pass | gpg --passphrase-fd 0 -o ${db_dir}/enc_db --cipher-algo=$typ -c ${db_dir}/${db_name}.sl3
+	mv ${db_dir}/enc_db ${db_dir}/${db_name}.sl3
 fi
 }
 
@@ -70,17 +70,17 @@ function save_db_path(){
 yad --text "Do you want to save the path of your DB so every time you
 will start the script you won't have to select it?" --title "Save DB path?" --width=410 --button=Yes --button=No
 if [ $? = 0 ] ; then
-	echo "database-path=${db_dir}/${db_name}.bpm" >> $conf_file   
+	echo "database-path=${db_dir}/${db_name}.sl3" >> $conf_file   
 else
 	echo "database-path=0" >> $conf_file
 fi
 }
 
 function create_db(){
-STRUCTURE="CREATE TABLE main (title TEXT,username TEXT,password TEXT);";
-cat /dev/null > ${db_dir}/${db_name}.bpm
+STRUCTURE="CREATE TABLE main (title TEXT,username TEXT,password TEXT,expdate TEXT);";
+cat /dev/null > ${db_dir}/${db_name}.sl3
 echo $STRUCTURE > /tmp/tmpstruct
-sqlite3 ${db_dir}/${db_name}.bpm < /tmp/tmpstruct;
+sqlite3 ${db_dir}/${db_name}.sl3 < /tmp/tmpstruct;
 rm -f /tmp/tmpstruct
 }
 
@@ -114,7 +114,7 @@ if [ -z "$db_name" ]; then
    	fi
    	exit 1
 fi
-echo "database-name=${db_name}.bpm" >> $conf_file
+echo "database-name=${db_name}.sl3" >> $conf_file
 create_db
 if [ $num_of_enc = 1 ]; then
 	pass=$(yad --form --field "Password:H" --field "Retype Password:H" --separator="@1212@" --title "Password" --image="dialog-password")

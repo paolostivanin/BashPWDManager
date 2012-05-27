@@ -14,7 +14,7 @@
 #
 BACKIFS=$IFS
 IFS=$'\n'
-version="2.0-alpha3"
+version="2.0-beta1"
 conf_file="/home/$USER/.config/bpwdman.conf"
 num_of_enc=$(cat $conf_file | grep num_of_enc | cut -f2 -d'=')
 ###################################################
@@ -124,13 +124,14 @@ fi
 
 
 ###################################################
-# Input info and validation !!!!! DEVO SANITIZZARE L'INPUT OVVERO DEVO MODIFICARE ' IN \' !!!!!
+# Input info, input validation and store all into sqlite3 db
 #
 function input_info(){
-title=$(yad --entry --title "Title" --text "Write Title")
+tmp_info=$(yad --title "Input Info" --form --field "Title" --field "Username" --field "Expire Date:DT" "" "" "none" --separator="@1212@" --date-format=%Y-%m-%d)
 exit_script
-username=$(yad --entry --title "Username" --text "Write Username")
-exit_script
+tmp_title=$(echo $tmp_info | awk -F"@1212@" '{print $1}')
+tmp_user=$(echo $tmp_info | awk -F"@1212@" '{print $2}')
+exp_date=$(echo $tmp_info | awk -F"@1212@" '{print $3}')
 } 
 
 function pwd_insert(){
@@ -140,8 +141,10 @@ if [ $(echo $pass_tmp | awk -F"@1212@" '{print $1}') != $(echo $pass_tmp | awk -
 	yad --title "Error" --text "Passwords are different. Please try again"
 	pwd_insert
 fi
+title=$(echo $tmp_title | sed "s/[\ \"']/\\''/g")
+username=$(echo $tmp_user | sed "s/[\ \"']/\\''/g")
 password=$(echo pass_tmp | awk -F"@1212@" '{print $1}' | sed "s/[\ \"']/\\''/g")
-sqlite3 $file_db "INSERT INTO main (title,username,password) VALUES ('TITLE:$title','USER:$username','PASS:$password')";
+sqlite3 $file_db "INSERT INTO main (title,username,password,expdate) VALUES ('TITLE:$title','USER:$username','PASS:$password','$exp_date')";
 }
 ###################################################
 
@@ -305,7 +308,7 @@ export -f viewone_pwd
 
 
 ###################################################
-# Extra args and startup check
+# Check extra shell args, startup check, check expiration date
 #
 function check_before_start(){
 if [ ! -f $conf_file ]; then
@@ -320,10 +323,25 @@ Do you want to do this now?" --title "Configuration Needed" --width=350 --height
 fi
 }
 
-if [ $(id -u) = 0 ] ; then
- yad --title "Error" --text "You <b>can't</b> start this script <b>as root</b>."
- exit 0
+function check_pwd_expiration(){
+now=$(date +%Y-%m-%d)
+now_epoch=$(date --date="$now" +%s)
+all_date=($(sqlite3 db.sl3 "select expdate from main";))
+num=$(echo ${#all_date[@]})
+for ((i=0; i<num; i++))
+do
+if [ "${all_date[$i]}" = "none" ]; then break ; fi
+tmp_epoch=$(date --date="${all_date[$i]}" +%s)
+if [ $tmp_epoch -lt $now_epoch ];then
+	already_expired=$(sqlite3 db.sl3 "select * from main where pwdate='${all_date[$i]}'";)
+	echo $already_expired >> /tmp/expired_pwd
+elif [ $tmp_epoch -eq $now_epoch ];then
+	today_expire=$(sqlite3 db.sl3 "select * from main where pwdate='${all_date[$i]}'";)
+	echo $today_expire >> /tmp/expired_pwd
 fi
+done	
+cat /tmp/expired_pwd | yad --text-info --width=400 --height=300 --title "Expired Passwords" --text "List of <b>EXPIRED</b> passwords"
+}
 
 if [ "$1" = "-v" ] || [ "$1" = "--version" ]; then
  echo "Bash Password Manager v$version developed by Polslinux <http://www.polslinux.it>"
@@ -399,6 +417,10 @@ fi
 ###################################################
 # Main script
 #
+if [ $(id -u) = 0 ] ; then
+ yad --title "Error" --text "You <b>can't</b> start this script <b>as root</b>."
+ exit 0
+fi
 check_before_start
 if [ $num_of_enc = 1 ]; then
 	pass=$(yad --class="GSu" --title="Password" --text="Write your DB password" --image="dialog-password" --entry --hide-text --separator="")
@@ -407,5 +429,6 @@ else
 	double_pass=$(yad --form --field "Password (GPG):H" --field "Password (OpenSSL):H" --separator="@1212@" --title "Password" --image="dialog-password")
 	exit_script
 fi
+check_pwd_expiration
 yad --title "Choose Action" --form --field "Add Password:BTN" --field "Change Password:BTN" --field "Delete Password:BTN" --field "View All Password:BTN" --field "View One Password:BTN" --field "Help & About:BTN" "bash -c add_pwd" "bash -c ch_pwd" "bash -c del_pwd" "bash -c viewall_pwd" "bash -c viewone_pwd" "bash -c help_gui" --height=200 --width=220
 ###################################################

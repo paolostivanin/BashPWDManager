@@ -125,12 +125,12 @@
 (08/01/2012) - v1.2.0
 	* NEWSTABLE RELEASE :)
 
-(??/05/2012) - v1.9.901 (2.0-beta1)
+(27/05/2012) - v1.9.901 (2.0-beta1)
 	* NEW:   new UI (insert dialog + view/add/etc with button)
 	* NEW:   yad has replaced zenity
 	* ADDED: when decrypt db popup with all titles and you can choose what to display
 	* ADDED: options to backup db
-	* ADDED: pwd expiration date ------------------------------------------------------------------------[TO DO]
+	* ADDED: pwd expiration date
 	* ADDED: double encryption using GPG or GPG+OpenSSL
 	* ADDED: option to uninstall the script (--uninstall)
 	* IMPROVED: core code have been revisited
@@ -145,5 +145,5 @@
 	* ADDED: log file (wrong pwd, backup info, etc)
 	* ADDED: check if password is dictionary based
 	
-(??/??/2013) - v3.0
+(??/??/????) - v3.0
 	* NEW: core and gui rewritten, now using C/GTK+
