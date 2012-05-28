@@ -130,7 +130,7 @@
 	* NEW:   yad has replaced zenity
 	* ADDED: when decrypt db popup with all titles and you can choose what to display
 	* ADDED: options to backup db
-	* ADDED: pwd expiration date ------------------------------------------------------------------------[TO DO]
+	* ADDED: pwd expiration date
 	* ADDED: double encryption using GPG or GPG+OpenSSL
 	* ADDED: option to uninstall the script (--uninstall)
 	* IMPROVED: core code have been revisited
