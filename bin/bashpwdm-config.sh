@@ -133,7 +133,6 @@ else
 fi
 
 check_pwd_char
-echo "db_created=1" >> $conf_file
 save_db_path
 first_encryption
 yad --text "Bash Password Manager has been configured :)" --title "Finish" --width=310

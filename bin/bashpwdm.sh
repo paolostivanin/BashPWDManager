@@ -14,7 +14,7 @@
 #
 BACKIFS=$IFS
 IFS=$'\n'
-version="2.0-beta1"
+version="2.0-rc"
 conf_file="/home/$USER/.config/bpwdman.conf"
 num_of_enc=$(cat $conf_file | grep num_of_enc | cut -f2 -d'=')
 ###################################################
@@ -330,21 +330,22 @@ all_date=($(sqlite3 db.sl3 "select expdate from main";))
 num=$(echo ${#all_date[@]})
 for ((i=0; i<num; i++))
 do
-if [ "${all_date[$i]}" = "none" ]; then break ; fi
-tmp_epoch=$(date --date="${all_date[$i]}" +%s)
-if [ $tmp_epoch -lt $now_epoch ];then
-	already_expired=$(sqlite3 db.sl3 "select * from main where pwdate='${all_date[$i]}'";)
-	echo $already_expired >> /tmp/expired_pwd
-elif [ $tmp_epoch -eq $now_epoch ];then
-	today_expire=$(sqlite3 db.sl3 "select * from main where pwdate='${all_date[$i]}'";)
-	echo $today_expire >> /tmp/expired_pwd
-fi
+	if [ "${all_date[$i]}" = "none" ]; then break ; fi
+	tmp_epoch=$(date --date="${all_date[$i]}" +%s)
+	if [ $tmp_epoch -lt $now_epoch ];then
+		already_expired=$(sqlite3 db.sl3 "select * from main where pwdate='${all_date[$i]}'";)
+		echo $already_expired >> /tmp/expired_pwd
+	elif [ $tmp_epoch -eq $now_epoch ];then
+		today_expire=$(sqlite3 db.sl3 "select * from main where pwdate='${all_date[$i]}'";)
+		echo $today_expire >> /tmp/expired_pwd
+	fi
 done	
 cat /tmp/expired_pwd | yad --text-info --width=400 --height=300 --title "Expired Passwords" --text "List of <b>EXPIRED</b> passwords"
+rm /tmp/expired_pwd
 }
 
 if [ "$1" = "-v" ] || [ "$1" = "--version" ]; then
- echo "Bash Password Manager v$version developed by Polslinux <http://www.polslinux.it>"
+ echo "Bash Password Manager v$version developed by Paolo Stivanin <http://www.polslinux.it>"
  exit 0
 elif [ "$1" = "--generate-pwd" ] || [ "$1" = "-p" ]; then
  nchar=$(yad --entry --title="Characters" --text="Write the number of password's characters (>= 8):" --numeric 8 65000 | cut -f1 -d',')

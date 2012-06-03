@@ -12,7 +12,7 @@ Requirements
 * gpg    : to encrypt/decrypt db
 * openssl: to encrypt/decrypt db
 * wget   : to download newest Bash PWD Manager version
-* sqlite3: to store your username and passwords
+* sqlite3: to store your info
 
 How it works
 ------------
@@ -22,7 +22,7 @@ After that you can add, delete, view or store new passwords.<br>
 This script has lot of features such:<br>
 
 - double encryption <b>(ATTENTION: if you use double encryption you must respect the order of the 2 passwords)</b>
-- possibility to choose your favourite cipher-algo (aes256, blowfish, twofish, ecc)
+- possibility to choose your favourite cipher-algo (aes256, blowfish, twofish, 3des, cast5)
 - possibility to generate strong random password
 - possibility to add, view, delete or change password
 - possibility to backup your database
