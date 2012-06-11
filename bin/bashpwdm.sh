@@ -333,10 +333,10 @@ do
 	if [ "${all_date[$i]}" = "none" ]; then break ; fi
 	tmp_epoch=$(date --date="${all_date[$i]}" +%s)
 	if [ $tmp_epoch -lt $now_epoch ];then
-		already_expired=$(sqlite3 db.sl3 "select * from main where pwdate='${all_date[$i]}'";)
+		already_expired=$(sqlite3 db.sl3 "select title,user,pwdate from main where pwdate='${all_date[$i]}'";)
 		echo $already_expired >> /tmp/expired_pwd
 	elif [ $tmp_epoch -eq $now_epoch ];then
-		today_expire=$(sqlite3 db.sl3 "select * from main where pwdate='${all_date[$i]}'";)
+		today_expire=$(sqlite3 db.sl3 "select title,user,pwdate from main where pwdate='${all_date[$i]}'";)
 		echo $today_expire >> /tmp/expired_pwd
 	fi
 done	
