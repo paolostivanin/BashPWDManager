@@ -1,3 +1,6 @@
+THIS PROJECT IS DEAD!
+=====================
+
 BASH PASSWORD MANAGER
 =====================
 
