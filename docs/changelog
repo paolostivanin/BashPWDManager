@@ -140,16 +140,28 @@
 	* IMPROVED: updater script has been improved
 	* UPDATED: readme file has been updated
 	
+<<<<<<< HEAD
 (11/06/2012) - v1.9.991 (2.0-rc)
         * FIXED: all bugs (if any)
 
 (??/08/2012) - v2.0  
         * Newstable release is now ready :)
+=======
+(04/06/2012) - v1.9.991 (2.0-rc1)
+	* FIXED: all bugs (if any)
+
+(11/06/2012) - v2.0
+	* Newstable release is now ready :)
+>>>>>>> master
 
 (??/??/2012) - v2.0.901 (2.1-beta1)	
 	* ADDED: cli interface
 	* ADDED: log file (wrong pwd, backup info, etc)
 	* ADDED: check if password is dictionary based
 	
+<<<<<<< HEAD
 (??/??/????) - v3.0
+=======
+(??/??/2013) - v3.0
+>>>>>>> master
 	* NEW: core and gui rewritten, now using C/GTK+
