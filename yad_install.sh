@@ -9,7 +9,7 @@
 ###############################################################################
 
 work_dir=$(mktemp -d --tmpdir=/tmp yad-install.XXXXXX)
-yad_ver=0.17.1.1
+yad_ver=0.21.0
 
 echo "BEFORE INSTALLING YAD PLEASE INSTALL THESE DEPS:
 automake
