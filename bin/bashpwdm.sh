@@ -113,7 +113,7 @@ else
  exit_script
 fi
 crypto_algo=$(cat $conf_file | grep algo | cut -f2 -d'=')
-path_db=$(dirname $file_db)
+path_db=${file_db%/*}
 local permission=$(ls -l $file_db | cut -f2 -d'-')
 if [ ! -f $file_db ] || [ "$permission" != "rw" ]; then
  yad --text "Database doesn't exist or hasn't read & write permissions." --title "Database Error"
@@ -360,7 +360,7 @@ elif [ "$1" = "--change-algo" ] || [ "$1" = "-c" ] ; then
   exit 1
  fi
  crypto_algo=$(cat $conf_file | cut -f1 -d' ')
- path_db=$(dirname $file_db)
+ path_db=${file_db%/*}
  gpg -o $path_db/out_db_gpg --cipher-algo=$crypto_algo -d $file_db
  openssl aes-256-cbc -d -a -in $path_db/out_db_gpg -out $path_db/out_db
  mv $path_db/out_db $file_db
