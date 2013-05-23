@@ -395,9 +395,9 @@ elif [ "$1" = "--uninstall" ] ; then
   fi
 elif [ "$1" = "--backup" ] || [ "$1" = "-b" ]; then
 	to_backup=$(yad --file --title "Select DB" --text "Select the database to backup" --width=800 --height=600)
-	cp $to_backup $(dirname $to_backup)/db_$(date +%d-%m-%Y)
-	md5sum $(dirname $to_backup)/db_$(date +%d-%m-%Y) > $(dirname $to_backup)/md5sum_of_database
-	yad --text "The file\n<b>$to_backup</b>\nhas been backupped as\n<b>$(dirname $to_backup)/db_$(date +%d-%m-%Y)</b>" --title "Backup finished"
+	cp $to_backup ${to_backup%/*}/db_$(date +%d-%m-%Y)
+	md5sum ${to_backup%/*}/db_$(date +%d-%m-%Y) > ${to_backup%/*}/md5sum_of_database
+	yad --text "The file\n<b>$to_backup</b>\nhas been backupped as\n<b>${to_backup%/*}/db_$(date +%d-%m-%Y)</b>" --title "Backup finished"
 	exit 0
 elif [ "$1" = "-h" ] || [ "$1" = "--help" ] ; then
  	echo -e "You are using Bash PWD Manager v$version.\nTo start using the script just search for 'BashPWDManager' into your app menu\nor type 'bashpwdm' into the terminal.
